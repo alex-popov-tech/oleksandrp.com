@@ -179,3 +179,18 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 }
 @keyframes blink { to { visibility: hidden; } }
 @media (prefers-reduced-motion: reduce) { .caret { animation: none; } }
+
+/* ---- shell mode and help ---- */
+#shell { height: 100dvh; padding: var(--lh) 2ch; color: var(--fg); background: var(--bg); cursor: text; }
+#shell .term { max-width: 90ch; }
+#shell label { display: flex; }
+#shell .prompt { color: var(--green); white-space: pre; }
+#shell input { font: inherit; color: var(--fg); background: transparent; border: 0; outline: 0; padding: 0; flex: 1; }
+#shell [data-shell-log] div { color: var(--muted); white-space: pre-wrap; }
+#shell .hint { color: var(--faint); margin-top: var(--lh); }
+#help { font: inherit; color: var(--fg); background: var(--bar); border: 1px solid var(--faint); padding: var(--lh) 2ch; max-width: 70ch; }
+#help::backdrop { background: rgb(0 0 0 / 0.5); }
+#help .help-title { color: var(--accent); margin-bottom: var(--lh); }
+#help table { border-collapse: collapse; }
+#help td { padding: 0 2ch 0 0; vertical-align: top; }
+#help td:first-child { color: var(--blue); white-space: nowrap; }

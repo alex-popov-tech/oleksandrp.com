@@ -6,6 +6,8 @@ import Sidebar from '../components/Sidebar.astro';
 import Winbar from '../components/Winbar.astro';
 import Statusline from '../components/Statusline.astro';
 import Cmdline from '../components/Cmdline.astro';
+import Shell from '../components/Shell.astro';
+import HelpOverlay from '../components/HelpOverlay.astro';
 import { buildTree, type TreeEntry } from '../lib/tree';
 import { numberLines } from '../lib/numbers';
 import { cvFiles } from '../lib/cv-files';
@@ -59,8 +61,11 @@ const body = numberLines(await Astro.slots.render('default'));
       <Statusline path={path} shortPath={shortPath} />
       <Cmdline />
     </div>
+    <Shell />
+    <HelpOverlay />
     <script>
       import '../scripts/cycler';
+      import '../scripts/nvim';
     </script>
   </body>
 </html>
