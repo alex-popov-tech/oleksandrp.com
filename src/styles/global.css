@@ -190,6 +190,8 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 #shell .hint { color: var(--faint); margin-top: var(--lh); }
 #help { font: inherit; color: var(--fg); background: var(--bar); border: 1px solid var(--faint); padding: var(--lh) 2ch; max-width: 70ch; }
 #help::backdrop { background: rgb(0 0 0 / 0.5); }
+/* the modal takes focus itself and holds nothing focusable; its border is the affordance */
+#help:focus, #help:focus-visible { outline: none; }
 #help .help-title { color: var(--accent); margin-bottom: var(--lh); }
 #help table { border-collapse: collapse; }
 #help td { padding: 0 2ch 0 0; vertical-align: top; }
