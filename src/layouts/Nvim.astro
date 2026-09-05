@@ -59,5 +59,8 @@ const body = numberLines(await Astro.slots.render('default'));
       <Statusline path={path} shortPath={shortPath} />
       <Cmdline />
     </div>
+    <script>
+      import '../scripts/cycler';
+    </script>
   </body>
 </html>

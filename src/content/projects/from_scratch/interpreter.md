@@ -7,6 +7,8 @@ tags: [Go, GitHub]
 hero:
   type: image
   src: ./interpreter.png
+excerpts:
+  - go-interpreter/repl.go
 ---
 Interpreter for the Monkey programming language, built in Go following 'Writing An Interpreter In Go' by Thorsten Ball.
 

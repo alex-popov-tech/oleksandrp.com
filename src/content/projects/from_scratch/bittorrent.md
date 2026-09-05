@@ -7,6 +7,9 @@ tags: [Go, GitHub]
 hero:
   type: image
   src: ./bittorrent.png
+excerpts:
+  - bittorrent-go/handshake.go
+  - bittorrent-go/bencode.go
 ---
 A BitTorrent client built from scratch in Go with no torrent libraries — it hand-rolls the bencode codec, parses .torrent files down to the info-hash, and announces to HTTP trackers to discover a peer swarm.
 

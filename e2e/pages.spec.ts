@@ -6,7 +6,7 @@ test('a project page renders the pane template', async ({ page }) => {
   await expect(lines.first()).toContainText('A Redis-compatible server');
   await expect(lines.first().locator('a', { hasText: '[github]' })).toHaveAttribute('href', 'https://github.com/alex-popov-tech/redis-go');
   await expect(page.locator('#buffer .tx.tags')).toContainText('RESP');
-  await expect(page.locator('#buffer .tx.media img')).toBeVisible();
+  await expect(page.locator('code-cycler')).toBeVisible();
   await expect(page.locator('#statusline')).toContainText('redis.go');
 });
 
@@ -35,4 +35,9 @@ test('the 404 page is an nvim error naming the path', async ({ page }) => {
 test('routes have no trailing slash', async ({ page }) => {
   const res = await page.goto('/projects/from_scratch/redis/');
   expect(res?.status()).toBe(404);
+});
+
+test('a project without excerpts shows its screenshot', async ({ page }) => {
+  await page.goto('/projects/store');
+  await expect(page.locator('#buffer .tx.media img')).toBeVisible();
 });

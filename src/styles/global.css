@@ -165,3 +165,17 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 #cmdline { display: flex; align-items: center; background: var(--bg); color: var(--dim); padding: 0 1ch; white-space: nowrap; overflow: hidden; }
 #cmdline.err { color: var(--peach); }
 #cmdline input { font: inherit; color: var(--fg); background: transparent; border: 0; outline: 0; padding: 0; flex: 1; }
+
+/* ---- code cycler ---- */
+.ln .tx.src a[data-src] { color: var(--teal); }
+.ln .tx.src a[data-project] { color: var(--blue); }
+.caret {
+  display: inline-block;
+  width: 1ch;
+  height: calc(var(--lh) - 4px);
+  vertical-align: text-bottom;
+  background: var(--accent);
+  animation: blink 1s steps(2, start) infinite;
+}
+@keyframes blink { to { visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) { .caret { animation: none; } }

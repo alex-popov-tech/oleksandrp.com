@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import Nvim from '../../layouts/Nvim.astro';
 import Pane from '../../components/Pane.astro';
 import Hero from '../../components/Hero.astro';
+import Cycler from '../../components/Cycler.astro';
+import { loadExcerpt } from '../../lib/excerpt-files';
 import { paragraphs } from '../../lib/text';
 import { bracketLinks, crumbFor, pathFor, shortPathFor } from '../../lib/pages';
 
@@ -24,6 +26,10 @@ const parent = entry.id.includes('/') ? entry.id.slice(0, entry.id.lastIndexOf('
   shortPath={shortPathFor('elsewhere', entry.id, d.lang)}
 >
   <Pane title={d.title} links={bracketLinks(d)} paragraphs={paras} tags={d.tags}>
-    {d.hero && <Hero hero={d.hero} alt={d.title} />}
+    {d.excerpts.length > 0 ? (
+      <Cycler snippets={d.excerpts.map((f) => ({ excerpt: loadExcerpt(f) }))} />
+    ) : (
+      d.hero && <Hero hero={d.hero} alt={d.title} />
+    )}
   </Pane>
 </Nvim>

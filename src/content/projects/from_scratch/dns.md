@@ -7,6 +7,9 @@ tags: [Go, GitHub]
 hero:
   type: image
   src: ./dns.png
+excerpts:
+  - dns-go/question.go
+  - dns-go/header.go
 ---
 A DNS server built from scratch in Go with no DNS libraries — it parses and serializes raw DNS packets byte by byte, across the header, question, and answer sections.
 

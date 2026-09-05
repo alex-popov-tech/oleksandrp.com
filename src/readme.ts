@@ -16,6 +16,8 @@ export const README: ReadmeLine[] = [
   { kind: 'blank' },
   { kind: 'p', text: 'Before that, TypeScript on the web and inside test frameworks. Lua in between, for Neovim plugins and a config I keep tweaking.' },
   { kind: 'blank' },
+  { kind: 'showcase' },
+  { kind: 'blank' },
   { kind: 'h2', text: 'Start here' },
   { kind: 'blank' },
   { kind: 'link', text: 'redis.go', href: '/projects/from_scratch/redis' },

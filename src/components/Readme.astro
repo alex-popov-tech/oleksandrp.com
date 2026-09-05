@@ -1,5 +1,6 @@
 ---
 import Line from './Line.astro';
+import Showcase from './Showcase.astro';
 import { README } from '../readme';
 ---
 {README.map((l) => {
@@ -19,7 +20,7 @@ import { README } from '../readme';
         </Line>
       );
     case 'showcase':
-      return null;
+      return <Showcase />;
     default:
       return <Line />;
   }

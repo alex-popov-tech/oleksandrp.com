@@ -7,6 +7,9 @@ tags: [Go, Git, GitHub]
 hero:
   type: image
   src: ./git.png
+excerpts:
+  - git-go/blob.go
+  - git-go/hashobject.go
 ---
 A Git implementation built from scratch in Go with no Git libraries — it reads and writes the real .git object store by hand (blobs, trees, commits), content-addressed with SHA-1 and zlib-compressed, byte-for-byte compatible with real git.
 

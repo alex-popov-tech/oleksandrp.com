@@ -24,6 +24,7 @@ test('the tree shows every section with README last', async ({ page, isMobile })
 
 test('start-here links point at real pages', async ({ page }) => {
   await page.goto('/');
-  const href = await page.locator('#buffer a', { hasText: 'redis.go' }).getAttribute('href');
+  // the showcase links redis.go too, so ask for the "Start here" list link only
+  const href = await page.locator('#buffer a:not([data-project]):not([data-src])', { hasText: 'redis.go' }).getAttribute('href');
   expect(href).toBe('/projects/from_scratch/redis');
 });
