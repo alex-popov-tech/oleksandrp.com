@@ -61,9 +61,8 @@ hero:                 # optional, renders a screenshot or video at the bottom
   type: image         # image | video
   src: ./redis.png    # relative to the md file, or /videos/x.mp4 for video
 excerpts:             # optional, renders the code cycler at the bottom
-  - file: redis-go/unmarshal.go              # under src/excerpts
-    source: app/internal/resp/unmarshal.go   # path in the repo, shown as the block header
-    lines: 7-22                              # shown in the header, links to the permalink
+  - redis-go/unmarshal.go   # file under src/excerpts; its first line is the GitHub permalink,
+                            # from which repo, path and line range are parsed for the header
 ```
 
 The markdown body is the description, one or more paragraphs.
@@ -104,7 +103,7 @@ The README showcase is a list in `src/site.ts`:
 
 ```ts
 export const showcase = [
-  { project: 'projects/from_scratch/redis', excerpt: 'redis-go/unmarshal.go' },
+  { project: '/projects/from_scratch/redis', file: 'redis-go/unmarshal.go' },
   ...
 ]
 ```
@@ -122,7 +121,7 @@ fenced block after the summary paragraphs.
 
 ### CV
 
-`public/cv/*.pdf` plus `src/content/cv.json` mapping filename to label,
+`public/cv/*.pdf` plus `src/cv.json` mapping filename to label,
 for example `{ "golang.pdf": "Golang developer", "qa.pdf": "QA automation" }`.
 With zero files the button and folder do not render. With one, the button
 links straight to it. With more, the button opens a small menu listing
@@ -140,8 +139,11 @@ One layout, `Nvim.astro`:
   count on folders. The current file's row is highlighted.
 - **buffer**: fluid width, scrolls independently. Has a gutter of line
   numbers and a cursor line.
-- **statusline**: mode block, current path, branch `main`, and at the right
-  a key hint (`hjkl · :q`) and `utf-8`.
+- **statusline**: mode block, current path, branch `main`, `utf-8` at the
+  right.
+- **command line**: one row under the statusline, as in vim. Normally shows
+  a dim key hint (`hjkl to move · Enter to open · :q to quit`); holds the
+  `:` prompt while typing a command, and error or info messages.
 
 Typography: JetBrains Mono, self-hosted via `@fontsource-variable/jetbrains-mono`,
 ligatures off. Colors are CSS custom properties in `src/styles/theme.css`
@@ -234,11 +236,11 @@ file.
 | `gg` / `G` | first / last row | first / last line |
 | `:` | open the command line in the statusline | same |
 | `Escape` | close the command line | same |
-| `?` | show the key hint in the statusline for a few seconds | same |
+| `?` | open the key table overlay | same |
 
 Command line: `:q` and `:q!` switch to shell mode. `:help` and `:h` show
 the key table as an overlay. Anything else shows `E492: Not an editor
-command: <text>` in the statusline for a moment.
+command: <text>` in the command line row for a moment.
 
 Shell mode: the whole page is replaced by a terminal view with
 `~/oleksandr $ ` and a blinking block cursor, and a dim hint
