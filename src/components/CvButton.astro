@@ -1,0 +1,13 @@
+---
+import { cvState } from '../lib/cv-files';
+const menu = cvState();
+---
+{menu.kind === 'single' && (
+  <a class="cta" href={menu.item.href} download><span class="long">Download CV pdf</span><span class="short">Download CV</span></a>
+)}
+{menu.kind === 'menu' && (
+  <details class="cv">
+    <summary class="cta"><span class="long">Download CV pdf</span><span class="short">Download CV</span></summary>
+    <ul>{menu.items.map((i) => <li><a href={i.href} download>{i.label}</a></li>)}</ul>
+  </details>
+)}

@@ -1,0 +1,12 @@
+---
+import Icon from './Icon.astro';
+interface Props { path: string; shortPath: string }
+const { path, shortPath } = Astro.props;
+---
+<div id="statusline">
+  <span class="mode" id="mode">NORMAL</span>
+  <span class="arrow"><Icon name="arrow" /></span>
+  <span class="path"><Icon name="file" /><span class="long">{path}</span><span class="short">{shortPath}</span></span>
+  <span class="branch"><Icon name="branch" />main</span>
+  <span class="right">utf-8</span>
+</div>

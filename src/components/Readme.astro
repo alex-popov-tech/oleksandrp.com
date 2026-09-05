@@ -1,0 +1,26 @@
+---
+import Line from './Line.astro';
+import { README } from '../readme';
+---
+{README.map((l) => {
+  switch (l.kind) {
+    case 'h1':
+      return <Line cls="h1"><span class="punct"># </span>{l.text}</Line>;
+    case 'h2':
+      return <Line cls="h2"><span class="punct">## </span>{l.text}</Line>;
+    case 'p':
+      return <Line>{l.text}</Line>;
+    case 'sub':
+      return <Line cls="sub">{l.text}</Line>;
+    case 'link':
+      return (
+        <Line>
+          <span class="punct">- [</span><a href={l.href}>{l.text}</a><span class="punct">]</span><span class="path">({l.href})</span>
+        </Line>
+      );
+    case 'showcase':
+      return null;
+    default:
+      return <Line />;
+  }
+})}

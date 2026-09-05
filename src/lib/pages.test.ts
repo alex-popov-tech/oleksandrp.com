@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { crumbFor, pathFor, shortPathFor, bracketLinks } from './pages';
+import { crumbFor, pathFor, shortPathFor, bracketLinks, currentPath } from './pages';
 
 describe('page helpers', () => {
   it('builds the breadcrumb from section, folders and file name', () => {
@@ -18,5 +18,16 @@ describe('page helpers', () => {
     expect(bracketLinks({ repo: 'alex-popov-tech/redis-go' })).toEqual([{ label: '[github]', href: 'https://github.com/alex-popov-tech/redis-go' }]);
     expect(bracketLinks({ live: 'https://x.y' })).toEqual([{ label: '[live]', href: 'https://x.y' }]);
     expect(bracketLinks({})).toEqual([]);
+  });
+});
+
+describe('currentPath', () => {
+  it('normalises the file-format pathnames astro renders with', () => {
+    expect(currentPath('/index.html')).toBe('/');
+    expect(currentPath('/')).toBe('/');
+    expect(currentPath('/projects/store.html')).toBe('/projects/store');
+    expect(currentPath('/projects/from_scratch/redis')).toBe('/projects/from_scratch/redis');
+    expect(currentPath('/projects/store/')).toBe('/projects/store');
+    expect(currentPath('/404.html')).toBe('/404');
   });
 });

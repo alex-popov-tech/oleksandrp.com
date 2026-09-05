@@ -1,0 +1,41 @@
+---
+interface Props { name: string }
+const { name } = Astro.props;
+
+const S = (color: string, body: string, w = 1.7) =>
+  `<g fill="none" stroke="${color}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${body}</g>`;
+
+const FOLDER = '<path d="M3.5 6.5a1.5 1.5 0 0 1 1.5-1.5h3.6l1.8 2h8.1a1.5 1.5 0 0 1 1.5 1.5v9a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5z"/>';
+const FOLDER_OPEN = '<path d="M3.5 18.5v-11A1.5 1.5 0 0 1 5 6h3.6l1.8 2h6.1A1.5 1.5 0 0 1 18 9.5v1"/><path d="M3.5 18.5l2.6-7h15l-2.6 7z"/>';
+const FILE = '<path d="M14 3H7a1.6 1.6 0 0 0-1.6 1.6v14.8A1.6 1.6 0 0 0 7 21h10a1.6 1.6 0 0 0 1.6-1.6V7.6z"/><polyline points="14,3 14,8 19,8"/>';
+const BRANCH = '<circle cx="7" cy="5.5" r="2.2"/><circle cx="7" cy="18.5" r="2.2"/><circle cx="17" cy="9.5" r="2.2"/><path d="M17 11.7v1.1a3 3 0 0 1-3 3H7"/><path d="M7 7.7v8.6"/>';
+const MD = '<rect x="2.6" y="6" width="18.8" height="12" rx="2"/><polyline points="6,15 6,9 9,12.5 12,9 12,15"/><polyline points="15.4,9 15.4,14"/><polyline points="13.6,12.4 15.4,14.6 17.2,12.4"/>';
+const SH = '<rect x="3.2" y="5.2" width="17.6" height="13.6" rx="2.4"/><polyline points="7.2,10 9.8,12.4 7.2,14.8"/><line x1="12.4" y1="15" x2="16.6" y2="15"/>';
+const GOPHER =
+  '<ellipse cx="12" cy="14" rx="6.6" ry="7.4" fill="#00ADD8"/>' +
+  '<path d="M6.6 6.4q1.4-2.4 3 0" stroke="#00ADD8" stroke-width="2.2" fill="none" stroke-linecap="round"/>' +
+  '<path d="M14.4 6.4q1.6-2.4 3 0" stroke="#00ADD8" stroke-width="2.2" fill="none" stroke-linecap="round"/>' +
+  '<circle cx="9.3" cy="11.4" r="2.7" fill="#fff"/><circle cx="14.7" cy="11.4" r="2.7" fill="#fff"/>' +
+  '<circle cx="10.1" cy="11.6" r="1.2" fill="#1b1b1b"/><circle cx="15.5" cy="11.6" r="1.2" fill="#1b1b1b"/>' +
+  '<ellipse cx="12" cy="16.2" rx="1.7" ry="1.2" fill="#fff"/>';
+
+const ICONS: Record<string, string> = {
+  folder: S('var(--accent)', FOLDER),
+  'folder-open': S('var(--accent)', FOLDER_OPEN),
+  file: S('var(--blue)', FILE),
+  branch: S('var(--mauve)', BRANCH),
+  go: GOPHER,
+  lua: '<circle cx="10.5" cy="13.5" r="7" fill="var(--blue)"/><circle cx="18" cy="6.5" r="2.6" fill="var(--blue)"/><circle cx="7.6" cy="10.6" r="2.1" fill="var(--bg)"/>',
+  ts: '<rect x="4" y="4" width="16" height="16" rx="3" fill="#3178C6"/>',
+  js: '<rect x="4" y="4" width="16" height="16" rx="3" fill="#F7DF1E"/>',
+  sh: S('var(--green)', SH, 1.6),
+  md: S('var(--dim)', MD, 1.6),
+  readme: S('var(--accent)', MD, 1.6),
+  pdf: S('var(--peach)', FILE, 1.6),
+  arrow: '<path d="M0 0 L9 11 L0 22 Z" fill="var(--accent)"/>',
+};
+
+const body = ICONS[name] ?? ICONS.md;
+const arrow = name === 'arrow';
+---
+<svg viewBox={arrow ? '0 0 9 22' : '0 0 24 24'} width={arrow ? 9 : 14} height={arrow ? 22 : 14} aria-hidden="true" set:html={body} />

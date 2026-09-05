@@ -1,0 +1,29 @@
+---
+import Icon from './Icon.astro';
+import type { TreeNode } from '../lib/tree';
+interface Props { nodes: TreeNode[]; current: string }
+const { nodes, current } = Astro.props;
+const guide = (depth: number) => (depth === 0 ? '' : '|  '.repeat(depth - 1) + '|- ');
+---
+{nodes.map((node) =>
+  node.kind === 'folder' ? (
+    <>
+      <div class="row folder" data-row data-folder={node.path} data-depth={node.depth} data-folded={node.folded ? '' : undefined}>
+        <span class="guide">{guide(node.depth)}</span>
+        <span class="chev">{node.folded ? '>' : 'v'}</span>
+        <span class="icon"><Icon name={node.folded ? 'folder' : 'folder-open'} /></span>
+        <span class="name">{node.name}</span>
+        {(node.depth > 0 || node.folded) && <span class="count">{node.count}</span>}
+      </div>
+      <div class="children" data-children={node.path} hidden={node.folded}>
+        <Astro.self nodes={node.children} current={current} />
+      </div>
+    </>
+  ) : (
+    <div class:list={['row', 'file', { sel: node.href === current }]} data-row data-depth={node.depth}>
+      <span class="guide">{guide(node.depth)}</span>
+      <span class="icon"><Icon name={node.icon} /></span>
+      <a class="name" href={node.href} download={node.download ? '' : undefined}>{node.name}</a>
+    </div>
+  ),
+)}

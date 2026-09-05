@@ -31,3 +31,15 @@ export function bracketLinks(data: { repo?: string; live?: string }): BracketLin
   if (data.live) out.push({ label: '[live]', href: data.live });
   return out;
 }
+
+/**
+ * The site path of the page being rendered. With `build.format: 'file'` Astro hands us
+ * `Astro.url.pathname` values like `/index.html` and `/projects/store.html`; the tree hrefs
+ * and the canonical URL use extensionless paths without a trailing slash.
+ */
+export function currentPath(pathname: string): string {
+  const noIndex = pathname.replace(/\/index\.html$/, '/');
+  const noExt = noIndex.replace(/\.html$/, '');
+  if (noExt === '' || noExt === '/') return '/';
+  return noExt.replace(/\/$/, '');
+}

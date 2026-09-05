@@ -1,7 +1,15 @@
 ---
+import Nvim from '../layouts/Nvim.astro';
+import Readme from '../components/Readme.astro';
+import { SITE } from '../site';
 ---
-<!doctype html>
-<html lang="en">
-  <head><meta charset="utf-8" /><title>Oleksandr Popov</title></head>
-  <body><h1>Oleksandr Popov</h1></body>
-</html>
+<Nvim
+  title={SITE.name}
+  description={SITE.description}
+  crumb="README.md"
+  short={SITE.root}
+  path={`${SITE.root}/README.md`}
+  shortPath="README.md"
+>
+  <Readme />
+</Nvim>

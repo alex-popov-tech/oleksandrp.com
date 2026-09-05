@@ -1,0 +1,26 @@
+---
+import Icon from './Icon.astro';
+import TreeNodes from './TreeNodes.astro';
+import { countFiles, type TreeNode } from '../lib/tree';
+import { SITE } from '../site';
+interface Props { tree: TreeNode[]; current: string }
+const { tree, current } = Astro.props;
+---
+<nav id="sidebar" popover="manual" aria-label="Files" transition:persist="sidebar">
+  <div class="winbar">
+    <button class="ghost phone-only" popovertarget="sidebar" popovertargetaction="hide" aria-label="Close file tree">x</button>
+    <Icon name="folder" />
+    <span>{SITE.root}</span>
+    <span class="spacer"></span>
+    <span class="phone-only">tap to open</span>
+  </div>
+  <div class="tree" id="tree">
+    <TreeNodes nodes={tree} current={current} />
+  </div>
+  <div class="winbar drawer-status">
+    <span class="mode">NORMAL</span>
+    <span>explorer</span>
+    <span class="spacer"></span>
+    <span>{countFiles(tree)} files</span>
+  </div>
+</nav>
