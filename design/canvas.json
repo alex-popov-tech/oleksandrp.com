@@ -1,0 +1,23 @@
+{
+  "pages": [
+    { "id": "page-1", "name": "The site" },
+    { "id": "page-2", "name": "Reference" }
+  ],
+  "artboards": [
+    { "file": "Main.dc.html", "title": "README, what opens first", "x": 0, "y": 0, "w": 1440, "h": 900, "page": "page-1" },
+    { "file": "PhoneReadme.dc.html", "title": "README on a phone", "x": 1540, "y": 28, "w": 390, "h": 844, "page": "page-1" },
+    { "file": "Open.dc.html", "title": "Anything open", "x": 2030, "y": 0, "w": 1440, "h": 900, "page": "page-1" },
+    { "file": "PhoneOpen.dc.html", "title": "Open on a phone", "x": 3570, "y": 28, "w": 390, "h": 844, "page": "page-1" },
+    { "file": "PhoneTree.dc.html", "title": "The tree, summoned", "x": 4060, "y": 28, "w": 390, "h": 844, "page": "page-1" },
+    { "file": "Startup.dc.html", "title": "Startup screen, if you ever want a door", "x": 0, "y": 0, "w": 1440, "h": 900, "page": "page-2" },
+    { "file": "Recruiter.dc.html", "title": "Copy source for the CV PDF", "x": 1540, "y": 0, "w": 1440, "h": 4000, "page": "page-2" }
+  ],
+  "annotations": [
+    { "id": "site", "x": 0, "y": -380, "w": 1000, "page": "page-1", "text": "The whole site, desktop and phone side by side. Two screens each.\nREADME.md sits at the root of the tree, under the folders, and is what opens when the page loads. Download CV pdf is the only thing on the top line.\nEverything else you click opens in the same template: crumb, title with github and live in brackets, description, tags, and then whatever suits that item at the bottom.\nEverything in brackets is yours to fill. No dates, roles or stacks were invented." },
+    { "id": "bottom", "x": 1040, "y": -380, "w": 480, "page": "page-1", "text": "The bottom block is the only thing that varies.\nA from-scratch project gets a source excerpt, shown here with the real Parse function from redis-go.\nA live site gets a screenshot or a short recording.\nAnything else gets nothing, and the pane just ends.\nA job uses the same template: role and dates as the title, what you owned as the description, the stack as tags, and what you shipped at the bottom." },
+    { "id": "phone", "x": 1560, "y": -380, "w": 900, "page": "page-1", "text": "Phone, 390 by 844.\nA tree beside a buffer does not fit, so this does what a narrow terminal does: one window at a time. The grid drops from 158 columns to 48 and the type from 15px to 13px, still a real terminal width. Same tree, icons, guide lines and statusline.\nThe tree stops being furniture and becomes a drawer: summoned from the icon at the top left, full screen while open, dismissed when you tap a file. On an opened buffer that icon becomes a back chevron, and the statusline path is shortened since the full one no longer fits." },
+    { "id": "theme", "x": 0, "y": -180, "w": 1000, "page": "page-1", "text": "One theme, Catppuccin Mocha. The generator has a single THEME line at the top with Gruvbox defined beside it, so retheming during development is one word." },
+    { "id": "ref", "x": 0, "y": -260, "w": 980, "page": "page-2", "text": "Two things kept from the earlier rounds because they still have a use.\nThe startup screen: a Neovim start screen with your name in ASCII and a key menu. Superseded by the README as the landing, but there if you ever want a door in front of the site.\nThe recruiter page: not shipping as a page, but its work history, language list and project write-ups are already your CV copy, just set for screen. Build the PDF from it." }
+  ],
+  "launch": { "view": "canvas", "page": "page-1" }
+}

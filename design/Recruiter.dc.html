@@ -1,0 +1,244 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap">
+  <style>
+    body { margin: 0; background: #faf7f1; }
+    a { color: #7c2d2a; text-decoration: none; border-bottom: 1px solid #7c2d2a; }
+    a:hover { color: #171511; border-bottom-color: #171511; }
+    .serif { font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif; }
+    .kicker { font-family: 'Instrument Sans', 'Helvetica Neue', Arial, sans-serif; font-size: 12px; line-height: 18px; letter-spacing: 0.18em; text-transform: uppercase; color: #6e6a61; font-weight: 500; }
+    .snippet { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; line-height: 20px; color: #3b3832; white-space: pre; margin: 0; }
+    .spec { display: flex; flex-direction: column; gap: 18px; padding: 28px 24px 32px 0; border-bottom: 1px solid #d9d3c7; }
+    .spec.r { border-left: 1px solid #d9d3c7; padding-left: 24px; }
+    .lang { font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif; font-size: 64px; line-height: 1; color: #171511; margin: 0; font-weight: 400; }
+    .chapter { display: flex; flex-direction: row; justify-content: space-between; align-items: baseline; }
+    .chapter .no { font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif; font-style: italic; font-size: 22px; color: #6e6a61; }
+    .chapter h2 { margin: 0; font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif; font-size: 56px; line-height: 1; font-weight: 400; color: #171511; }
+    .job { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 32px; padding: 28px 0; border-bottom: 1px solid #d9d3c7; align-items: baseline; }
+    .job .co { font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1; color: #171511; }
+    .proj { display: flex; flex-direction: column; gap: 14px; padding: 32px 32px 36px 0; border-bottom: 1px solid #d9d3c7; }
+    .proj.r { border-left: 1px solid #d9d3c7; padding-left: 32px; }
+    .proj h3 { margin: 0; font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 36px; font-weight: 400; color: #171511; }
+    .proj p { margin: 0; font-size: 15px; line-height: 24px; color: #3b3832; }
+    .col h4 { margin: 0; font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif; font-style: italic; font-size: 28px; line-height: 1; font-weight: 400; color: #171511; }
+    .col ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 24px; color: #3b3832; }
+  </style>
+</helmet>
+<div style="width: 1440px; min-height: 4000px; background: #faf7f1; color: #171511; font-family: 'Instrument Sans', 'Helvetica Neue', Arial, sans-serif; font-size: 16px; line-height: 26px; display: flex; flex-direction: column;">
+
+  <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 28px 64px; border-bottom: 1px solid #d9d3c7;">
+    <span style="font-weight: 500; font-size: 15px;">Oleksandr Popov</span>
+    <span class="serif" style="font-style: italic; font-size: 22px; color: #171511;">Portfolio, second edition</span>
+    <span class="kicker"><a href="https://github.com/alex-popov-tech" style="border-bottom: 0;">github</a> · <a href="https://oleksandrp.com" style="border-bottom: 0;">oleksandrp.com</a></span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 32px; padding: 96px 64px 72px 64px;">
+    <div style="grid-column: span 8; display: flex; flex-direction: column; gap: 24px;">
+      <span class="kicker">A web developer who</span>
+      <h1 class="serif" style="margin: 0; font-size: 164px; line-height: 0.92; letter-spacing: -0.02em; font-weight: 400; color: #171511;">re-invents the wheel, <em style="font-style: italic; color: #7c2d2a;">on purpose.</em></h1>
+    </div>
+    <div style="grid-column: span 4; align-self: end; display: flex; flex-direction: column; gap: 20px;">
+      <p style="margin: 0; font-size: 18px; line-height: 28px; color: #171511; text-wrap: pretty;">Redis, DNS, Git, BitTorrent and HTTP, each rebuilt from the wire up in Go. Neovim plugins in Lua. TypeScript on the web and inside test frameworks before that.</p>
+      <span><a href="#work">Skip to work history</a></span>
+    </div>
+  </div>
+
+  <div class="kicker" style="display: flex; flex-direction: row; gap: 48px; align-items: center; padding: 16px 64px; border-top: 1px solid #d9d3c7; border-bottom: 1px solid #d9d3c7; color: #171511;">
+    <span>01 Languages</span>
+    <span>02 Work</span>
+    <span>03 From scratch</span>
+    <span>04 Elsewhere</span>
+    <span style="flex-grow: 1;"></span>
+    <span style="color: #6e6a61;">Nº 2 · 2026</span>
+  </div>
+
+  <div style="padding: 72px 64px 0 64px; display: flex; flex-direction: column; gap: 32px;">
+    <div class="chapter">
+      <div style="display: flex; flex-direction: row; gap: 20px; align-items: baseline;">
+        <span class="no">01</span>
+        <h2>Languages</h2>
+      </div>
+      <span class="kicker">Each set in its own idiom</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid #d9d3c7;">
+      <div class="spec">
+        <h3 class="lang">Go</h3>
+        <pre class="snippet">for msg := range ch {
+    handle(msg)
+}</pre>
+        <span class="kicker">since [YEAR] · servers, protocols, CLIs</span>
+      </div>
+      <div class="spec r">
+        <h3 class="lang">TypeScript</h3>
+        <pre class="snippet">type Result&lt;T&gt; =
+  | { ok: true; value: T }
+  | { ok: false; error: Error }</pre>
+        <span class="kicker">since [YEAR] · web apps, test frameworks</span>
+      </div>
+      <div class="spec r">
+        <h3 class="lang">Lua</h3>
+        <pre class="snippet">vim.keymap.set("n", "&lt;leader&gt;s",
+  require("store").open)</pre>
+        <span class="kicker">since [YEAR] · Neovim plugins, dotfiles</span>
+      </div>
+      <div class="spec">
+        <h3 class="lang">Gleam</h3>
+        <pre class="snippet">use user &lt;- result.try(fetch(id))
+Ok(user.name)</pre>
+        <span class="kicker">since [YEAR] · Advent of Code, on the BEAM</span>
+      </div>
+      <div class="spec r">
+        <h3 class="lang">JavaScript</h3>
+        <pre class="snippet">const done = await Promise.all(
+  jobs.map(run))</pre>
+        <span class="kicker">since [YEAR] · everything before TypeScript</span>
+      </div>
+      <div class="spec r">
+        <h3 class="lang">Shell</h3>
+        <pre class="snippet">fd -e go -x wc -l \
+  | sort -n | tail -1</pre>
+        <span class="kicker">since [YEAR] · glue, homelab, dotfiles</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="work" style="padding: 96px 64px 0 64px; display: flex; flex-direction: column; gap: 32px;">
+    <div class="chapter">
+      <div style="display: flex; flex-direction: row; gap: 20px; align-items: baseline;">
+        <span class="no">02</span>
+        <h2>Work</h2>
+      </div>
+      <span class="kicker">Test automation first, then the web, then under it</span>
+    </div>
+    <div style="display: flex; flex-direction: column; border-top: 1px solid #d9d3c7;">
+      <div class="job">
+        <span class="kicker" style="grid-column: span 2;">[YYYY] to [YYYY]</span>
+        <span class="co" style="grid-column: span 3;">Lokalise</span>
+        <span style="grid-column: span 7; font-size: 16px; line-height: 26px; color: #3b3832;">[ROLE] · [ONE LINE ON WHAT YOU OWNED THERE]</span>
+      </div>
+      <div class="job">
+        <span class="kicker" style="grid-column: span 2;">[YYYY] to [YYYY]</span>
+        <span class="co" style="grid-column: span 3;">Informa</span>
+        <span style="grid-column: span 7; font-size: 16px; line-height: 26px; color: #3b3832;">[ROLE] · [ONE LINE ON WHAT YOU OWNED THERE]</span>
+      </div>
+      <div class="job">
+        <span class="kicker" style="grid-column: span 2;">[YYYY] to [YYYY]</span>
+        <span class="co" style="grid-column: span 3;">EPAM</span>
+        <span style="grid-column: span 7; font-size: 16px; line-height: 26px; color: #3b3832;">[ROLE] · [ONE LINE ON WHAT YOU OWNED THERE]</span>
+      </div>
+      <div class="job">
+        <span class="kicker" style="grid-column: span 2;">[YYYY] to [YYYY]</span>
+        <span class="co" style="grid-column: span 3;">Keenethics</span>
+        <span style="grid-column: span 7; font-size: 16px; line-height: 26px; color: #3b3832;">[ROLE] · shipped <a href="https://www.mayak.co.ua/">Mayak</a>, a directory of psychological services in Ukraine, on Next.js and PostgreSQL</span>
+      </div>
+      <div class="job">
+        <span class="kicker" style="grid-column: span 2;">[YYYY] to [YYYY]</span>
+        <span class="co" style="grid-column: span 3;">[COMPANY]</span>
+        <span style="grid-column: span 7; font-size: 16px; line-height: 26px; color: #3b3832;">[ROLE] · [ONE LINE ON WHAT YOU OWNED THERE]</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 96px 64px 0 64px; display: flex; flex-direction: column; gap: 32px;">
+    <div class="chapter">
+      <div style="display: flex; flex-direction: row; gap: 20px; align-items: baseline;">
+        <span class="no">03</span>
+        <h2>From scratch</h2>
+      </div>
+      <span class="kicker">Six things that already existed, rebuilt to understand them</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border-top: 1px solid #d9d3c7;">
+      <div class="proj">
+        <h3>A Redis server that redis-cli can't tell apart</h3>
+        <p>Speaks RESP over TCP with a goroutine per connection. Strings with expiry, streams, MULTI/EXEC transactions, WATCH, and leader-follower replication with WAIT.</p>
+        <div style="display: flex; flex-direction: row; gap: 24px; align-items: baseline;"><span class="kicker">Go · RESP · replication</span><span><a href="https://github.com/alex-popov-tech/redis-go">Read the code</a></span></div>
+      </div>
+      <div class="proj r">
+        <h3>Git, byte-for-byte compatible</h3>
+        <p>Reads and writes the real .git object store by hand and clones public repositories over Smart HTTP: pkt-line framing, packfiles, ref-delta chains, checkout.</p>
+        <div style="display: flex; flex-direction: row; gap: 24px; align-items: baseline;"><span class="kicker">Go · packfiles · zlib</span><span><a href="https://github.com/alex-popov-tech/git-go">Read the code</a></span></div>
+      </div>
+      <div class="proj">
+        <h3>A DNS server with no DNS library</h3>
+        <p>Parses and serializes DNS packets byte by byte: bit-packed header flags, pointer-compressed names, recursive forwarding to an upstream resolver.</p>
+        <div style="display: flex; flex-direction: row; gap: 24px; align-items: baseline;"><span class="kicker">Go · UDP · name compression</span><span><a href="https://github.com/alex-popov-tech/dns-go">Read the code</a></span></div>
+      </div>
+      <div class="proj r">
+        <h3>A BitTorrent client, magnet links included</h3>
+        <p>Bencode, tracker announces, the peer wire protocol, SHA-1 verified pieces over a goroutine-per-peer work queue, and metadata fetched from peers over ut_metadata.</p>
+        <div style="display: flex; flex-direction: row; gap: 24px; align-items: baseline;"><span class="kicker">Go · peer wire · BEP 9/10</span><span><a href="https://github.com/alex-popov-tech/bittorrent-go">Read the code</a></span></div>
+      </div>
+      <div class="proj">
+        <h3>HTTP/1.1 on raw TCP</h3>
+        <p>No net/http on the server side: request lines and headers carved out of the byte stream, chunked encoding with trailers, streamed files, reverse proxying, graceful shutdown.</p>
+        <div style="display: flex; flex-direction: row; gap: 24px; align-items: baseline;"><span class="kicker">Go · TCP · chunked encoding</span><span><a href="https://github.com/alex-popov-tech/go_http">Read the code</a></span></div>
+      </div>
+      <div class="proj r">
+        <h3>grep, with a hand-compiled matcher</h3>
+        <p>Patterns compiled into a token list and matched with backtracking search: classes, anchors, quantifiers, nested capture groups, backreferences, recursive file search.</p>
+        <div style="display: flex; flex-direction: row; gap: 24px; align-items: baseline;"><span class="kicker">Go · regex engine · CLI</span><span><a href="https://github.com/alex-popov-tech/grep-go">Read the code</a></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 96px 64px 0 64px; display: flex; flex-direction: column; gap: 32px;">
+    <div class="chapter">
+      <div style="display: flex; flex-direction: row; gap: 20px; align-items: baseline;">
+        <span class="no">04</span>
+        <h2>Elsewhere</h2>
+      </div>
+      <span class="kicker">The parts that are not a job</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; border-top: 1px solid #d9d3c7; padding-top: 32px;">
+      <div class="col" style="display: flex; flex-direction: column; gap: 20px;">
+        <h4>Built to learn</h4>
+        <ul>
+          <li>CodeCrafters: Redis, DNS, Git, BitTorrent, grep, end to end</li>
+          <li>Boot.dev: HTTP/1.1 on raw TCP, starting from UDP datagrams</li>
+          <li>Advent of Code: 2024 in Go, 2025 in Gleam</li>
+          <li>One Billion Row Challenge, in Go</li>
+          <li>A Monkey interpreter, after Thorsten Ball's book</li>
+        </ul>
+      </div>
+      <div class="col" style="display: flex; flex-direction: column; gap: 20px;">
+        <h4>Open source</h4>
+        <ul>
+          <li><a href="https://github.com/alex-popov-tech/store.nvim">store.nvim</a>, change_case.nvim, talk-to-me.nvim: Neovim plugins in Lua</li>
+          <li>SelenideJS and Play Right: user-oriented test frameworks over Selenium and Playwright</li>
+          <li><a href="https://www.raycast.com/alex-popov-tech/lastpass">LastPass for Raycast</a>, in the official store</li>
+          <li>claude-rio: a deterministic skill and agent matcher for Claude Code</li>
+          <li><a href="https://dtek-theta.vercel.app">Better DTEK</a>: live power-outage schedules for Ukrainian addresses, SvelteKit</li>
+          <li><a href="https://dotfiles.oleksandrp.com">.dotfiles</a>: wezterm, zsh, nvim, tmux, a Brewfile</li>
+        </ul>
+      </div>
+      <div class="col" style="display: flex; flex-direction: column; gap: 20px;">
+        <h4>Hardware</h4>
+        <ul>
+          <li>ZMK firmware for split ergonomic keyboards: Corne, Skeletyl, Dao, Skean, Jorne, Seagull, a 5x12 ortho</li>
+          <li>A Raspberry Pi homelab: Home Assistant, <a href="https://acapulko.oleksandrp.com/">Acapulko</a> for the blackouts, a media stack</li>
+          <li>FPV quads</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 120px; padding: 72px 64px 56px 64px; border-top: 1px solid #171511; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 32px; align-items: end;">
+    <div class="serif" style="grid-column: span 7; font-size: 112px; line-height: 0.95; letter-spacing: -0.02em; color: #171511;">Say <em style="font-style: italic; color: #7c2d2a;">hello.</em></div>
+    <div style="grid-column: span 5; display: flex; flex-direction: column; gap: 12px; font-size: 18px; line-height: 28px;">
+      <span>[EMAIL]</span>
+      <span><a href="https://github.com/alex-popov-tech">github.com/alex-popov-tech</a></span>
+      <span><a href="https://oleksandrp.com">oleksandrp.com</a></span>
+      <span class="kicker" style="margin-top: 20px;">Second edition · 2026 · Set in Instrument Serif and Instrument Sans</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
