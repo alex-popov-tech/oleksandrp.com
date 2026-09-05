@@ -1,0 +1,26 @@
+---
+import Line from './Line.astro';
+import type { BracketLink } from '../lib/pages';
+interface Props { title: string; links?: BracketLink[]; meta?: string; paragraphs: string[]; tags: string[] }
+const { title, links = [], meta, paragraphs, tags } = Astro.props;
+---
+<Line cls="title">
+  <span>{title}</span>
+  {(links.length > 0 || meta) && (
+    <span class="links">
+      {meta && <span class="dim">{meta}</span>}
+      {links.map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}
+    </span>
+  )}
+</Line>
+<Line />
+{paragraphs.map((p, i) => (
+  <>
+    <Line>{p}</Line>
+    {i < paragraphs.length - 1 && <Line />}
+  </>
+))}
+<Line />
+<Line cls="tags">{tags.map((t) => <span>{t}</span>)}</Line>
+<Line />
+<slot />

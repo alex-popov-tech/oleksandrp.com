@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import Nvim from '../../layouts/Nvim.astro';
+import Pane from '../../components/Pane.astro';
+import Line from '../../components/Line.astro';
+import { paragraphs } from '../../lib/text';
+import { bracketLinks, crumbFor, pathFor, shortPathFor } from '../../lib/pages';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('work');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const paras = paragraphs(entry.body);
+---
+<Nvim
+  title={d.title}
+  description={paras[0] ?? d.title}
+  crumb={crumbFor('work', entry.id, d.lang)}
+  short="work"
+  path={pathFor('work', entry.id, d.lang)}
+  shortPath={shortPathFor('work', entry.id, d.lang)}
+>
+  <Pane title={d.role} meta={`${d.from} - ${d.to}`} paragraphs={paras} tags={d.tags}>
+    {d.shipped.length > 0 && (
+      <>
+        <Line cls="label">shipped</Line>
+        <Line />
+        {d.shipped.map((s) => (
+          <>
+            <Line cls="title">
+              <span>{s.title}</span>
+              <span class="links">{bracketLinks(s).map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}</span>
+            </Line>
+            <Line>{s.description}</Line>
+            <Line cls="tags">{s.tags.map((t) => <span>{t}</span>)}</Line>
+            <Line />
+          </>
+        ))}
+      </>
+    )}
+  </Pane>
+</Nvim>
