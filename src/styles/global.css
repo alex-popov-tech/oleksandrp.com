@@ -194,3 +194,32 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 #help table { border-collapse: collapse; }
 #help td { padding: 0 2ch 0 0; vertical-align: top; }
 #help td:first-child { color: var(--blue); white-space: nowrap; }
+
+/* ---- phone: one window at a time, the tree is a drawer ---- */
+@media (max-width: 899px) {
+  :root { --fs: 13px; --lh: 20px; --gutter: 3ch; }
+  #app { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) var(--lh); }
+  #main { grid-column: 1; }
+  #statusline { grid-column: 1; }
+  #cmdline { display: none; }
+  #sidebar[popover] { display: none; }
+  #sidebar[popover]:popover-open {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100dvh;
+    border: 0;
+    z-index: 10;
+  }
+  .phone-only { display: inline-flex; }
+  .drawer-status { display: flex; }
+  .drawer-status .mode { background: var(--accent); color: var(--bg); padding: 0 1ch; font-weight: 700; }
+  .winbar .crumb .long, #statusline .path .long, .cta .long { display: none; }
+  .winbar .crumb .short, #statusline .path .short, .cta .short { display: inline; }
+  #statusline .branch, #statusline .arrow { display: none; }
+  .ln .tx { padding-right: 1ch; }
+  .ln .tx.title .links { flex-basis: 100%; margin-left: 0; }
+  .ln .tx .path { display: none; }
+  .ln .tx.sub { padding-left: 2ch; }
+}
