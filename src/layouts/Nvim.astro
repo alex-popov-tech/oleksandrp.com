@@ -47,6 +47,13 @@ const body = numberLines(await Astro.slots.render('default'));
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={new URL(current, Astro.site)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={new URL(current, Astro.site)} />
+    <meta property="og:image" content={new URL('/og.png', Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <ClientRouter />

@@ -1,0 +1,2 @@
+# www to apex. Requires www.oleksandrp.com to be attached as a second custom domain (README, phase 2).
+https://www.oleksandrp.com/* https://oleksandrp.com/:splat 301
