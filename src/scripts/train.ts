@@ -13,6 +13,9 @@ const CHECK_MS = 10_000;
 const MIN_WIDTH = 900;
 /** the next departure lives here so browsing between pages does not reset the wait */
 const SLOT_KEY = 'sl:next-departure';
+/** ?sl=loop keeps it running back to back, for looking at it without waiting */
+const LOOP = typeof location !== 'undefined' && new URLSearchParams(location.search).has('sl');
+const LOOP_GAP_MS = 1_200;
 
 let timer: number | undefined;
 let running = false;
@@ -36,6 +39,7 @@ function writeSlot(at: number) {
 }
 
 function scheduleNext() {
+  if (LOOP) return void window.setTimeout(run, LOOP_GAP_MS);
   writeSlot(Date.now() + GAP_MIN_MS + Math.random() * (GAP_MAX_MS - GAP_MIN_MS));
 }
 
@@ -64,14 +68,6 @@ function columnWidth(node: HTMLElement): number {
   return w || 9;
 }
 
-/**
- * Dims whatever the row covers instead of painting a colour: the sidebar and the buffer are
- * different shades, so a fixed fill showed as a lighter block over the tree. Set here rather
- * than in the stylesheet because the CSS minifier collapses the pair of prefixed and
- * unprefixed declarations down to the -webkit- one, which Chrome then ignores.
- */
-const PLATE = 'brightness(0.32) blur(4px)';
-
 const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 /**
@@ -83,8 +79,7 @@ function rowHtml(row: string): string {
   const trimmed = row.replace(/\s+$/, '');
   if (trimmed.trim() === '') return '<span></span>';
   const lead = trimmed.length - trimmed.replace(/^ +/, '').length;
-  const style = `margin-left:${lead}ch;backdrop-filter:${PLATE};-webkit-backdrop-filter:${PLATE}`;
-  return `<span style="${style}">${escape(trimmed.slice(lead))}</span>`;
+  return `<span style="margin-left:${lead}ch">${escape(trimmed.slice(lead))}</span>`;
 }
 
 function run() {
@@ -92,22 +87,27 @@ function run() {
   if (!node) return;
   running = true;
 
+  const pane = node.parentElement!.getBoundingClientRect();
   const lh = parseFloat(getComputedStyle(document.body).lineHeight) || 22;
   const cw = columnWidth(node);
-  // keep the whole train between the winbar and the statusline, on the text grid
-  const room = Math.max(0, window.innerHeight - TRAIN_ROWS * lh - 3 * lh);
-  node.style.top = `${lh + Math.floor((Math.random() * room) / lh) * lh}px`;
+  // keep the whole train inside the pane, below the winbar, on the text grid
+  // start below the winbar and the cursor line: that line is painted --cursor, and a --bg
+  // plate crossing it shows as a faint band
+  const top = 3 * lh;
+  const room = Math.max(0, pane.height - TRAIN_ROWS * lh - top - lh);
+  node.style.top = `${top + Math.floor((Math.random() * room) / lh) * lh}px`;
 
-  let col = Math.ceil(window.innerWidth / cw);
-  let travelled = 0;
+  let col = Math.ceil(pane.width / cw);
   node.hidden = false;
 
   const step = () => {
-    const frame = Math.floor(travelled / COLS_PER_FRAME) % TRAIN_FRAMES.length;
+    // sl indexes the pattern by column, and the column counts down as the train moves left.
+    // Deriving it from distance travelled instead spins the drivers backwards.
+    const n = TRAIN_FRAMES.length;
+    const frame = ((Math.floor(col / COLS_PER_FRAME) % n) + n) % n;
     node.innerHTML = TRAIN_FRAMES[frame].map(rowHtml).join('\n');
     node.style.left = `${Math.round(col * cw)}px`;
     col -= 1;
-    travelled += 1;
     if (col < -TRAIN_COLS) {
       node.hidden = true;
       node.innerHTML = '';
@@ -125,8 +125,12 @@ declare global {
 
 if (!window.__trainBound && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   window.__trainBound = true;
-  if (!readSlot()) writeSlot(Date.now() + FIRST_RUN_MS);
-  window.setInterval(tick, CHECK_MS);
-  document.addEventListener('visibilitychange', tick);
-  tick();
+  if (LOOP) {
+    run();
+  } else {
+    if (!readSlot()) writeSlot(Date.now() + FIRST_RUN_MS);
+    window.setInterval(tick, CHECK_MS);
+    document.addEventListener('visibilitychange', tick);
+    tick();
+  }
 }

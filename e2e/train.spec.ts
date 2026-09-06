@@ -15,12 +15,18 @@ test('the train departs, crosses, and never blocks a click', async ({ page }) =>
   await expect(train).toBeVisible();
   await expect(train).toHaveCSS('pointer-events', 'none');
   expect((await train.textContent())?.split('\n')).toHaveLength(6);
-  // each row dims what it covers, otherwise the sprite interleaves with the prose.
-  // it must be a backdrop-filter, not a fill: the tree and the buffer are different shades
+  // each row carries a plate, otherwise the sprite interleaves with the prose
   const row = train.locator('span').first();
-  expect(await row.evaluate((el) => getComputedStyle(el).backdropFilter)).toContain('brightness');
-  // an ancestor transform would make .train a backdrop root and the filter would dim nothing
-  expect(await train.evaluate((el) => getComputedStyle(el).transform)).toBe('none');
+  expect(await row.evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
+  // the plate is only invisible because the train runs inside the buffer pane, which is
+  // uniformly --bg. Over the sidebar's --bar it would read as a lighter block.
+  expect(await train.evaluate((el) => el.parentElement?.id)).toBe('main');
+  const [pane, box] = await train.evaluate((el) => {
+    const p = el.parentElement!.getBoundingClientRect();
+    const b = el.getBoundingClientRect();
+    return [{ l: p.left, r: p.right }, { l: b.left, r: b.right }];
+  });
+  expect(box.l).toBeGreaterThanOrEqual(pane.l - 1);
 
   // it floats over the buffer, so links underneath must still take the click
   await page.locator('#tree a[href="/projects/from_scratch/redis"]').click();

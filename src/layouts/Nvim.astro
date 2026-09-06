@@ -60,13 +60,13 @@ const body = numberLines(await Astro.slots.render('default'));
       <div id="main">
         <Winbar crumb={crumb} short={short} isReadme={current === '/'} />
         <main id="buffer" tabindex="-1" set:html={body} />
+        <Train />
       </div>
       <Statusline path={path} shortPath={shortPath} />
       <Cmdline />
     </div>
     <Shell />
     <HelpOverlay />
-    <Train />
     <script>
       import '../scripts/cycler';
       import '../scripts/nvim';

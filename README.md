@@ -64,24 +64,28 @@ Current glyphs: `custom-folder` U+E5FF, `custom-folder_open` U+E5FE, `oct-git_br
 
 ## The train
 
-Every minute or two the little train from `sl -l` crosses the page. It is a fixed-position
-`<pre>` with `pointer-events: none` sitting below the drawer and the help dialog, so it can
-never swallow a click; it picks a random row on the text grid, steps one column at a time and
-advances a wheel pattern every fourth column so the drivers turn at a sane rate.
+Every minute or two the little train from `sl -l` crosses the buffer. It is an absolutely
+positioned `<pre>` inside `#main` with `pointer-events: none`, so it can never swallow a
+click and is clipped at the pane edges; it picks a random row on the text grid and steps one
+column at a time, indexing the wheel pattern by column the way `sl` does — derive it from
+distance travelled instead and the drivers spin backwards.
 
-Each row dims what it covers with its own `backdrop-filter` rather than painting a fill: the
-sidebar and the buffer are different shades, so a fixed colour showed up as a block whenever
-the train crossed the tree. Two things this depends on, both of which silently break it:
-`.train` must carry no `transform`, since a transformed ancestor becomes a backdrop root and
-the filter would then see an empty box instead of the page — movement uses `left` for that
-reason — and the filter is set inline by `scripts/train.ts`, because the CSS minifier
-collapses the prefixed and unprefixed declarations down to the `-webkit-` one, which Chrome
-then ignores. Both are covered by e2e assertions.
+Each row carries a plate hugging its ink, filled with `--bg`. That plate is invisible only
+because the train stays inside `#main`, which is uniformly `--bg`: it simply overwrites the
+text, the way `sl` overwrites a terminal. Two other approaches failed and are worth not
+repeating — a `--bg` fill that also crossed the sidebar read as a lighter block against
+`--bar`, and dimming with `backdrop-filter` read as a black box (and needs `.train` to carry
+no `transform`, or a transformed ancestor becomes a backdrop root and it dims nothing at all).
+The train also starts below the cursor line, which is painted `--cursor` and would show a
+faint band through the plate.
 
 The next departure is stored in `localStorage` under `sl:next-departure` and polled every ten
 seconds rather than armed as one long timer, so browsing between pages does not restart the
-wait and a slot that falls due while the tab is hidden or throttled still departs on the next
-tick instead of being lost.
+wait and a slot falling due while the tab is hidden still departs on the next tick. Add
+`?sl=loop` to any URL to run it back to back without waiting.
+
+It stays in the shed under `prefers-reduced-motion` and on screens narrower than the
+63-column sprite.
 
 The art in `src/lib/train.ts` is from [`sl`](https://github.com/mtoyoda/sl), the program you
 get when you typo `ls`:
