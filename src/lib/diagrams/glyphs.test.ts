@@ -15,7 +15,7 @@ const SAFE = new Set([
   // box drawing
   ...'─│┌┐└┘├┤┬┴┼╭╮╰╯',
   // blocks
-  ...'█▓▒░▀▄▌▐▖▗▘▝▙▚▛▜▟',
+  ...'█▓▒░▀▄▌▐▖▗▘▝▙▚▞▛▜▟',
   // geometric
   ...'▪▫●○◉◎◐◑◒◓◜◝◞◟▶◀★✓',
   // arrows and punctuation

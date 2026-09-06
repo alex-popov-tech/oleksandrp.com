@@ -90,8 +90,10 @@ export function renderFrame(tSeconds: number, opts: { speed?: number; plugins?: 
 
   // ---- header ----
   g.box(0, 0, 3, COLS - 1, C.dim);
-  g.put(1, 2, '▛▀▘▜▛ ▛▜ ▛▜ ▛▀▘', C.blue);
-  g.put(2, 2, '▄▄▌▐▙ ▙▟ ▌▐ ▙▄▖', C.blue);
+  // STORE, drawn on the 2x2 sub-grid each block glyph gives you: 6 pixels wide, 4 tall
+  // per letter. The handoff's own wordmark used the same vocabulary but read as five blocks.
+  g.put(1, 2, '▟▀▘▀▛▘▞▀▖▛▀▖█▛▘', C.blue);
+  g.put(2, 2, '▄█▘ ▌ ▚▄▘▛▜▖▙▄▖', C.blue);
   g.put(1, 18, 'plugin store', C.dim);
   g.put(2, 18, '.nvim', C.mute);
   const sort = 'Sort: Recently Updated';
