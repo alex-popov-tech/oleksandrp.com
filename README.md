@@ -72,7 +72,9 @@ the text grid and steps one column at a time, indexing the wheel pattern by colu
 
 The eastbound run uses `TRAIN_FRAMES_FLIPPED`, the same consist mirrored by `mirrorRow`:
 each row reversed with `/ \ ( ) [ ] { } < >` swapped for their mirror images. Without it the
-engine would drive in reverse, funnel-last.
+engine would drive in reverse, funnel-last. Mirroring also flips the apparent rotation, so
+`frameFor` reverses the eastbound basis to cancel that out — miss it and the drivers spin
+backwards in exactly one direction of travel.
 
 Each row carries a plate hugging its ink, filled with `--bg`. That plate is invisible only
 because the train stays inside `#main`, which is uniformly `--bg`: it simply overwrites the

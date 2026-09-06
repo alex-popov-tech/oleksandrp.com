@@ -1,9 +1,9 @@
-import { TRAIN_COLS, TRAIN_FRAMES, TRAIN_FRAMES_FLIPPED, TRAIN_ROWS } from '../lib/train';
+import { frameFor, TRAIN_COLS, TRAIN_FRAMES, TRAIN_FRAMES_FLIPPED, TRAIN_ROWS } from '../lib/train';
 
 const STEP_MS = 28;
 /** columns travelled per wheel pattern. sl uses 3; 2 spins the drivers a touch livelier,
     and 1 (a new pattern every column) reads as a strobe. */
-const COLS_PER_FRAME = 2;
+const COLS_PER_FRAME = 6;
 const FIRST_RUN_MS = 12_000;
 const GAP_MIN_MS = 60_000;
 const GAP_MAX_MS = 150_000;
@@ -108,10 +108,7 @@ function run() {
   node.hidden = false;
 
   const step = () => {
-    // sl indexes the pattern by column, which counts down as the train moves left. Deriving
-    // it from distance travelled instead spins the drivers backwards.
-    const n = frames.length;
-    const frame = ((Math.floor(col / COLS_PER_FRAME) % n) + n) % n;
+    const frame = frameFor(col, eastbound, COLS_PER_FRAME, frames.length);
     node.innerHTML = frames[frame].map(rowHtml).join('\n');
     node.style.left = `${Math.round(col * cw)}px`;
     col += eastbound ? 1 : -1;

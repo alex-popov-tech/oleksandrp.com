@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mirrorRow, TRAIN_COLS, TRAIN_FRAMES, TRAIN_FRAMES_FLIPPED, TRAIN_ROWS } from './train';
+import { frameFor, mirrorRow, TRAIN_COLS, TRAIN_FRAMES, TRAIN_FRAMES_FLIPPED, TRAIN_ROWS } from './train';
 
 describe('sl train art', () => {
   it('is six wheel patterns of six rows', () => {
@@ -46,5 +46,34 @@ describe('mirroring', () => {
     const facingRight = TRAIN_FRAMES_FLIPPED[0][0].indexOf('++');
     expect(facingLeft).toBeLessThan(TRAIN_COLS / 2);
     expect(facingRight).toBeGreaterThan(TRAIN_COLS / 2);
+  });
+});
+
+describe('frameFor', () => {
+  const N = TRAIN_FRAMES.length;
+  /** the pattern indexes seen as the train advances, in travel order */
+  const walk = (from: number, eastbound: boolean) =>
+    Array.from({ length: 24 }, (_, i) => frameFor(eastbound ? from + i : from - i, eastbound, 2, N));
+  /** how the index moves between consecutive columns, as a signed step mod N */
+  const steps = (seq: number[]) =>
+    seq.slice(1).map((v, i) => (((v - seq[i]) % N) + N) % N);
+
+  it('walks the cycle the same way whichever direction the train travels', () => {
+    // the eastbound consist is mirrored, which reverses the apparent rotation; its basis
+    // must reverse too, or the drivers spin backwards one way round. The phase differs,
+    // the direction must not.
+    const west = steps(walk(40, false));
+    const east = steps(walk(40, true));
+    expect(new Set(west)).toEqual(new Set(east));
+    for (const s of west) expect([0, N - 1]).toContain(s);
+  });
+
+  it('shows every pattern for exactly colsPerFrame columns', () => {
+    const counts = new Map<number, number>();
+    for (let col = 0; col < N * 2; col++) {
+      const f = frameFor(col, false, 2, N);
+      counts.set(f, (counts.get(f) ?? 0) + 1);
+    }
+    expect([...counts.values()]).toEqual(Array(N).fill(2));
   });
 });

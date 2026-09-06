@@ -94,3 +94,16 @@ export function mirrorRow(row: string): string {
 export const TRAIN_FRAMES_FLIPPED: readonly (readonly string[])[] = TRAIN_FRAMES.map((frame) =>
   frame.map(mirrorRow),
 );
+
+/**
+ * Index of the wheel pattern for a given column.
+ *
+ * sl indexes by column, and westbound the column counts down, so the sequence plays
+ * backwards through the patterns. Mirroring the art for the eastbound run flips the
+ * apparent rotation, so its basis has to run the other way to cancel that out -- otherwise
+ * the drivers turn backwards exactly one direction of travel.
+ */
+export function frameFor(col: number, eastbound: boolean, colsPerFrame: number, patterns: number): number {
+  const basis = eastbound ? -col : col;
+  return ((Math.floor(basis / colsPerFrame) % patterns) + patterns) % patterns;
+}
