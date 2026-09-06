@@ -313,8 +313,8 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
   background: linear-gradient(
     90deg,
     rgb(var(--bg-rgb) / 0) 0,
-    rgb(var(--bg-rgb) / 0.94) 5ch,
-    rgb(var(--bg-rgb) / 0.94) calc(100% - 5ch),
+    rgb(var(--bg-rgb) / 1) 6ch,
+    rgb(var(--bg-rgb) / 1) calc(100% - 6ch),
     rgb(var(--bg-rgb) / 0) 100%
   );
   padding: 0 1ch;
