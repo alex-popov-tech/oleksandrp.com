@@ -176,8 +176,9 @@ function leaveShell() {
 
 function bindShell() {
   const shell = $<HTMLElement>('#shell');
-  if (!shell || shell.dataset.bound) return;
-  shell.dataset.bound = '';
+  // note: dataset.bound = '' would be falsy, so the guard has to test the attribute
+  if (!shell || shell.hasAttribute('data-bound')) return;
+  shell.setAttribute('data-bound', '');
   shell.addEventListener('click', (e) => {
     if ((e.target as HTMLElement).closest('input')) return;
     leaveShell();
@@ -286,8 +287,10 @@ function onKey(e: KeyboardEvent) {
 
 function bindSidebar() {
   const sidebar = $<HTMLElement>('#sidebar');
-  if (!sidebar || sidebar.dataset.bound) return;
-  sidebar.dataset.bound = '';
+  // the sidebar persists across view transitions, so this must bind exactly once;
+  // dataset.bound = '' would be falsy and re-bind on every page load
+  if (!sidebar || sidebar.hasAttribute('data-bound')) return;
+  sidebar.setAttribute('data-bound', '');
   sidebar.addEventListener('click', (e) => {
     const row = (e.target as HTMLElement).closest<HTMLElement>('.row');
     if (!row) return;

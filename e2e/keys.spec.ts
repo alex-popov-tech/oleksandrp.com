@@ -80,3 +80,42 @@ test('unknown commands show E492, ? opens help', async ({ page }) => {
   await page.keyboard.press('q');
   await expect(page.locator('#help')).toBeHidden();
 });
+
+test('folders fold on a fresh load and keep folding after navigating', async ({ page }) => {
+  // regression: the bind guard used a falsy '' so listeners stacked up, and an even
+  // number of them folded then instantly unfolded again
+  await page.goto('/');
+  const work = page.locator('#tree [data-children="work"]');
+  await expect(work).toBeVisible();
+  await page.locator('#tree .row.folder[data-folder="work"]').click();
+  await expect(work).toBeHidden();
+  await page.locator('#tree .row.folder[data-folder="work"]').click();
+  await expect(work).toBeVisible();
+
+  for (const href of ['/projects/store', '/projects/from_scratch/redis', '/work/epam']) {
+    await page.locator(`#tree a[href="${href}"]`).click();
+    await expect(page).toHaveURL(new RegExp(`${href}$`));
+    await page.locator('#tree .row.folder[data-folder="work"]').click();
+    await expect(work, `folding after navigating to ${href}`).toBeHidden();
+    await page.locator('#tree .row.folder[data-folder="work"]').click();
+    await expect(work).toBeVisible();
+  }
+});
+
+test('the shell logs exactly one echo and one error per command', async ({ page }) => {
+  // regression: a second submit listener re-read the cleared input and logged a bare prompt
+  await page.goto('/');
+  await page.keyboard.press(':');
+  await page.keyboard.type('q');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#shell')).toBeVisible();
+  await page.keyboard.type('echo oops');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('[data-shell-log] div')).toHaveText([
+    '~/oleksandr $ echo oops',
+    'zsh: command not found: echo',
+  ]);
+  await page.keyboard.type('fd .');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('[data-shell-log] div')).toHaveCount(4);
+});
