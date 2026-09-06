@@ -1,0 +1,11 @@
+---
+import CvButton from './CvButton.astro';
+interface Props { crumb: string; short: string; isReadme: boolean }
+const { crumb, short, isReadme } = Astro.props;
+---
+<div class="winbar">
+  <button id="drawer-open" class="ghost phone-only" popovertarget="sidebar" popovertargetaction="show" aria-label="Open file tree">{isReadme ? '≡' : '<'}</button>
+  <span class="crumb"><span class="long">{crumb}</span><span class="short">{short}</span></span>
+  <span class="spacer"></span>
+  <CvButton />
+</div>

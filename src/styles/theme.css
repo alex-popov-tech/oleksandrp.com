@@ -1,0 +1,28 @@
+/* Catppuccin Mocha, copied from CATPPUCCIN in design/gen_v4.py */
+:root {
+  --bg: #1e1e2e;
+  --bar: #181825;
+  --sel: #313244;
+  --cursor: #2a2b3c;
+  --fg: #cdd6f4;
+  --muted: #a6adc8;
+  --dim: #6c7086;
+  --faint: #45475a;
+  --guide: #45475a;
+  --accent: #f9e2af;
+  --blue: #89b4fa;
+  --mauve: #cba6f7;
+  --green: #a6e3a1;
+  --peach: #fab387;
+  --teal: #94e2d5;
+}
+
+/* Gruvbox, the other palette from design/gen_v4.py. To retheme, swap this block in
+   and set markdown.shikiConfig.theme and THEME in src/lib/highlight.ts to 'gruvbox-dark-medium'.
+:root {
+  --bg: #282828; --bar: #1d2021; --sel: #3c3836; --cursor: #32302f;
+  --fg: #ebdbb2; --muted: #bdae93; --dim: #928374; --faint: #504945; --guide: #504945;
+  --accent: #fabd2f; --blue: #83a598; --mauve: #d3869b; --green: #b8bb26;
+  --peach: #fe8019; --teal: #8ec07c;
+}
+*/

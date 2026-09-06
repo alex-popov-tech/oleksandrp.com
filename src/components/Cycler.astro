@@ -1,0 +1,50 @@
+---
+import Line from './Line.astro';
+import { excerptLabel, type Excerpt } from '../lib/excerpts';
+import { highlightLines } from '../lib/highlight';
+import { padTo } from '../lib/typing';
+
+interface Snippet { excerpt: Excerpt; project?: { name: string; href: string } }
+interface Props { snippets: Snippet[]; fenced?: boolean }
+const { snippets, fenced = false } = Astro.props;
+if (snippets.length === 0) throw new Error('Cycler needs at least one snippet');
+
+const rendered = await Promise.all(
+  snippets.map(async (s) => ({ ...s, lines: await highlightLines(s.excerpt.code, s.excerpt.lang) })),
+);
+const max = Math.max(...rendered.map((r) => r.lines.length));
+const first = rendered[0];
+const rows = padTo(first.lines, max, '');
+const fence = '```';
+---
+<code-cycler data-count={rendered.length}>
+  {fenced && <Line cls="punct"><span data-fence>{fence + first.excerpt.lang}</span></Line>}
+  <Line cls="src">
+    {first.project && (
+      <>
+        <a data-project href={first.project.href}>{first.project.name}</a>
+        <span class="punct"> › </span>
+      </>
+    )}
+    <a data-src href={first.excerpt.permalink} target="_blank" rel="noopener">{excerptLabel(first.excerpt)}</a>
+  </Line>
+  <Line />
+  <div class="code" data-live>
+    {rows.map((html) => (
+      <div class="ln"><span class="nr"></span><div class="tx" set:html={html}></div></div>
+    ))}
+  </div>
+  {fenced && <Line cls="punct">{fence}</Line>}
+  {rendered.map((r) => (
+    <template
+      data-snippet
+      data-lang={r.excerpt.lang}
+      data-label={excerptLabel(r.excerpt)}
+      data-href={r.excerpt.permalink}
+      data-project-name={r.project?.name}
+      data-project-href={r.project?.href}
+    >
+      {r.lines.map((html) => <div set:html={html}></div>)}
+    </template>
+  ))}
+</code-cycler>

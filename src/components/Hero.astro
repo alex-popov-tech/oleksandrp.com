@@ -1,0 +1,17 @@
+---
+import { Image } from 'astro:assets';
+import Line from './Line.astro';
+import type { CollectionEntry } from 'astro:content';
+type Hero = NonNullable<CollectionEntry<'projects'>['data']['hero']>;
+interface Props { hero: Hero; alt: string }
+const { hero, alt } = Astro.props;
+---
+<Line cls="label">{hero.type === 'image' ? 'screenshot' : 'recording'}</Line>
+<Line />
+<Line cls="media">
+  {hero.type === 'image' ? (
+    <Image src={hero.src} alt={alt} widths={[640, 960, 1280]} sizes="(max-width: 899px) 100vw, 70vw" loading="lazy" />
+  ) : (
+    <video src={hero.src} controls muted loop playsinline preload="metadata"></video>
+  )}
+</Line>

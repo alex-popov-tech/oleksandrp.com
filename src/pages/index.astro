@@ -1,0 +1,15 @@
+---
+import Nvim from '../layouts/Nvim.astro';
+import Readme from '../components/Readme.astro';
+import { SITE } from '../site';
+---
+<Nvim
+  title={SITE.name}
+  description={SITE.description}
+  crumb="README.md"
+  short={SITE.root}
+  path={`${SITE.root}/README.md`}
+  shortPath="README.md"
+>
+  <Readme />
+</Nvim>

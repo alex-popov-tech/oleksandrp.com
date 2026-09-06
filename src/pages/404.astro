@@ -1,0 +1,14 @@
+---
+import Nvim from '../layouts/Nvim.astro';
+import Line from '../components/Line.astro';
+import { SITE } from '../site';
+---
+<Nvim title="Not found" description="No such file" crumb="" short={SITE.root} path={`${SITE.root}`} shortPath="">
+  <Line cls="err">E484: Can't open file <span id="missing"></span></Line>
+  <Line />
+  <Line><a href="/">back to README.md</a></Line>
+</Nvim>
+<script>
+  const el = document.getElementById('missing');
+  if (el) el.textContent = location.pathname;
+</script>

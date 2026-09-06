@@ -1,0 +1,5 @@
+---
+interface Props { cls?: string }
+const { cls = '' } = Astro.props;
+---
+<div class="ln"><span class="nr"></span><div class:list={['tx', cls]}><slot /></div></div>
