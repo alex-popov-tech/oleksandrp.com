@@ -19,14 +19,10 @@ test('the train departs, crosses, and never blocks a click', async ({ page }) =>
   const row = train.locator('span').first();
   expect(await row.evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
   // the plate is only invisible because the train runs inside the buffer pane, which is
-  // uniformly --bg. Over the sidebar's --bar it would read as a lighter block.
+  // uniformly --bg. Over the sidebar's --bar it would read as a lighter block. It starts
+  // outside the pane at each end of its run, so the clipping is what matters, not its box.
   expect(await train.evaluate((el) => el.parentElement?.id)).toBe('main');
-  const [pane, box] = await train.evaluate((el) => {
-    const p = el.parentElement!.getBoundingClientRect();
-    const b = el.getBoundingClientRect();
-    return [{ l: p.left, r: p.right }, { l: b.left, r: b.right }];
-  });
-  expect(box.l).toBeGreaterThanOrEqual(pane.l - 1);
+  expect(await train.evaluate((el) => getComputedStyle(el.parentElement!).overflow)).toBe('hidden');
 
   // it floats over the buffer, so links underneath must still take the click
   await page.locator('#tree a[href="/projects/from_scratch/redis"]').click();
