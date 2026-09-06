@@ -16,6 +16,23 @@ npm run test:e2e   # playwright (builds and previews on its own)
 
 Node 24 (`.nvmrc`). Playwright needs `npx playwright install chromium` once.
 
+## What is tested, and what is not
+
+The unit tests carry the weight: pure functions for the file tree, line numbering, prose
+wrapping, excerpt parsing, sprite mirroring, wheel-frame direction and the flow diagram's
+state machine. They are fast, stable, and cover the things eyeballing cannot settle — whether
+the wheel cycle runs the same direction both ways is not a question a screenshot answers.
+
+The e2e suite is deliberately four tests. Everything visual or behavioural is checked by hand,
+which is what actually catches bugs here; every animation bug this project has had was found
+by looking at it, never by an assertion. So `e2e/guards.spec.ts` covers only failures that are
+*silent*: an overlay quietly eating clicks, `prefers-reduced-motion` being ignored, a
+fixed-width block widening the page at a viewport nobody owns, and routing config that breaks
+on an Astro upgrade without changing how any page looks.
+
+Do not add e2e tests that assert how something is implemented or how it looks. They churn on
+every visual change and have never caught anything.
+
 ## Add a project
 
 1. Create `src/content/projects/<slug>.md`, or `src/content/projects/from_scratch/<slug>.md` for a from-scratch build. The folder is the tree folder; `<slug>` plus the extension for `lang` is the file name shown.
