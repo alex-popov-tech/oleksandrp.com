@@ -2,9 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { COLS, ROWS, SAMPLE, renderFrame } from './schedule';
 import type { Role } from '../diagram';
 
-const ROLES: Role[] = ['fg', 'dim', 'faint', 'accent', 'blue', 'green', 'peach', 'teal', 'orange', 'mauve'];
+const ROLES: Role[] = ['fg', 'dim', 'faint', 'accent', 'blue', 'green', 'peach', 'teal', 'orange', 'red', 'mauve'];
 const whole = (t: number) => renderFrame(t).grid.map((r) => r.map((c) => c.ch).join('')).join('\n');
 const rowAt = (t: number, row: number) => renderFrame(t).grid[row].map((c) => c.ch).join('');
+/** the left column only: the agenda shares these rows */
+const leftAt = (t: number, row: number) => rowAt(t, row).slice(0, 21).trim();
 /** the row the pointer is on, or -1 */
 const pointerRow = (t: number) => renderFrame(t).grid.findIndex((r) => r[22].ch === '▶');
 
@@ -12,6 +14,13 @@ describe('renderFrame', () => {
   it('is pure: the same t always gives the same frame', () => {
     expect(whole(3.25)).toBe(whole(3.25));
     expect(whole(30)).toBe(whole(30));
+  });
+
+  it('shows an outage in red, not the amber a maybe uses', () => {
+    // 06:00 sits in 04:00-07:30, an outage; the range after it is a maybe
+    expect(renderFrame(0).grid[2][39].color).toBe('red');
+    expect(renderFrame(0).grid[3][39].color).toBe('accent');
+    expect(renderFrame(0).grid[1][39].color).toBe('faint'); // past, so dimmed
   });
 
   it('only uses colour roles the stylesheet knows', () => {
@@ -43,7 +52,7 @@ describe('renderFrame', () => {
   it('keeps the countdown in step with the clock it is shown beside', () => {
     // 06:20 with the change at 07:30 is 1h10m: a countdown off by minutes reads as a bug
     expect(renderFrame(1 / 3).clock).toBe('06:20');
-    expect(rowAt(1 / 3, 10).trim()).toBe('in 1h10m');
+    expect(leftAt(1 / 3, 10)).toBe('in 1h10m');
   });
 
   it('cycles today, tomorrow, the day after, and back', () => {
@@ -51,9 +60,9 @@ describe('renderFrame', () => {
     expect(renderFrame(20).day).toBe(1);
     expect(renderFrame(44).day).toBe(2);
     expect(renderFrame(68).day).toBe(0);
-    expect(rowAt(0, 5)).toContain('wed · today');
-    expect(rowAt(20, 5)).toContain('thu · tomorrow');
-    expect(rowAt(44, 5)).toContain('fri · day after');
+    expect(leftAt(0, 5)).toBe('today');
+    expect(leftAt(20, 5)).toBe('tomorrow');
+    expect(leftAt(44, 5)).toBe('day after');
   });
 
   it('points at exactly one range, the one the clock is inside', () => {
@@ -87,9 +96,9 @@ describe('renderFrame', () => {
   });
 
   it('counts down to the next change and never past it', () => {
-    expect(rowAt(0, 10).trim()).toBe('in 1h30m'); // 06:00 -> 07:30
-    expect(rowAt(1, 10).trim()).toBe('in 30m');
-    expect(rowAt(1.4, 10).trim()).toBe('in 10m');
+    expect(leftAt(0, 10)).toBe('in 1h30m'); // 06:00 -> 07:30
+    expect(leftAt(1, 10)).toBe('in 30m');
+    expect(leftAt(1.4, 10)).toBe('in 10m');
     for (let t = 0; t < 17.9; t += 0.1) {
       expect(rowAt(t, 10)).not.toContain('-');
     }

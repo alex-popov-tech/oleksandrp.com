@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { COLS, LOOP_S, PLUGINS, ROWS, renderFrame } from './store';
 import type { Bg, Role } from '../diagram';
 
-const ROLES: Role[] = ['fg', 'dim', 'faint', 'accent', 'blue', 'green', 'peach', 'teal', 'orange', 'mauve'];
+const ROLES: Role[] = ['fg', 'dim', 'faint', 'accent', 'blue', 'green', 'peach', 'teal', 'orange', 'red', 'mauve'];
 const BGS: Bg[] = ['sel', 'flash'];
 const whole = (t: number) => renderFrame(t).grid.map((r) => r.map((c) => c.ch).join('')).join('\n');
 const rowAt = (t: number, row: number) => renderFrame(t).grid[row].map((c) => c.ch).join('');

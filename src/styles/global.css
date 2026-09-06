@@ -309,6 +309,7 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 .diagram .c-blue { color: var(--blue); }
 .diagram .c-green { color: var(--green); }
 .diagram .c-peach { color: var(--peach); }
+.diagram .c-red { color: var(--red); }
 .diagram .c-teal { color: var(--teal); }
 .diagram .c-mauve { color: var(--mauve); }
 .diagram .c-orange { color: var(--peach); }

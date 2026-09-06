@@ -11,7 +11,7 @@ export type Status = 'yes' | 'no' | 'maybe';
 /** [start hour, end hour, status], half-hour resolution — what the app compresses to */
 export type Range = [number, number, Status];
 
-const C: Record<string, Role> = { fg: 'fg', dim: 'faint', mute: 'dim', amber: 'accent', red: 'peach', grn: 'green' };
+const C: Record<string, Role> = { fg: 'fg', dim: 'faint', mute: 'dim', amber: 'accent', red: 'red', grn: 'green' };
 
 const ST: Record<Status, { ch: string; color: Role; label: string }> = {
   yes: { ch: '█', color: C.grn, label: 'power' },
@@ -34,7 +34,6 @@ const DIGITS: Record<string, string[]> = {
   ':': [' ', '▪', '▪'],
 };
 
-const DOW = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 const DAY_NAME = ['today', 'tomorrow', 'day after'];
 
 export const SAMPLE: { today: Range[]; tomorrow: Range[] } = {
@@ -57,7 +56,6 @@ interface Options {
   speed?: number;
   startHour?: number;
   group?: string;
-  todayDow?: number;
   today?: Range[];
   tomorrow?: Range[];
 }
@@ -81,7 +79,7 @@ function humanise(hours: number): string {
 }
 
 export function renderFrame(tSeconds: number, opts: Options = {}): ScheduleFrame {
-  const { speed = 1, startHour = 6, group = 'GPV1.2', todayDow = 2 } = opts;
+  const { speed = 1, startHour = 6, group = 'GPV1.2' } = opts;
   const today = opts.today ?? SAMPLE.today;
   const tomorrow = opts.tomorrow ?? SAMPLE.tomorrow;
 
@@ -114,7 +112,7 @@ export function renderFrame(tSeconds: number, opts: Options = {}): ScheduleFrame
     col += glyph[0].length + 1;
   }
 
-  g.put(5, 1, `${DOW[(todayDow + Math.floor(T / 24)) % 7]} · ${DAY_NAME[day]}`, C.mute);
+  g.put(5, 1, DAY_NAME[day], C.mute);
   g.put(6, 1, group, C.mute);
   g.put(8, 1, current[2] === 'yes' ? '◉' : current[2] === 'maybe' ? '◎' : '○', status.color);
   g.put(8, 3, status.label, status.color);
