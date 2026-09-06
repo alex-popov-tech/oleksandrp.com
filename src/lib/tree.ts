@@ -1,8 +1,8 @@
 export type Lang = 'go' | 'lua' | 'ts' | 'js' | 'sh' | 'md';
-export type Section = 'work' | 'projects' | 'elsewhere';
+export type Section = 'work' | 'projects';
 
 export const EXT: Record<Lang, string> = { go: '.go', lua: '.lua', ts: '.ts', js: '.js', sh: '.sh', md: '.md' };
-export const SECTION_ORDER: Section[] = ['work', 'projects', 'elsewhere'];
+export const SECTION_ORDER: Section[] = ['work', 'projects'];
 
 export interface TreeEntry {
   section: Section;
@@ -18,7 +18,7 @@ export interface CvFile {
 }
 
 export interface TreeOptions {
-  /** folder paths that start folded, e.g. ['elsewhere'] */
+  /** folder paths that start folded, e.g. ['projects/other'] */
   folded?: string[];
   cv?: CvFile[];
 }

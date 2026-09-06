@@ -6,8 +6,8 @@ export const SITE = {
   root: '~/oleksandr',
 };
 
-/** folder paths that start folded in the tree */
-export const FOLDED = ['elsewhere'];
+/** folder paths that start folded in the tree; everything is open by default */
+export const FOLDED: string[] = [];
 
 /** README code showcase: cycles through these excerpts, in order. */
 export const showcase = [

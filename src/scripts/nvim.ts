@@ -56,8 +56,6 @@ function toggleFold(row: HTMLElement, fold?: boolean) {
   const willFold = fold ?? !kids.hidden;
   kids.hidden = willFold;
   row.toggleAttribute('data-folded', willFold);
-  const chev = row.querySelector('.chev');
-  if (chev) chev.textContent = willFold ? '▸' : '▾';
 }
 
 function openRow(row: HTMLElement) {

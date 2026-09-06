@@ -16,8 +16,8 @@ test('a work page shows role, dates and shipped items', async ({ page }) => {
   await expect(page.locator('#buffer .ln').first()).toContainText('[YYYY] - [YYYY]');
 });
 
-test('an elsewhere page renders a video', async ({ page }) => {
-  await page.goto('/elsewhere/advent_of_code');
+test('a project with a video hero renders it', async ({ page }) => {
+  await page.goto('/projects/other/advent_of_code');
   await expect(page.locator('#buffer video')).toHaveAttribute('src', '/videos/aoc2024.mp4');
 });
 

@@ -16,10 +16,12 @@ test('the tree shows every section with README last', async ({ page, isMobile })
   test.skip(isMobile, 'the tree is a drawer on phones, covered in phone.spec.ts');
   await page.goto('/');
   const names = await page.locator('#tree .row[data-depth="0"] .name').allTextContents();
-  expect(names).toEqual(['work', 'projects', 'elsewhere', 'README.md']);
+  expect(names).toEqual(['work', 'projects', 'README.md']);
   await expect(page.locator('#tree .row.sel .name')).toHaveText('README.md');
-  await expect(page.locator('#tree [data-children="elsewhere"]')).toBeHidden();
+  // every folder, projects/other included, starts open
+  await expect(page.locator('#tree [data-children="projects/other"]')).toBeVisible();
   await expect(page.locator('#tree .row', { hasText: 'redis.go' })).toBeVisible();
+  await expect(page.locator('#tree .row', { hasText: 'advent_of_code.go' })).toBeVisible();
 });
 
 test('start-here links point at real pages', async ({ page }) => {

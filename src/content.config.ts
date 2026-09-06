@@ -32,11 +32,6 @@ const projects = defineCollection({
   schema: projectSchema,
 });
 
-const elsewhere = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/elsewhere' }),
-  schema: projectSchema,
-});
-
 const work = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/work' }),
   schema: z.object({
@@ -60,4 +55,4 @@ const work = defineCollection({
   }),
 });
 
-export const collections = { projects, elsewhere, work };
+export const collections = { projects, work };

@@ -16,14 +16,9 @@
   --font: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
   --fs: 15px;
   --lh: 22px;
-  --side: 38ch;
   --gutter: 4ch;
   color-scheme: dark;
 }
-@media (max-width: 1199px) {
-  :root { --side: 30ch; }
-}
-
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); }
 body {
@@ -45,7 +40,7 @@ button.ghost { font: inherit; color: inherit; background: none; border: 0; paddi
 #app {
   display: grid;
   height: 100dvh;
-  grid-template-columns: var(--side) minmax(0, 1fr);
+  grid-template-columns: fit-content(42ch) minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr) var(--lh) var(--lh);
 }
 #sidebar[popover] {
@@ -165,14 +160,12 @@ details.cv li a:hover { background: var(--sel); text-decoration: none; }
   display: inline-block;
   transform: scaleY(1.5);
 }
-.row .chev { color: var(--dim); width: 2ch; flex: none; }
 /* the nerd glyphs fill their 2ch cell, so the gap before the name has to be explicit */
 .row .icon { width: 2ch; flex: none; display: inline-flex; align-items: center; margin-right: 0.7ch; }
 .row .name { color: inherit; overflow: hidden; text-overflow: ellipsis; }
 .row.file .name:hover { color: var(--accent); text-decoration: none; }
 /* neo-tree keeps names neutral and lets only the icons carry colour */
 .row.folder { color: var(--fg); cursor: pointer; }
-.row .count { margin-left: auto; color: var(--dim); }
 .row.sel { background: var(--sel); }
 .row.sel .name { color: var(--fg); font-weight: 700; }
 body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset: -1px; }
@@ -188,8 +181,8 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 }
 #statusline .mode { background: var(--accent); color: var(--bg); padding: 0 1ch; font-weight: 700; }
 #statusline .arrow { display: inline-flex; align-items: center; }
-/* the powerline divider has to fill the bar, so it is sized to the line height */
-.nf-arrow { color: var(--accent); font-size: var(--lh); line-height: 1; }
+/* the divider must fill the bar height, so it has to outrank .nf's font-size */
+#statusline .nf-arrow { color: var(--accent); font-size: var(--lh); line-height: 1; }
 #statusline .path { color: var(--fg); margin-left: 1ch; display: inline-flex; align-items: center; gap: 1ch; overflow: hidden; }
 #statusline .path .short { display: none; }
 #statusline .branch { color: var(--muted); margin-left: 2ch; display: inline-flex; align-items: center; gap: 1ch; }
@@ -206,8 +199,8 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
   font-variant-ligatures: none;
   speak: never;
 }
-.nf-folder { color: var(--blue); }
-.nf-folder-open, .nf-readme { color: var(--accent); }
+.nf-folder, .nf-folder-open { color: var(--blue); }
+.nf-readme { color: var(--accent); }
 .nf-file { color: var(--blue); }
 .nf-branch { color: var(--mauve); }
 .nf-go { color: #00add8; }

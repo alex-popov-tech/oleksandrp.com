@@ -14,10 +14,8 @@ const { nodes, current, ancestors = [] } = Astro.props;
     <>
       <div class="row folder" data-row data-folder={node.path} data-depth={node.depth} data-folded={node.folded ? '' : undefined}>
         <span class="guide">{guide}</span>
-        <span class="chev">{node.folded ? '▸' : '▾'}</span>
         <span class="icon"><Icon name={node.folded ? 'folder' : 'folder-open'} /></span>
         <span class="name">{node.name}</span>
-        {(node.depth > 0 || node.folded) && <span class="count">{node.count}</span>}
       </div>
       <div class="children" data-children={node.path} hidden={node.folded}>
         <Astro.self nodes={node.children} current={current} ancestors={childAncestors} />

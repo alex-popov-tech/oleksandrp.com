@@ -22,20 +22,22 @@ test('j/k move the cursor and relative numbers follow', async ({ page }) => {
   await expect(lines.first()).toHaveClass(/cur/);
 });
 
-test('h focuses the tree; k, l, j, Enter unfold elsewhere and open a file', async ({ page }) => {
+test('h focuses the tree; gg, h, l, j and Enter drive it', async ({ page }) => {
   await page.goto('/');
   await page.keyboard.press('h');
   await expect(page.locator('body')).toHaveAttribute('data-pane', 'tree');
   await expect(page.locator('#tree .row.tcur .name')).toHaveText('README.md');
-  await page.keyboard.press('k');
-  await expect(page.locator('#tree .row.tcur .name')).toHaveText('elsewhere');
+  await page.keyboard.type('gg');
+  await expect(page.locator('#tree .row.tcur .name')).toHaveText('work');
+  await page.keyboard.press('h');
+  await expect(page.locator('#tree [data-children="work"]')).toBeHidden();
   await page.keyboard.press('l');
-  await expect(page.locator('#tree [data-children="elsewhere"]')).toBeVisible();
+  await expect(page.locator('#tree [data-children="work"]')).toBeVisible();
   await page.keyboard.press('j');
-  await expect(page.locator('#tree .row.tcur .name')).toHaveText('advent_of_code.go');
+  await expect(page.locator('#tree .row.tcur .name')).toHaveText('lokalise.md');
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(/\/elsewhere\/advent_of_code$/);
-  await expect(page.locator('#tree .row.sel .name')).toHaveText('advent_of_code.go');
+  await expect(page).toHaveURL(/\/work\/lokalise$/);
+  await expect(page.locator('#tree .row.sel .name')).toHaveText('lokalise.md');
   await expect(page.locator('body')).toHaveAttribute('data-pane', 'buffer');
   await expect(page.locator('#buffer .ln').first()).toHaveClass(/cur/);
 });

@@ -5,7 +5,7 @@ const entries: TreeEntry[] = [
   { section: 'projects', id: 'store', lang: 'lua', order: 1 },
   { section: 'projects', id: 'from_scratch/git', lang: 'go', order: 2 },
   { section: 'projects', id: 'from_scratch/redis', lang: 'go', order: 1 },
-  { section: 'elsewhere', id: 'advent_of_code', lang: 'go', order: 1 },
+  { section: 'projects', id: 'other/advent_of_code', lang: 'go', order: 1 },
   { section: 'work', id: 'lokalise', lang: 'md', order: 1 },
 ];
 
@@ -20,14 +20,14 @@ describe('fileName', () => {
 });
 
 describe('buildTree', () => {
-  it('orders sections work, projects, elsewhere and ends with README', () => {
+  it('orders sections work, projects and ends with README', () => {
     const tree = buildTree(entries);
-    expect(tree.map((n) => n.name)).toEqual(['work', 'projects', 'elsewhere', 'README.md']);
+    expect(tree.map((n) => n.name)).toEqual(['work', 'projects', 'README.md']);
     expect(tree.at(-1)).toMatchObject({ kind: 'file', href: '/', icon: 'readme', depth: 0 });
   });
   it('puts subfolders before files and sorts files by order', () => {
     const projects = folder(buildTree(entries), 'projects');
-    expect(projects.children.map((c) => c.name)).toEqual(['from_scratch', 'store.lua']);
+    expect(projects.children.map((c) => c.name)).toEqual(['from_scratch', 'other', 'store.lua']);
     const fs = projects.children[0] as FolderNode;
     expect(fs.children.map((c) => c.name)).toEqual(['redis.go', 'git.go']);
     expect(fs.children[0]).toMatchObject({ href: '/projects/from_scratch/redis', icon: 'go', depth: 2 });
@@ -36,23 +36,23 @@ describe('buildTree', () => {
   });
   it('counts files recursively', () => {
     const projects = folder(buildTree(entries), 'projects');
-    expect(projects.count).toBe(3);
+    expect(projects.count).toBe(4);
     expect((projects.children[0] as FolderNode).count).toBe(2);
   });
   it('folds the folders named in options', () => {
-    const tree = buildTree(entries, { folded: ['elsewhere'] });
-    expect(folder(tree, 'elsewhere').folded).toBe(true);
-    expect(folder(tree, 'projects').folded).toBe(false);
+    const tree = buildTree(entries, { folded: ['projects'] });
+    expect(folder(tree, 'projects').folded).toBe(true);
+    expect(folder(tree, 'work').folded).toBe(false);
   });
   it('adds a cv folder before README only when files exist', () => {
     expect(buildTree(entries).some((n) => n.name === 'cv')).toBe(false);
     const tree = buildTree(entries, { cv: [{ name: 'golang.pdf', href: '/cv/golang.pdf' }] });
-    expect(tree.map((n) => n.name)).toEqual(['work', 'projects', 'elsewhere', 'cv', 'README.md']);
+    expect(tree.map((n) => n.name)).toEqual(['work', 'projects', 'cv', 'README.md']);
     expect(folder(tree, 'cv').children[0]).toMatchObject({ kind: 'file', name: 'golang.pdf', icon: 'pdf', download: true, depth: 1 });
   });
   it('omits empty sections', () => {
     const tree = buildTree(entries.filter((e) => e.section !== 'work'));
-    expect(tree.map((n) => n.name)).toEqual(['projects', 'elsewhere', 'README.md']);
+    expect(tree.map((n) => n.name)).toEqual(['projects', 'README.md']);
   });
 });
 
