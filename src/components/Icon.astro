@@ -19,16 +19,6 @@ const BRANCH = '<circle cx="7" cy="5.6" r="2.1"/><circle cx="7" cy="18.4" r="2.1
 const MARKDOWN = '<rect x="2.4" y="6.2" width="19.2" height="11.6" rx="2.4"/><polyline points="6,15.2 6,8.8 9,12.2 12,8.8 12,15.2"/><path d="M16.2 8.8v4.6"/><polyline points="14.2,12.2 16.2,14.6 18.2,12.2"/>';
 const SHELL = '<rect x="3" y="5" width="18" height="14" rx="2.6"/><polyline points="7.4,10.2 9.9,12.4 7.4,14.6"/><path d="M12.6 15h4.2"/>';
 
-/** The gopher: body, ears, eyes with pupils, muzzle. */
-const GOPHER =
-  '<ellipse cx="7.4" cy="6.6" rx="2" ry="2.3" fill="#00ADD8"/>' +
-  '<ellipse cx="16.6" cy="6.6" rx="2" ry="2.3" fill="#00ADD8"/>' +
-  '<ellipse cx="12" cy="13.9" rx="6.5" ry="7.3" fill="#00ADD8"/>' +
-  '<circle cx="9.4" cy="11" r="2.9" fill="#fff"/><circle cx="14.6" cy="11" r="2.9" fill="#fff"/>' +
-  '<circle cx="10.3" cy="11.2" r="1.25" fill="#12121c"/><circle cx="15.5" cy="11.2" r="1.25" fill="#12121c"/>' +
-  '<ellipse cx="12" cy="15.4" rx="2" ry="1.5" fill="#fdf2e3"/>' +
-  '<path d="M11 15.1h2" stroke="#12121c" stroke-width="0.9" stroke-linecap="round"/>';
-
 /** The Lua logo: a sphere with an orbit and the satellite dot. */
 const LUA =
   '<circle cx="10.6" cy="13.4" r="6.6" fill="#2c2d72"/>' +
@@ -41,7 +31,7 @@ const ICONS: Record<string, string> = {
   'folder-open': stroke('var(--accent)', FOLDER_OPEN),
   file: stroke('var(--blue)', FILE),
   branch: stroke('var(--mauve)', BRANCH),
-  go: GOPHER,
+  go: badge('#00add8', '#0c1116', 'GO'),
   lua: LUA,
   ts: badge('#3178c6', '#ffffff', 'TS'),
   js: badge('#f7df1e', '#12121c', 'JS'),
