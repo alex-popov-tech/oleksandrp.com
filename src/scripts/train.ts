@@ -1,8 +1,9 @@
 import { TRAIN_COLS, TRAIN_FRAMES, TRAIN_FRAMES_FLIPPED, TRAIN_ROWS } from '../lib/train';
 
 const STEP_MS = 28;
-/** columns travelled per wheel pattern; this is sl's own value */
-const COLS_PER_FRAME = 3;
+/** columns travelled per wheel pattern. sl uses 3; 2 spins the drivers a touch livelier,
+    and 1 (a new pattern every column) reads as a strobe. */
+const COLS_PER_FRAME = 2;
 const FIRST_RUN_MS = 12_000;
 const GAP_MIN_MS = 60_000;
 const GAP_MAX_MS = 150_000;
