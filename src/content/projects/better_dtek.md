@@ -5,6 +5,7 @@ order: 3
 repo: alex-popov-tech/better-dtek
 live: https://dtek-theta.vercel.app
 tags: [Playwright, Redis, SvelteKit, TailwindCSS, TypeScript, Vercel, Vite]
+diagram: dtek-schedule
 excerpts:
   - better-dtek/transform.ts
 ---

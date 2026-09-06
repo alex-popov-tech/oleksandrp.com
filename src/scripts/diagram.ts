@@ -7,6 +7,7 @@ const FPS = 20;
 /** One chunk per diagram: a project page downloads its own renderer and no others. */
 const LOADERS: Record<DiagramId, () => Promise<{ diagram: Diagram }>> = {
   'acapulko-flow': () => import('../lib/diagrams/acapulko'),
+  'dtek-schedule': () => import('../lib/diagrams/schedule'),
   'store-browse': () => import('../lib/diagrams/store'),
 };
 

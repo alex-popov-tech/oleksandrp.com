@@ -27,8 +27,9 @@ describe.each(DIAGRAM_IDS)('%s', (id) => {
 
   it('draws only glyphs that are one cell wide in JetBrains Mono', () => {
     const used = new Set<string>();
-    // sample the whole loop: a glyph may only appear for a fraction of a second
-    for (let t = 0; t < 20; t += 0.05) {
+    // 80s covers the longest loop; the step is fine enough to catch a glyph that only
+    // shows for a fraction of a second, like the install flash or a notification banner
+    for (let t = 0; t < 80; t += 0.05) {
       for (const row of diagram.render(t).grid) for (const cell of row) used.add(cell.ch);
     }
     expect([...used].filter((ch) => !SAFE.has(ch))).toEqual([]);

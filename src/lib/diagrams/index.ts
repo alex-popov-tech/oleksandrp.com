@@ -7,12 +7,14 @@
  */
 import type { Diagram } from '../diagram';
 import { diagram as acapulko } from './acapulko';
+import { diagram as schedule } from './schedule';
 import { diagram as store } from './store';
 
-export const DIAGRAM_IDS = ['acapulko-flow', 'store-browse'] as const;
+export const DIAGRAM_IDS = ['acapulko-flow', 'dtek-schedule', 'store-browse'] as const;
 export type DiagramId = (typeof DIAGRAM_IDS)[number];
 
 export const DIAGRAMS: Record<DiagramId, Diagram> = {
   'acapulko-flow': acapulko,
+  'dtek-schedule': schedule,
   'store-browse': store,
 };
