@@ -41,3 +41,20 @@ test('a project without excerpts shows its screenshot', async ({ page }) => {
   await page.goto('/projects/store');
   await expect(page.locator('#buffer .tx.media img')).toBeVisible();
 });
+
+test('the tree cannot be text-selected but the buffer can', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the tree is a drawer on phones');
+  await page.goto('/projects/store');
+  const dragOver = async (selector: string) => {
+    const box = (await page.locator(selector).first().boundingBox())!;
+    await page.mouse.move(box.x + 4, box.y + 4);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width - 4, box.y + 160, { steps: 12 });
+    await page.mouse.up();
+    const text = await page.evaluate(() => window.getSelection()?.toString() ?? '');
+    await page.evaluate(() => window.getSelection()?.removeAllRanges());
+    return text;
+  };
+  expect(await dragOver('#tree')).toBe('');
+  expect(await dragOver('#buffer .ln .tx')).toContain('Store.nvim');
+});
