@@ -1,4 +1,10 @@
-import { frameFor, TRAIN_COLS, TRAIN_FRAMES, TRAIN_FRAMES_FLIPPED, TRAIN_ROWS } from '../lib/train';
+import {
+  frameFor,
+  TRAIN_COLS,
+  TRAIN_FRAMES,
+  TRAIN_FRAMES_FLIPPED,
+  TRAIN_ROWS,
+} from "../lib/train";
 
 const STEP_MS = 28;
 /** columns travelled per wheel pattern. sl uses 3; 2 spins the drivers a touch livelier,
@@ -13,9 +19,11 @@ const CHECK_MS = 10_000;
 /** the sprite is 63 columns wide; below this it would be wider than the screen */
 const MIN_WIDTH = 900;
 /** the next departure lives here so browsing between pages does not reset the wait */
-const SLOT_KEY = 'sl:next-departure';
+const SLOT_KEY = "sl:next-departure";
 /** ?sl=loop keeps it running back to back, for looking at it without waiting */
-const LOOP = typeof location !== 'undefined' && new URLSearchParams(location.search).has('sl');
+const LOOP =
+  typeof location !== "undefined" &&
+  new URLSearchParams(location.search).has("sl");
 const LOOP_GAP_MS = 1_200;
 
 let timer: number | undefined;
@@ -23,7 +31,7 @@ let running = false;
 /** alternate the direction each run, starting on a coin flip */
 let eastbound = Math.random() < 0.5;
 
-const train = () => document.getElementById('train');
+const train = () => document.getElementById("train");
 
 function readSlot(): number {
   try {
@@ -43,7 +51,9 @@ function writeSlot(at: number) {
 
 function scheduleNext() {
   if (LOOP) return void window.setTimeout(run, LOOP_GAP_MS);
-  writeSlot(Date.now() + GAP_MIN_MS + Math.random() * (GAP_MAX_MS - GAP_MIN_MS));
+  writeSlot(
+    Date.now() + GAP_MIN_MS + Math.random() * (GAP_MAX_MS - GAP_MIN_MS),
+  );
 }
 
 /**
@@ -54,7 +64,8 @@ function scheduleNext() {
 function tick() {
   if (running) return;
   // a hidden tab or a phone leaves the slot alone, so it departs once conditions allow
-  if (document.visibilityState === 'hidden' || window.innerWidth < MIN_WIDTH) return;
+  if (document.visibilityState === "hidden" || window.innerWidth < MIN_WIDTH)
+    return;
   const due = readSlot();
   if (!due) return writeSlot(Date.now() + FIRST_RUN_MS);
   if (Date.now() >= due) run();
@@ -62,16 +73,17 @@ function tick() {
 
 /** Width of one column of the buffer font, measured rather than assumed. */
 function columnWidth(node: HTMLElement): number {
-  const probe = document.createElement('span');
-  probe.textContent = '0'.repeat(20);
-  probe.style.cssText = 'position:absolute;visibility:hidden;white-space:pre';
+  const probe = document.createElement("span");
+  probe.textContent = "0".repeat(20);
+  probe.style.cssText = "position:absolute;visibility:hidden;white-space:pre";
   node.after(probe);
   const w = probe.getBoundingClientRect().width / 20;
   probe.remove();
   return w || 9;
 }
 
-const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const escape = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 /**
  * One plate per row, hugging that row's ink from first to last character. Per-run plates
@@ -79,9 +91,9 @@ const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').rep
  * between the engine and its wheels, which is the noise this is here to prevent.
  */
 function rowHtml(row: string): string {
-  const trimmed = row.replace(/\s+$/, '');
-  if (trimmed.trim() === '') return '<span></span>';
-  const lead = trimmed.length - trimmed.replace(/^ +/, '').length;
+  const trimmed = row.replace(/\s+$/, "");
+  if (trimmed.trim() === "") return "<span></span>";
+  const lead = trimmed.length - trimmed.replace(/^ +/, "").length;
   return `<span style="margin-left:${lead}ch">${escape(trimmed.slice(lead))}</span>`;
 }
 
@@ -109,12 +121,12 @@ function run() {
 
   const step = () => {
     const frame = frameFor(col, eastbound, COLS_PER_FRAME, frames.length);
-    node.innerHTML = frames[frame].map(rowHtml).join('\n');
+    node.innerHTML = frames[frame].map(rowHtml).join("\n");
     node.style.left = `${Math.round(col * cw)}px`;
     col += eastbound ? 1 : -1;
     if (eastbound ? col > lastCol : col < -TRAIN_COLS) {
       node.hidden = true;
-      node.innerHTML = '';
+      node.innerHTML = "";
       running = false;
       return scheduleNext();
     }
@@ -124,17 +136,22 @@ function run() {
 }
 
 declare global {
-  interface Window { __trainBound?: boolean }
+  interface Window {
+    __trainBound?: boolean;
+  }
 }
 
-if (!window.__trainBound && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (
+  !window.__trainBound &&
+  !matchMedia("(prefers-reduced-motion: reduce)").matches
+) {
   window.__trainBound = true;
   if (LOOP) {
     run();
   } else {
     if (!readSlot()) writeSlot(Date.now() + FIRST_RUN_MS);
     window.setInterval(tick, CHECK_MS);
-    document.addEventListener('visibilitychange', tick);
+    document.addEventListener("visibilitychange", tick);
     tick();
   }
 }
