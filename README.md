@@ -36,8 +36,28 @@ every visual change and have never caught anything.
 ## Add a project
 
 1. Create `src/content/projects/<slug>.md`, or `src/content/projects/from_scratch/<slug>.md` for a from-scratch build. The folder is the tree folder; `<slug>` plus the extension for `lang` is the file name shown.
-2. Frontmatter: `title`, `lang` (`go|lua|ts|js|sh|md`), `order` (sort within the folder), optional `repo` (`owner/name`), optional `live` URL, `tags`, `excerpts`. A `hero` (`type: image` with `src: ./<slug>.png` beside the file, or `type: video` with a `/videos/…` path) is still supported by the schema but nothing uses one: every project shows code instead, because a product screenshot is the one thing on the page that is not a terminal.
+2. Frontmatter: `title`, `lang` (`go|lua|ts|js|sh|md`), `order` (sort within the folder), optional `repo` (`owner/name`), optional `live` URL, `tags`, `excerpts`, optional `diagram`. A `hero` (`type: image` with `src: ./<slug>.png` beside the file, or `type: video` with a `/videos/…` path) is still supported by the schema but nothing uses one: every project shows code instead, because a product screenshot is the one thing on the page that is not a terminal.
 3. Body: the description, paragraphs separated by blank lines.
+
+## Add a diagram
+
+A project can carry an animated ASCII diagram above its code, opted into with `diagram: <id>`
+in its frontmatter. Each one is a pure `render(t)` over a fixed character grid in
+`src/lib/diagrams/`, registered in `src/lib/diagrams/index.ts`; that registry is also what the
+content schema validates the id against, so a typo fails the build.
+
+`Diagram.astro` draws frame 0 during the build — the picture is real without JavaScript — and
+`scripts/diagram.ts` takes over, loading only the renderer that page needs. It animates at
+20fps, but only while the block is on screen and the tab is in front, and not at all under
+`prefers-reduced-motion`. A frame may return `flags`, which become `data-*` attributes on the
+host: that is how acapulko's SVG bulb knows to light up. Diagrams are `.page-effect`, and the
+train stays in the shed on any page that has one.
+
+**One glyph, one cell.** A character JetBrains Mono does not carry falls back to another face
+at a different advance width and shears the row it sits on — braille (`⠋`) measures 10.26px
+against the 9px cell, `⎿` measures 15px. `glyphs.test.ts` holds a whitelist of glyphs measured
+in a browser at exactly one cell and fails on anything new, so the check happens before the
+diagram ships rather than after someone spots a crooked border.
 
 ## Add a code excerpt
 

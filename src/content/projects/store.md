@@ -4,6 +4,7 @@ lang: lua
 order: 1
 repo: alex-popov-tech/store.nvim
 tags: [GitHub, Lua, Neovim]
+diagram: store-browse
 excerpts:
   - store.nvim/sort.lua
 ---

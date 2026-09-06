@@ -296,30 +296,35 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
   .ln .tx.sub { padding-left: 2ch; }
 }
 
-/* ---- ascii flow diagram ---- */
-.flow { display: block; overflow-x: auto; }
-.flow .flow-grid { position: relative; width: calc(var(--gutter) + 100ch); }
-/* the two SVG nodes sit on the character grid, sized in cells so they stay aligned */
-.flow .flow-node { position: absolute; overflow: visible; }
-.flow .plane { color: var(--blue); }
-.flow .bulb { color: var(--faint); transition: color 0.25s; }
-.flow .bulb .rays, .flow .bulb .filament { opacity: 0; transition: opacity 0.25s; }
-.flow[data-on] .bulb { color: var(--accent); }
-.flow[data-on] .bulb .rays { opacity: 0.7; }
-.flow[data-on] .bulb .filament { opacity: 1; }
-.flow[data-flash] .plane, .flow[data-flash] .bulb { color: var(--accent); }
-/* the diagram is a fixed 100-column drawing: it must not reflow, only scroll */
-.flow .flow-row { white-space: pre; overflow-wrap: normal; }
-.flow .ln .tx { padding-right: 0; }
-.flow .c-fg { color: var(--fg); }
-.flow .c-dim { color: var(--dim); }
-.flow .c-faint { color: var(--faint); }
-.flow .c-accent { color: var(--accent); }
-.flow .c-blue { color: var(--blue); }
-.flow .c-green { color: var(--green); }
-.flow .c-peach { color: var(--peach); }
-.flow .c-teal { color: var(--teal); }
-.flow .c-orange { color: var(--peach); }
+/* ---- ascii diagrams ---- */
+.diagram { display: block; overflow-x: auto; }
+/* a diagram is a fixed-width drawing: it must not reflow, only scroll */
+.diagram .diagram-grid { position: relative; width: calc(var(--gutter) + var(--cols) * 1ch); }
+.diagram .diagram-row { white-space: pre; overflow-wrap: normal; }
+.diagram .ln .tx { padding-right: 0; }
+.diagram .c-fg { color: var(--fg); }
+.diagram .c-dim { color: var(--dim); }
+.diagram .c-faint { color: var(--faint); }
+.diagram .c-accent { color: var(--accent); }
+.diagram .c-blue { color: var(--blue); }
+.diagram .c-green { color: var(--green); }
+.diagram .c-peach { color: var(--peach); }
+.diagram .c-teal { color: var(--teal); }
+.diagram .c-mauve { color: var(--mauve); }
+.diagram .c-orange { color: var(--peach); }
+.diagram .bg-sel { background: var(--sel); }
+/* the install flash: the selection colour, pulled towards green */
+.diagram .bg-flash { background: color-mix(in srgb, var(--green) 22%, var(--sel)); }
+
+/* the acapulko diagram's two SVG nodes sit on the character grid, sized in cells */
+.diagram .diagram-node { position: absolute; overflow: visible; }
+.diagram .plane { color: var(--blue); }
+.diagram .bulb { color: var(--faint); transition: color 0.25s; }
+.diagram .bulb .rays, .diagram .bulb .filament { opacity: 0; transition: opacity 0.25s; }
+.diagram[data-on] .bulb { color: var(--accent); }
+.diagram[data-on] .bulb .rays { opacity: 0.7; }
+.diagram[data-on] .bulb .filament { opacity: 1; }
+.diagram[data-flash] .plane, .diagram[data-flash] .bulb { color: var(--accent); }
 
 /* ---- sl ---- */
 .train {

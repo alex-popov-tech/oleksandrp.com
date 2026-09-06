@@ -1,23 +1,13 @@
 /**
  * The acapulko data-flow diagram: grid or battery feeds the pi, the pi notifies Telegram
  * and the status page. Ported from the design handoff's `renderFrame`, keeping its glyphs,
- * geometry and 16-second timeline exactly. The one deliberate change is colour: the handoff
- * names Tokyo Night hex values, this returns role tokens so the diagram themes with the rest
- * of the site and survives a palette swap.
+ * geometry and 16-second timeline exactly.
  *
  * Pure: the same `t` always yields the same grid, which is what makes it testable.
  */
+import { Grid, type Diagram, type Frame, type Role } from '../diagram';
 
-export type Role = 'fg' | 'dim' | 'faint' | 'accent' | 'blue' | 'green' | 'peach' | 'teal' | 'orange';
-
-export interface Cell {
-  ch: string;
-  color: Role;
-  op: number;
-}
-
-export interface Frame {
-  grid: Cell[][];
+export interface FlowFrame extends Frame {
   phase: string;
   gridOn: boolean;
   bulbOn: boolean;
@@ -32,17 +22,17 @@ export const NODE_BOX = {
   bulb: { row: 7, col: 56, cols: 10, rows: 6 },
 } as const;
 
-export const FLOW_COLS = 100;
-export const FLOW_ROWS = 14;
+export const COLS = 100;
+export const ROWS = 14;
 /** the timeline repeats every 16 seconds */
-export const FLOW_LOOP_S = 16;
+export const LOOP_S = 16;
 
-export function renderFrame(tSeconds: number, opts: { speed?: number } = {}): Frame {
+export function renderFrame(tSeconds: number, opts: { speed?: number } = {}): FlowFrame {
 const P = opts;
 const speed = P.speed ?? 1;
 const C: Record<string, Role> = { fg: 'fg', dim: 'faint', mute: 'dim', amber: 'accent', blue: 'blue', red: 'peach', grn: 'green', cyan: 'teal', org: 'orange', pulse: 'accent' };
 
-const LOOP = FLOW_LOOP_S, DROP = 5, RESTORE = 11, PULSE = 1.4, MSG = 3.6;
+const LOOP = LOOP_S, DROP = 5, RESTORE = 11, PULSE = 1.4, MSG = 3.6;
 const T = tSeconds * speed, t = T % LOOP;
 const gridOn = t < DROP || t >= RESTORE;
 const eventT = t >= RESTORE ? t - RESTORE : t >= DROP ? t - DROP : null;
@@ -53,17 +43,17 @@ const msgOn = arrived && eventT < PULSE + MSG;
 const bulbOn = t < DROP ? true : t < RESTORE ? t - DROP < PULSE : t - RESTORE >= PULSE;
 const pct = t < DROP ? 76 + t * 2.4 : t < RESTORE ? 88 - (t - DROP) * 3.5 : 67 + (t - RESTORE) * 2.4;
 
-const W = FLOW_COLS, H = FLOW_ROWS;
-const g: Cell[][] = Array.from({ length: H }, () => Array.from({ length: W }, () => ({ ch: ' ', color: C.fg, op: 1 })));
-const put = (r: number, c: number, str: string, color: Role, op = 1) => { for (let i = 0; i < str.length; i++) if (c + i < W && r < H) g[r][c + i] = { ch: str[i], color, op }; };
-const putLines = (r: number, c: number, lines: string[], color: Role, op?: number) => lines.forEach((l, i) => put(r + i, c, l, color, op));
+const G = new Grid(COLS, ROWS);
+const g = G.cells;
+const put = (r: number, c: number, str: string, color: Role, op = 1) => G.put(r, c, str, color, op);
+const putLines = (r: number, c: number, lines: string[], color: Role, op?: number) => G.putLines(r, c, lines, color, op);
 
 // ---- nodes ----
 const gc = gridOn ? C.amber : C.dim;
 putLines(0, 2, ['   ┌┐', ' ┌─┼┼─┐', '─┴─┼┼─┴─', '   ││', '   ││', '  ─┴┴─'], gc);
 put(1, 10, 'grid', gridOn ? C.fg : C.mute);
 
-const fill = Math.round(pct / 100 * 8), bc = gridOn ? C.dim : C.blue;
+const fill = Math.round(pct / 100 * 8);
 put(9, 1, '╭────────╮', C.fg);
 put(10, 1, '│', C.fg); put(10, 2, '█'.repeat(fill) + '░'.repeat(8 - fill), gridOn ? C.grn : C.blue); put(10, 10, '├┤', C.fg);
 put(11, 1, '╰────────╯', C.fg);
@@ -89,11 +79,10 @@ const drawPower = (path: [number, number, string][], color: Role, active: boolea
   const cells = reverse ? [...path].reverse() : path;
   cells.forEach(([r, c, ch], i) => {
     if (!active) { g[r][c] = { ch, color: C.dim, op: 1 }; return; }
-    const hot = (i - flow) % 5 === 0 || (i - flow) % 5 === -0;
-    const hot2 = ((i - flow) % 5 + 5) % 5 === 0;
+    const hot = ((i - flow) % 5 + 5) % 5 === 0;
     // arrowheads are terminators: always crisp, or the bus looks two-toned
     const head = ch === '▶' || ch === '◀';
-    g[r][c] = hot2 ? { ch: '●', color, op: 1 } : { ch, color, op: head ? 1 : 0.55 };
+    g[r][c] = hot ? { ch: '●', color, op: 1 } : { ch, color, op: head ? 1 : 0.55 };
   });
 };
 drawPower(gridPath, C.amber, gridOn, false);
@@ -122,5 +111,10 @@ if (msgOn) {
 
 
     const phase = t < DROP ? 'steady · on grid' : t < DROP + PULSE ? 'grid dropped → notifying' : t < RESTORE ? 'on battery' : t < RESTORE + PULSE ? 'grid restored → notifying' : 'steady · on grid';
-return { grid: g, phase, gridOn, bulbOn, pct, flashing };
+const flags: string[] = [];
+if (bulbOn) flags.push('on');
+if (flashing) flags.push('flash');
+return { grid: g, flags, phase, gridOn, bulbOn, pct, flashing };
 }
+
+export const diagram: Diagram = { cols: COLS, rows: ROWS, render: (t) => renderFrame(t) };

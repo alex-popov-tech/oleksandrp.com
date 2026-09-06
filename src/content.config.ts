@@ -1,3 +1,4 @@
+import { DIAGRAM_IDS } from './lib/diagrams';
 import { defineCollection, z, type SchemaContext } from 'astro:content';
 import { glob } from 'astro/loaders';
 
@@ -26,7 +27,7 @@ const projectSchema = ({ image }: SchemaContext) =>
     /** files under src/excerpts, e.g. 'redis-go/unmarshal.go' */
     excerpts: z.array(z.string()).default([]),
     /** an animated ascii diagram to show above the excerpts */
-    diagram: z.enum(['acapulko-flow']).optional(),
+    diagram: z.enum(DIAGRAM_IDS).optional(),
   });
 
 const projects = defineCollection({

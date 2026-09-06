@@ -11,7 +11,8 @@ import { test, expect } from '@playwright/test';
 test('overlays never swallow a click', async ({ page, isMobile }) => {
   test.skip(isMobile, 'the train and diagram are desktop only');
   await page.clock.install();
-  await page.goto('/projects/store');
+  // a page with no diagram of its own: the train only runs where nothing else is animating
+  await page.goto('/projects/dotfiles');
   await page.clock.fastForward('00:25');
   await expect(page.locator('#train')).toBeVisible();
   await expect(page.locator('#train')).toHaveCSS('pointer-events', 'none');
@@ -26,7 +27,7 @@ test('prefers-reduced-motion silences everything that moves', async ({ page }) =
   await page.goto('/projects/acapulko');
 
   // the diagram holds its first frame
-  const row = page.locator('.flow-row').nth(6);
+  const row = page.locator('.diagram-row').nth(6);
   const before = await row.textContent();
 
   // the cycler shows its snippet whole rather than typing it

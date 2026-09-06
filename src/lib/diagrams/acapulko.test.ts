@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { FLOW_COLS, FLOW_LOOP_S, FLOW_ROWS, renderFrame, type Role } from './flow';
+import { COLS, LOOP_S, ROWS, renderFrame } from './acapulko';
+import type { Role } from '../diagram';
 
 const ROLES: Role[] = ['fg', 'dim', 'faint', 'accent', 'blue', 'green', 'peach', 'teal', 'orange'];
 const textAt = (t: number, row: number) =>
@@ -9,8 +10,8 @@ const whole = (t: number) => renderFrame(t).grid.map((r) => r.map((c) => c.ch).j
 describe('renderFrame', () => {
   it('is a 14 by 100 grid', () => {
     const { grid } = renderFrame(0);
-    expect(grid).toHaveLength(FLOW_ROWS);
-    for (const row of grid) expect(row).toHaveLength(FLOW_COLS);
+    expect(grid).toHaveLength(ROWS);
+    for (const row of grid) expect(row).toHaveLength(COLS);
   });
 
   it('is pure: the same t always gives the same frame', () => {
@@ -22,7 +23,7 @@ describe('renderFrame', () => {
     // the packet phase is driven by absolute time, so the picture is not 16s-periodic
     for (const t of [1, 6, 8, 12]) {
       const a = renderFrame(t);
-      const b = renderFrame(t + FLOW_LOOP_S);
+      const b = renderFrame(t + LOOP_S);
       expect([b.gridOn, b.bulbOn, b.phase, Math.round(b.pct)]).toEqual([a.gridOn, a.bulbOn, a.phase, Math.round(a.pct)]);
     }
   });
