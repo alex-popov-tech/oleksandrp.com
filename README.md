@@ -64,14 +64,20 @@ Current glyphs: `custom-folder` U+E5FF, `custom-folder_open` U+E5FE, `oct-git_br
 
 ## The train
 
-Every minute or two a D51 steam locomotive chugs across the page. It is a fixed-position
+Every minute or two the little train from `sl -l` crosses the page. It is a fixed-position
 `<pre>` with `pointer-events: none` sitting below the drawer and the help dialog, so it can
-never swallow a click; it picks a random row, steps one column at a time, and cycles six wheel
-patterns so the drivers turn. It stays in the shed under `prefers-reduced-motion` and on
-screens narrower than the 84-column sprite.
+never swallow a click; it picks a random row on the text grid, steps one column at a time and
+cycles six wheel patterns so the drivers turn. Each row carries its own plate hugging that
+row's ink, with a soft halo, so it blanks a stepped outline rather than dragging its whole
+bounding box across the page. It stays in the shed under `prefers-reduced-motion` and on
+screens narrower than the 63-column sprite.
 
-The art in `src/lib/train.ts` is the D51 from [`sl`](https://github.com/mtoyoda/sl), the
-program you get when you typo `ls`:
+The next departure is stored in `localStorage` under `sl:next-departure`, so browsing between
+pages does not restart the wait — otherwise someone reading through the projects would never
+see it.
+
+The art in `src/lib/train.ts` is from [`sl`](https://github.com/mtoyoda/sl), the program you
+get when you typo `ls`:
 
 > Copyright 1993,1998,2014 Toyoda Masashi (mtoyoda@acm.org)
 >

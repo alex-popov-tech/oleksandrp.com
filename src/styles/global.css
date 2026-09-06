@@ -306,24 +306,18 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
   font-size: var(--fs);
   line-height: var(--lh);
   color: var(--fg);
-  /* the sprite and the prose are the same weight, so without a plate behind it the two
-     interleave into noise. A gradient rather than a flat fill so the leading and trailing
-     edges fade instead of dragging a hard rectangle across the page. backdrop-filter would
-     be prettier but Chromium will not composite it together with a mask. */
-  background: linear-gradient(
-    90deg,
-    rgb(var(--bg-rgb) / 0) 0,
-    rgb(var(--bg-rgb) / 1) 6ch,
-    rgb(var(--bg-rgb) / 1) calc(100% - 6ch),
-    rgb(var(--bg-rgb) / 0) 100%
-  );
-  padding: 0 1ch;
-  text-shadow: 0 0 3px var(--bg);
   white-space: pre;
   /* it floats over the page, so it must never swallow a click */
   pointer-events: none;
   user-select: none;
   will-change: transform;
+}
+/* one plate per row, hugging that row's ink, so the train blanks a stepped outline
+   rather than dragging its whole bounding box across the page. The halo softens the
+   border instead of cutting a hard edge through the text underneath. */
+.train span {
+  background: rgb(var(--bg-rgb));
+  box-shadow: 0 0 7px 3px rgb(var(--bg-rgb));
 }
 @media (prefers-reduced-motion: reduce) { .train { display: none !important; } }
 @media (max-width: 899px) { .train { display: none !important; } }
