@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.skip(({ isMobile }) => isMobile, 'the phone project covers the drawer layout');
 
-const PAGES = ['/', '/projects/other/advent_of_code', '/projects/from_scratch/dns', '/projects/openai_chat'];
+const PAGES = ['/', '/projects/other/advent_of_code', '/projects/from_scratch/dns', '/projects/openai_chat', '/projects/acapulko'];
 
 // an iPad Air in landscape, and the ~1000px a split-view window gets
 for (const [label, width, height] of [

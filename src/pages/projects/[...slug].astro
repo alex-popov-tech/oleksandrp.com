@@ -3,7 +3,9 @@ import { getCollection } from 'astro:content';
 import Nvim from '../../layouts/Nvim.astro';
 import Pane from '../../components/Pane.astro';
 import Hero from '../../components/Hero.astro';
+import Line from '../../components/Line.astro';
 import Cycler from '../../components/Cycler.astro';
+import Flow from '../../components/Flow.astro';
 import { loadExcerpt } from '../../lib/excerpt-files';
 import { paragraphs } from '../../lib/text';
 import { bracketLinks, crumbFor, pathFor, shortPathFor } from '../../lib/pages';
@@ -26,6 +28,8 @@ const parent = entry.id.includes('/') ? entry.id.slice(0, entry.id.lastIndexOf('
   shortPath={shortPathFor('projects', entry.id, d.lang)}
 >
   <Pane title={d.title} links={bracketLinks(d)} paragraphs={paras} tags={d.tags}>
+    {d.diagram === 'acapulko-flow' && <Flow />}
+    {d.diagram && d.excerpts.length > 0 && <Line />}
     {d.excerpts.length > 0 ? (
       <Cycler snippets={d.excerpts.map((f) => ({ excerpt: loadExcerpt(f) }))} />
     ) : (

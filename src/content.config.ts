@@ -25,6 +25,8 @@ const projectSchema = ({ image }: SchemaContext) =>
       .optional(),
     /** files under src/excerpts, e.g. 'redis-go/unmarshal.go' */
     excerpts: z.array(z.string()).default([]),
+    /** an animated ascii diagram to show above the excerpts */
+    diagram: z.enum(['acapulko-flow']).optional(),
   });
 
 const projects = defineCollection({

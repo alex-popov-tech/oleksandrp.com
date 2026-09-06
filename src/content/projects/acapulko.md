@@ -5,6 +5,7 @@ order: 2
 repo: alex-popov-tech/acapulko
 live: https://acapulko.oleksandrp.com/
 tags: [Go, Home Assistant, Telegram, Raspberry Pi, Docker, SSE]
+diagram: acapulko-flow
 excerpts:
   - acapulko/dtek.go
 ---
