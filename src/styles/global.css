@@ -179,10 +179,24 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
   white-space: nowrap;
   overflow: hidden;
 }
-#statusline .mode { background: var(--accent); color: var(--bg); padding: 0 1ch; font-weight: 700; }
-#statusline .arrow { display: inline-flex; align-items: center; }
-/* the divider must fill the bar height, so it has to outrank .nf's font-size */
-#statusline .nf-arrow { color: var(--accent); font-size: var(--lh); line-height: 1; }
+#statusline .mode {
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+  background: var(--accent);
+  color: var(--bg);
+  padding: 0 1ch;
+  font-weight: 700;
+}
+/* the powerline divider: a clipped block, so it is exactly the mode colour and
+   exactly the bar height. A font glyph left a dark sliver above it. */
+#statusline .sep {
+  flex: none;
+  align-self: stretch;
+  width: 0.9ch;
+  background: var(--accent);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
 #statusline .path { color: var(--fg); margin-left: 1ch; display: inline-flex; align-items: center; gap: 1ch; overflow: hidden; }
 #statusline .path .short { display: none; }
 #statusline .branch { color: var(--muted); margin-left: 2ch; display: inline-flex; align-items: center; gap: 1ch; }
@@ -200,7 +214,6 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
   speak: never;
 }
 .nf-folder, .nf-folder-open { color: var(--blue); }
-.nf-readme { color: var(--accent); }
 .nf-file { color: var(--blue); }
 .nf-branch { color: var(--mauve); }
 .nf-go { color: #00add8; }
@@ -208,7 +221,7 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 .nf-ts { color: #3178c6; }
 .nf-js { color: #f7df1e; }
 .nf-sh { color: var(--green); }
-.nf-md { color: var(--dim); }
+.nf-md, .nf-readme { color: var(--fg); }
 .nf-pdf { color: var(--peach); }
 
 /* ---- code cycler ---- */

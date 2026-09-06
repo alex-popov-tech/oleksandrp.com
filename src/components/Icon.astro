@@ -10,7 +10,6 @@ const { name } = Astro.props;
 const GLYPH: Record<string, string> = {
   'folder': '',        // custom-folder
   'folder-open': '',   // custom-folder_open
-  'file': '',          // cod-file
   'branch': '',        // oct-git_branch
   'go': '',            // seti-go2, the GO wordmark
   'lua': '',           // seti-lua
@@ -18,9 +17,8 @@ const GLYPH: Record<string, string> = {
   'js': '',            // seti-javascript
   'sh': '',            // oct-terminal
   'md': '',            // oct-markdown
-  'readme': '',        // oct-markdown, in the accent colour
+  'readme': '',        // oct-markdown, same white as md
   'pdf': '',           // seti-pdf
-  'arrow': '',         // pl-left_hard_divider
 };
 
 const glyph = GLYPH[name] ?? GLYPH.md;
