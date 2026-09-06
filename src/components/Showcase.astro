@@ -1,7 +1,0 @@
----
-import Cycler from './Cycler.astro';
-import { showcase } from '../site';
-import { loadExcerpt } from '../lib/excerpt-files';
-const snippets = showcase.map((s) => ({ excerpt: loadExcerpt(s.file), project: { name: s.name, href: s.project } }));
----
-<Cycler snippets={snippets} fenced />

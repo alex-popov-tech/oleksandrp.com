@@ -8,13 +8,3 @@ export const SITE = {
 
 /** folder paths that start folded in the tree; everything is open by default */
 export const FOLDED: string[] = [];
-
-/** README code showcase: cycles through these excerpts, in order. */
-export const showcase = [
-  { name: 'redis.go', project: '/projects/from_scratch/redis', file: 'redis-go/unmarshal.go' },
-  { name: 'git.go', project: '/projects/from_scratch/git', file: 'git-go/blob.go' },
-  { name: 'bittorrent.go', project: '/projects/from_scratch/bittorrent', file: 'bittorrent-go/handshake.go' },
-  { name: 'dns.go', project: '/projects/from_scratch/dns', file: 'dns-go/question.go' },
-  { name: 'store.lua', project: '/projects/store', file: 'store.nvim/sort.lua' },
-  { name: 'better_dtek.ts', project: '/projects/better_dtek', file: 'better-dtek/transform.ts' },
-];

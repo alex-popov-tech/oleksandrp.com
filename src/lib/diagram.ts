@@ -102,7 +102,7 @@ export function runs(row: Cell[]): Run[] {
   return out;
 }
 
-const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+export const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 /**
  * One row of spans. The server and the client both go through here, so the first painted
@@ -113,7 +113,7 @@ export function rowHtml(row: Cell[]): string {
     .map((r) => {
       const cls = r.bg ? `c-${r.color} bg-${r.bg}` : `c-${r.color}`;
       const style = r.op === 1 ? '' : ` style="opacity:${r.op}"`;
-      return `<span class="${cls}"${style}>${escape(r.text)}</span>`;
+      return `<span class="${cls}"${style}>${escapeHtml(r.text)}</span>`;
     })
     .join('');
 }

@@ -68,7 +68,7 @@ export function buildTree(entries: TreeEntry[], opts: TreeOptions = {}): TreeNod
       children: opts.cv.map((f) => ({ kind: 'file', name: f.name, href: f.href, icon: 'pdf', depth: 1, download: true })),
     });
   }
-  roots.push({ kind: 'file', name: 'README.md', href: '/', icon: 'readme', depth: 0 });
+  roots.push({ kind: 'file', name: 'README.sh', href: '/', icon: 'sh', depth: 0 });
   return roots;
 }
 

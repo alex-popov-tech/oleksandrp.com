@@ -14,7 +14,7 @@
   font-display: swap;
   font-weight: 100 800;
   src: url('../fonts/jetbrains-mono-symbols-subset.woff2') format('woff2-variations');
-  unicode-range: U+2190-21FF, U+2500-25FF, U+2700-27BF;
+  unicode-range: U+2190-21FF, U+2300-232F, U+2500-25FF, U+2700-27BF;
 }
 
 @font-face {
@@ -318,17 +318,17 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 .diagram .diagram-grid { position: relative; width: calc(var(--gutter) + var(--cols) * 1ch); }
 .diagram .diagram-row { white-space: pre; overflow-wrap: normal; }
 .diagram .ln .tx { padding-right: 0; }
-.diagram .c-fg { color: var(--fg); }
-.diagram .c-dim { color: var(--dim); }
-.diagram .c-faint { color: var(--faint); }
-.diagram .c-accent { color: var(--accent); }
-.diagram .c-blue { color: var(--blue); }
-.diagram .c-green { color: var(--green); }
-.diagram .c-peach { color: var(--peach); }
-.diagram .c-red { color: var(--red); }
-.diagram .c-teal { color: var(--teal); }
-.diagram .c-mauve { color: var(--mauve); }
-.diagram .c-orange { color: var(--peach); }
+.c-fg { color: var(--fg); }
+.c-dim { color: var(--dim); }
+.c-faint { color: var(--faint); }
+.c-accent { color: var(--accent); }
+.c-blue { color: var(--blue); }
+.c-green { color: var(--green); }
+.c-peach { color: var(--peach); }
+.c-red { color: var(--red); }
+.c-teal { color: var(--teal); }
+.c-mauve { color: var(--mauve); }
+.c-orange { color: var(--peach); }
 .diagram .bg-sel { background: var(--sel); }
 /* the install flash: the selection colour, pulled towards green */
 .diagram .bg-flash { background: color-mix(in srgb, var(--green) 22%, var(--sel)); }
@@ -342,6 +342,15 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 .diagram[data-on] .bulb .rays { opacity: 0.7; }
 .diagram[data-on] .bulb .filament { opacity: 1; }
 .diagram[data-flash] .plane, .diagram[data-flash] .bulb { color: var(--accent); }
+
+/* ---- README.sh session ---- */
+/* a terminal buffer: no gutter, and the rows are preformatted, so they scroll rather than wrap */
+.session { display: block; overflow-x: auto; }
+.session .ln .tx { white-space: pre; overflow-wrap: normal; color: var(--fg); }
+.session .ln .tx.out { padding-left: 2ch; }
+/* prose keeps its hard wraps but still reflows on a screen narrower than they are */
+.session .ln .tx.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+.session a:hover { color: var(--accent); }
 
 /* ---- sl ---- */
 .train {

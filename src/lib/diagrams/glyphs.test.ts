@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { DIAGRAMS, DIAGRAM_IDS } from './index';
+import { SCRIPT } from '../../readme';
+import { renderSession } from '../session';
 
 /**
  * Every diagram is a character grid: one glyph, one cell. A glyph JetBrains Mono does not
@@ -23,6 +25,8 @@ const SAFE = new Set([
   ...'■□▪▫▲△▶▷▸◀◁◆◇◈◉○◌◎●',
   // arrows, marks and punctuation
   ...'←↑→↓↔↕⇥✓✕✗✶➔➜➝➞·–—…',
+  // the shell prompt and the modifier keys the keymap names
+  ...'❯⌃⌘⌥',
 ]);
 
 describe.each(DIAGRAM_IDS)('%s', (id) => {
@@ -42,5 +46,16 @@ describe.each(DIAGRAM_IDS)('%s', (id) => {
     const { grid } = diagram.render(0);
     expect(grid).toHaveLength(diagram.rows);
     for (const row of grid) expect(row).toHaveLength(diagram.cols);
+  });
+});
+
+describe('README.sh', () => {
+  it('draws only glyphs that are one cell wide in JetBrains Mono', () => {
+    const used = new Set<string>();
+    for (const row of renderSession(SCRIPT, Number.MAX_SAFE_INTEGER).rows) {
+      for (const span of row.spans) for (const ch of span.text) used.add(ch);
+    }
+    for (const { cmd } of SCRIPT) for (const ch of cmd) used.add(ch);
+    expect([...used].filter((ch) => !SAFE.has(ch))).toEqual([]);
   });
 });

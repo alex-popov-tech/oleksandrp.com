@@ -37,6 +37,11 @@ test('prefers-reduced-motion silences everything that moves', async ({ page }) =
   await page.clock.fastForward('05:00');
   expect(await row.textContent()).toBe(before);
   await expect(page.locator('#train')).toBeHidden();
+
+  // README.sh is shown in full rather than typed out
+  await page.goto('/');
+  await expect(page.locator('shell-session')).toContainText('github.com/alex-popov-tech');
+  await expect(page.locator('shell-session .ln').first()).toContainText('whoami');
 });
 
 test('no page scrolls sideways, at any width', async ({ page, isMobile }) => {

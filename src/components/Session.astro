@@ -1,0 +1,17 @@
+---
+/**
+ * README.sh, played as a zsh session. The build renders the finished transcript, so the page
+ * is complete without JavaScript and to a crawler; scripts/session.ts clears it and types it
+ * back in. A terminal buffer, so no line-number gutter — that is what nvim does too.
+ */
+import { renderSession, rowHtml } from '../lib/session';
+import { SCRIPT } from '../readme';
+
+const { rows } = renderSession(SCRIPT, Number.MAX_SAFE_INTEGER);
+---
+<shell-session class="session page-effect">
+  {rows.map((row) => (
+    <div class="ln"><div class:list={['tx', { out: row.indent, wrap: row.wrap }]} set:html={rowHtml(row.spans)} /></div>
+  ))}
+  <div class="ln"><div class="tx" set:html={rowHtml([{ text: '❯ ', color: 'green' }])}><span class="caret"></span></div></div>
+</shell-session>

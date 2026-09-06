@@ -22,8 +22,8 @@ describe('fileName', () => {
 describe('buildTree', () => {
   it('orders sections work, projects and ends with README', () => {
     const tree = buildTree(entries);
-    expect(tree.map((n) => n.name)).toEqual(['work', 'projects', 'README.md']);
-    expect(tree.at(-1)).toMatchObject({ kind: 'file', href: '/', icon: 'readme', depth: 0 });
+    expect(tree.map((n) => n.name)).toEqual(['work', 'projects', 'README.sh']);
+    expect(tree.at(-1)).toMatchObject({ kind: 'file', href: '/', icon: 'sh', depth: 0 });
   });
   it('puts subfolders before files and sorts files by order', () => {
     const projects = folder(buildTree(entries), 'projects');
@@ -47,12 +47,12 @@ describe('buildTree', () => {
   it('adds a cv folder before README only when files exist', () => {
     expect(buildTree(entries).some((n) => n.name === 'cv')).toBe(false);
     const tree = buildTree(entries, { cv: [{ name: 'golang.pdf', href: '/cv/golang.pdf' }] });
-    expect(tree.map((n) => n.name)).toEqual(['work', 'projects', 'cv', 'README.md']);
+    expect(tree.map((n) => n.name)).toEqual(['work', 'projects', 'cv', 'README.sh']);
     expect(folder(tree, 'cv').children[0]).toMatchObject({ kind: 'file', name: 'golang.pdf', icon: 'pdf', download: true, depth: 1 });
   });
   it('omits empty sections', () => {
     const tree = buildTree(entries.filter((e) => e.section !== 'work'));
-    expect(tree.map((n) => n.name)).toEqual(['projects', 'README.md']);
+    expect(tree.map((n) => n.name)).toEqual(['projects', 'README.sh']);
   });
 });
 

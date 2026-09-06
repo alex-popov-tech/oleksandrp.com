@@ -63,7 +63,7 @@ diagram ships rather than after someone spots a crooked border.
 
 1. Copy the lines verbatim into `src/excerpts/<repo>/<name>.<ext>`.
 2. Make the first line a comment holding the GitHub permalink with a line range, e.g. `// https://github.com/alex-popov-tech/redis-go/blob/<sha>/app/internal/resp/unmarshal.go#L7-L25`. The header of the block is built from it.
-3. List the file under `excerpts:` in the project's frontmatter, or add it to `showcase` in `src/site.ts` for the README.
+3. List the file under `excerpts:` in the project's frontmatter.
 
 Excerpts win over `hero` on a project page. `src/excerpts/` is excluded from `tsconfig.json` — the files are verbatim fragments, not project source.
 
@@ -100,8 +100,8 @@ pyftsubset SymbolsNerdFontMono-Regular.ttf \
 ### Box drawing and blocks
 
 `src/fonts/jetbrains-mono-symbols-subset.woff2` is JetBrains Mono Variable v2.304 (OFL, see
-`src/fonts/JetBrainsMono-OFL.txt`) subset to U+2190-21FF, U+2500-25FF and U+2700-27BF — the
-arrows, box drawing, blocks, geometric shapes and marks that the diagrams and the tree guides
+`src/fonts/JetBrainsMono-OFL.txt`) subset to U+2190-21FF, U+2300-232F, U+2500-25FF and
+U+2700-27BF — the arrows, box drawing, blocks, geometric shapes, modifier keys and marks that the diagrams and the tree guides
 are drawn with. It is declared as a face of `JetBrains Mono Variable` over those ranges.
 
 This is not decoration, it is what keeps the character grid square. `@fontsource` cuts its
@@ -117,12 +117,54 @@ what is safe and fails on anything new.
 
 ```sh
 pyftsubset 'JetBrainsMono[wght].ttf' \
-  --unicodes='U+2190-21FF,U+2500-25FF,U+2700-27BF' \
+  --unicodes='U+2190-21FF,U+2300-232F,U+2500-25FF,U+2700-27BF' \
   --layout-features='' --no-hinting --desubroutinize --flavor=woff2 \
   --output-file=src/fonts/jetbrains-mono-symbols-subset.woff2
 ```
 
 Current glyphs: `custom-folder` U+E5FF, `custom-folder_open` U+E5FE, `oct-git_branch` U+F418, `seti-go2` U+E65E, `seti-lua` U+E620, `seti-typescript` U+E628, `seti-javascript` U+E60C, `oct-terminal` U+F489, `oct-markdown` U+F48A, `seti-pdf` U+E67D. The statusline's powerline divider is a CSS `clip-path` triangle rather than a glyph, so it matches the mode block exactly.
+
+## The README session
+
+The landing page is `README.sh`, a zsh session that types itself out: each command is a
+section of the bio. `src/readme.ts` holds the content, `src/lib/session.ts` the playback —
+a pure `renderSession(t)`, so the build renders the finished transcript (complete without
+JavaScript, and to a crawler) and `scripts/session.ts` clears it and replays it.
+
+It plays once per browser session — the flag is `readme:played` in `sessionStorage`, so
+moving between pages does not restart it — and not at all under `prefers-reduced-motion`.
+Clicking the pane replays it on demand. While it plays the pane is a `.page-effect`, which
+keeps the train away; when it settles the class comes off and the train runs again.
+
+Rows reflow by default and a phone needs that, so only the rows whose columns mean something
+— the language table, the keyboard — are marked `pre`. It is a terminal buffer, so there is
+no line-number gutter, the way nvim shows one.
+
+The keyboard is the real GALLIUM layer of `~/me/zmk/zmk-skean/config/skean.keymap`. Only the
+eight keys the fingers rest on are amber: the design handoff also lit up `G` and `P`, which
+are the index stretch and contradicted its own caption.
+
+### Recounting the languages
+
+`src/languages.ts` is a snapshot. The sources are not in this repo, so the build cannot count
+them — regenerate it by hand with [tokei](https://github.com/XAMPPRocky/tokei) over local
+clones of every project this site lists, plus `~/.dotfiles` and all four store.nvim modules.
+Count each project separately: a vendored directory in one of them will quietly inflate the
+whole table otherwise.
+
+```sh
+tokei --output json --hidden \
+  --exclude node_modules --exclude vendor --exclude dist --exclude build \
+  --exclude .svelte-kit --exclude .vercel --exclude .wrangler --exclude .next \
+  --exclude .worktree --exclude .worktrees --exclude .claude --exclude .codecrafters \
+  --exclude output --exclude generated_images --exclude package-lock.json \
+  --exclude '*_templ.go' <project>
+```
+
+`--hidden` matters for `~/.dotfiles`; without it tokei skips the whole repository. The
+excludes worth keeping are the git worktrees (`.worktree`, a second copy of the same source)
+and templ's generated Go. Sum `code + comments + blanks` per language, fold TSX into
+TypeScript, and drop anything that is not a programming language.
 
 ## The train
 
