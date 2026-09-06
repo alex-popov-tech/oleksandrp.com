@@ -8,6 +8,7 @@ const FPS = 20;
 const LOADERS: Record<DiagramId, () => Promise<{ diagram: Diagram }>> = {
   'acapulko-flow': () => import('../lib/diagrams/acapulko'),
   'dtek-schedule': () => import('../lib/diagrams/schedule'),
+  'rio-hooks': () => import('../lib/diagrams/rio'),
   'store-browse': () => import('../lib/diagrams/store'),
 };
 

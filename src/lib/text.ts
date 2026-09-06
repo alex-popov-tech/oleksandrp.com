@@ -29,3 +29,12 @@ export function hardWrap(text: string, columns: number = WRAP_COLUMNS): string[]
   lines.push(line);
   return lines;
 }
+
+/**
+ * Cut text to fit a column budget, ending on an ellipsis so the cut reads as deliberate
+ * rather than as a rendering fault. Characterwise, not on word boundaries: in a narrow
+ * column "manage global…" carries more than "manage…".
+ */
+export function clip(text: string, columns: number): string {
+  return text.length <= columns ? text : `${text.slice(0, columns - 1).trimEnd()}…`;
+}

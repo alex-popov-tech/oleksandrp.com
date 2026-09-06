@@ -7,14 +7,16 @@
  */
 import type { Diagram } from '../diagram';
 import { diagram as acapulko } from './acapulko';
+import { diagram as rio } from './rio';
 import { diagram as schedule } from './schedule';
 import { diagram as store } from './store';
 
-export const DIAGRAM_IDS = ['acapulko-flow', 'dtek-schedule', 'store-browse'] as const;
+export const DIAGRAM_IDS = ['acapulko-flow', 'dtek-schedule', 'rio-hooks', 'store-browse'] as const;
 export type DiagramId = (typeof DIAGRAM_IDS)[number];
 
 export const DIAGRAMS: Record<DiagramId, Diagram> = {
   'acapulko-flow': acapulko,
   'dtek-schedule': schedule,
+  'rio-hooks': rio,
   'store-browse': store,
 };

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { hardWrap, paragraphs } from './text';
+import { clip, hardWrap, paragraphs } from './text';
 
 describe('paragraphs', () => {
   it('splits on blank lines and joins soft wraps', () => {
@@ -31,5 +31,21 @@ describe('hardWrap', () => {
     expect(lines.length).toBeGreaterThan(1);
     for (const l of lines) expect(l.length).toBeLessThanOrEqual(80);
     expect(lines.join(' ')).toBe(prose);
+  });
+});
+
+describe('clip', () => {
+  it('leaves text that already fits', () => {
+    expect(clip('short', 10)).toBe('short');
+    expect(clip('exactly te', 10)).toBe('exactly te');
+  });
+
+  it('ends on an ellipsis, within the budget', () => {
+    expect(clip('manage global and project-local settings', 15)).toBe('manage global…');
+    expect(clip('manage global and project-local settings', 15)).toHaveLength(14);
+  });
+
+  it('does not leave a space stranded before the ellipsis', () => {
+    expect(clip('a collection of QoL plugins', 16)).toBe('a collection of…');
   });
 });

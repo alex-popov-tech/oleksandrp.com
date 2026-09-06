@@ -4,6 +4,7 @@ lang: js
 order: 5
 repo: alex-popov-tech/claude-rio
 tags: [GitHub, JavaScript, Node.js]
+diagram: rio-hooks
 excerpts:
   - claude-rio/keyword-matcher.js
 ---

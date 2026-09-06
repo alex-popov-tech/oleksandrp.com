@@ -22,7 +22,7 @@ const SAFE = new Set([
   // geometric
   ...'■□▪▫▲△▶▷▸◀◁◆◇◈◉○◌◎●',
   // arrows, marks and punctuation
-  ...'←↑→↓↔↕⇥✓✕✗✶·–—…',
+  ...'←↑→↓↔↕⇥✓✕✗✶➔➜➝➞·–—…',
 ]);
 
 describe.each(DIAGRAM_IDS)('%s', (id) => {

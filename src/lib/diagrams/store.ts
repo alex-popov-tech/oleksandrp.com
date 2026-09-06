@@ -8,7 +8,7 @@
  * its description instead.
  */
 import { Grid, type Diagram, type Frame, type Role } from '../diagram';
-import { hardWrap } from '../text';
+import { clip, hardWrap } from '../text';
 
 export interface Plugin {
   name: string;
@@ -59,10 +59,6 @@ const LIST_RIGHT = 44;
 const DESC_COLS = 15;
 const README_COLS = 27;
 
-/** Truncate on the ellipsis rather than mid-word, so a cut description still reads as one. */
-function clip(text: string, columns: number): string {
-  return text.length <= columns ? text : `${text.slice(0, columns - 1).trimEnd()}…`;
-}
 
 export interface StoreFrame extends Frame {
   selected: number;
