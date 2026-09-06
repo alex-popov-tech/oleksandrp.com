@@ -12,6 +12,8 @@ test('the locomotive departs, crosses, and never blocks a click', async ({ page 
   await expect(train).toBeVisible();
   await expect(train).toHaveCSS('pointer-events', 'none');
   expect((await train.textContent())?.split('\n')).toHaveLength(10);
+  // without a plate behind it the sprite interleaves with the prose into noise
+  expect(await train.evaluate((el) => getComputedStyle(el).backgroundImage)).toContain('gradient');
 
   // it floats over the buffer, so links underneath must still take the click
   await page.locator('#tree a[href="/projects/from_scratch/redis"]').click();
