@@ -170,11 +170,11 @@ details.cv li a:hover { background: var(--sel); text-decoration: none; }
 .row .icon { width: 2ch; flex: none; display: inline-flex; align-items: center; margin-right: 0.7ch; }
 .row .name { color: inherit; overflow: hidden; text-overflow: ellipsis; }
 .row.file .name:hover { color: var(--accent); text-decoration: none; }
-.row.folder { color: var(--accent); cursor: pointer; }
-.row.folder[data-depth="1"] { color: var(--muted); }
+/* neo-tree keeps names neutral and lets only the icons carry colour */
+.row.folder { color: var(--fg); cursor: pointer; }
 .row .count { margin-left: auto; color: var(--dim); }
 .row.sel { background: var(--sel); }
-.row.sel .name { color: var(--blue); }
+.row.sel .name { color: var(--fg); font-weight: 700; }
 body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset: -1px; }
 
 /* ---- statusline and command line ---- */
@@ -206,7 +206,8 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
   font-variant-ligatures: none;
   speak: never;
 }
-.nf-folder, .nf-folder-open, .nf-readme { color: var(--accent); }
+.nf-folder { color: var(--blue); }
+.nf-folder-open, .nf-readme { color: var(--accent); }
 .nf-file { color: var(--blue); }
 .nf-branch { color: var(--mauve); }
 .nf-go { color: #00add8; }
