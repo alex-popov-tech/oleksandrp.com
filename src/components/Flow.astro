@@ -26,7 +26,7 @@ const box = (b: { row: number; col: number; cols: number; rows: number }) =>
 
 const first = renderFrame(0);
 ---
-<ascii-flow class="flow" data-on={first.bulbOn ? '' : undefined}>
+<ascii-flow class="flow page-effect" data-on={first.bulbOn ? '' : undefined}>
   <div class="flow-grid">
     {first.grid.map((row) => (
       <div class="ln"><span class="nr"></span><div class="tx flow-row">{runs(row).map((r) => (

@@ -63,6 +63,8 @@ function scheduleNext() {
  */
 function tick() {
   if (running) return;
+  // the train is the fallback: a page carrying its own effect keeps its slot for the next one
+  if (document.querySelector(".page-effect")) return;
   // a hidden tab or a phone leaves the slot alone, so it departs once conditions allow
   if (document.visibilityState === "hidden" || window.innerWidth < MIN_WIDTH)
     return;

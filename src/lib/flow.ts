@@ -69,11 +69,11 @@ put(10, 1, '│', C.fg); put(10, 2, '█'.repeat(fill) + '░'.repeat(8 - fill),
 put(11, 1, '╰────────╯', C.fg);
 put(12, 1, `deye ${Math.round(pct)}%`, C.mute); put(12, 10, gridOn ? '⇡' : '⇣', gridOn ? C.grn : C.blue);
 
-putLines(4, 34, ['╭───────╮', '│       │', '│  pi5  │', '│       │', '╰───────╯'], C.fg);
-put(6, 37, 'pi5', C.org);
+putLines(4, 30, ['╭───────╮', '│       │', '│  pi5  │', '│       │', '╰───────╯'], C.fg);
+put(6, 33, 'pi5', C.org);
 // the source indicator sits inside the box: amber on grid, blue on battery
-put(7, 37, '▪', gridOn ? C.amber : C.blue);
-put(7, 39, '▪', Math.floor(T * 5) % 3 === 0 ? C.grn : C.dim);
+put(7, 33, '▪', gridOn ? C.amber : C.blue);
+put(7, 35, '▪', Math.floor(T * 5) % 3 === 0 ? C.grn : C.dim);
 
 // the plane and the bulb are drawn as SVG over these cells; leave them empty
 put(5, 59, 'telegram', C.mute);
@@ -82,7 +82,7 @@ put(13, 57, 'status page', C.mute);
 
 // ---- power lines ----
 const gridPath: [number, number, string][] = []; for (let c = 12; c <= 19; c++) gridPath.push([2, c, '─']); gridPath.push([2, 20, '╮']); for (let r = 3; r <= 5; r++) gridPath.push([r, 20, '│']); gridPath.push([6, 20, '├']);
-const piPath: [number, number, string][] = []; for (let c = 21; c <= 32; c++) piPath.push([6, c, '─']); piPath.push([6, 33, '▶']);
+const piPath: [number, number, string][] = []; for (let c = 21; c <= 28; c++) piPath.push([6, c, '─']); piPath.push([6, 29, '▶']);
 const battPath: [number, number, string][] = []; for (let r = 7; r <= 9; r++) battPath.push([r, 20, '│']); battPath.push([10, 20, '╰']); for (let c = 19; c >= 13; c--) battPath.push([10, c, '─']);
 const flow = Math.floor(T * 7);
 const drawPower = (path: [number, number, string][], color: Role, active: boolean, reverse: boolean) => {
@@ -103,8 +103,8 @@ if (!gridOn) g[6][20] = { ch: '╭', color: C.blue, op: 0.55 };
 if (gridOn) put(10, 13, '◀', C.amber); else put(10, 13, '─', C.blue, 0.55);
 
 // ---- notification lines ----
-const tgPath: [number, number, string][] = []; for (let c = 43; c <= 47; c++) tgPath.push([5, c, '─']); tgPath.push([5, 48, '╯']); for (let r = 4; r >= 3; r--) tgPath.push([r, 48, '│']); tgPath.push([2, 48, '╭']); for (let c = 49; c <= 55; c++) tgPath.push([2, c, '─']); tgPath.push([2, 56, '▶']);
-const webPath: [number, number, string][] = []; for (let c = 43; c <= 47; c++) webPath.push([7, c, '─']); webPath.push([7, 48, '╮']); for (let r = 8; r <= 9; r++) webPath.push([r, 48, '│']); webPath.push([10, 48, '╰']); for (let c = 49; c <= 55; c++) webPath.push([10, c, '─']); webPath.push([10, 56, '▶']);
+const tgPath: [number, number, string][] = []; for (let c = 39; c <= 47; c++) tgPath.push([5, c, '─']); tgPath.push([5, 48, '╯']); for (let r = 4; r >= 3; r--) tgPath.push([r, 48, '│']); tgPath.push([2, 48, '╭']); for (let c = 49; c <= 55; c++) tgPath.push([2, c, '─']); tgPath.push([2, 56, '▶']);
+const webPath: [number, number, string][] = []; for (let c = 39; c <= 47; c++) webPath.push([7, c, '─']); webPath.push([7, 48, '╮']); for (let r = 8; r <= 9; r++) webPath.push([r, 48, '│']); webPath.push([10, 48, '╰']); for (let c = 49; c <= 55; c++) webPath.push([10, c, '─']); webPath.push([10, 56, '▶']);
 for (const p of [tgPath, webPath]) p.forEach(([r, c, ch]) => { g[r][c] = { ch, color: C.dim, op: 1 }; });
 if (pulseProg !== null) {
   for (const p of [tgPath, webPath]) {

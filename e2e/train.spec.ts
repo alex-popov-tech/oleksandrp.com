@@ -37,7 +37,8 @@ test('the departure slot survives navigation, so browsing does not reset the wai
 
   // browse for a while; the countdown must keep running rather than restarting
   await page.clock.fastForward('00:06');
-  for (const href of ['/projects/dotfiles', '/projects/lastpass', '/projects/acapulko']) {
+  // none of these carry their own effect, so the train stays eligible throughout
+  for (const href of ['/projects/dotfiles', '/projects/lastpass', '/projects/dreampicai']) {
     await page.locator(`#tree a[href="${href}"]`).click();
     await expect(page).toHaveURL(new RegExp(`${href}$`));
   }
@@ -54,4 +55,18 @@ test('reduced motion keeps it in the shed', async ({ page }) => {
   await page.goto('/projects/store');
   await page.clock.fastForward('05:00');
   await expect(page.locator('#train')).toBeHidden();
+});
+
+test('a page with its own effect does not also get the train', async ({ page }) => {
+  await page.clock.install();
+  await page.goto('/projects/acapulko');
+  await expect(page.locator('.page-effect')).toBeVisible();
+  await page.clock.fastForward('00:40');
+  await expect(page.locator('#train')).toBeHidden();
+
+  // the slot is kept, so the next page without an effect gets it
+  await page.locator('#tree a[href="/projects/store"]').click();
+  await expect(page).toHaveURL(/projects\/store$/);
+  await page.clock.fastForward('00:11');
+  await expect(page.locator('#train')).toBeVisible();
 });
