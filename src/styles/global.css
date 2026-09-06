@@ -32,7 +32,14 @@ body {
   text-size-adjust: 100%;
 }
 a { color: var(--blue); text-decoration: none; }
-a:hover { color: var(--accent); text-decoration: underline; }
+a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+  /* the bracket glyphs dip below the baseline, so skip-ink chops the rule into
+     stubs around [ and ]; draw it straight through and drop it clear of the descenders */
+  text-decoration-skip-ink: none;
+  text-underline-offset: 2px;
+}
 button.ghost { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 [hidden] { display: none !important; }
 
