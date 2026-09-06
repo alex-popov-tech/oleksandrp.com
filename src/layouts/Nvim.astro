@@ -8,6 +8,7 @@ import Statusline from '../components/Statusline.astro';
 import Cmdline from '../components/Cmdline.astro';
 import Shell from '../components/Shell.astro';
 import HelpOverlay from '../components/HelpOverlay.astro';
+import Train from '../components/Train.astro';
 import { buildTree, type TreeEntry } from '../lib/tree';
 import { numberLines } from '../lib/numbers';
 import { cvFiles } from '../lib/cv-files';
@@ -65,9 +66,11 @@ const body = numberLines(await Astro.slots.render('default'));
     </div>
     <Shell />
     <HelpOverlay />
+    <Train />
     <script>
       import '../scripts/cycler';
       import '../scripts/nvim';
+      import '../scripts/train';
     </script>
   </body>
 </html>

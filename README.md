@@ -62,6 +62,26 @@ pyftsubset SymbolsNerdFontMono-Regular.ttf \
 
 Current glyphs: `custom-folder` U+E5FF, `custom-folder_open` U+E5FE, `oct-git_branch` U+F418, `seti-go2` U+E65E, `seti-lua` U+E620, `seti-typescript` U+E628, `seti-javascript` U+E60C, `oct-terminal` U+F489, `oct-markdown` U+F48A, `seti-pdf` U+E67D. The statusline's powerline divider is a CSS `clip-path` triangle rather than a glyph, so it matches the mode block exactly.
 
+## The train
+
+Every minute or two a D51 steam locomotive chugs across the page. It is a fixed-position
+`<pre>` with `pointer-events: none` sitting below the drawer and the help dialog, so it can
+never swallow a click; it picks a random row, steps one column at a time, and cycles six wheel
+patterns so the drivers turn. It stays in the shed under `prefers-reduced-motion` and on
+screens narrower than the 84-column sprite.
+
+The art in `src/lib/train.ts` is the D51 from [`sl`](https://github.com/mtoyoda/sl), the
+program you get when you typo `ls`:
+
+> Copyright 1993,1998,2014 Toyoda Masashi (mtoyoda@acm.org)
+>
+> Everyone is permitted to do anything on this program including copying, modifying, and
+> improving, unless you try to pretend that you wrote it. i.e., the above copyright notice
+> has to appear in all copies.
+
+It was extracted from `sl.h` by script rather than retyped, so the joins are byte-exact.
+Do not hand-edit it.
+
 ## Theme
 
 `src/styles/theme.css` holds the palette (Gruvbox is there, commented out). The Shiki theme is set in `astro.config.mjs` and `src/lib/highlight.ts`.

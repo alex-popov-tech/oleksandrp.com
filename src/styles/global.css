@@ -293,3 +293,26 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
   .ln .tx .path { display: none; }
   .ln .tx.sub { padding-left: 2ch; }
 }
+
+/* ---- sl ---- */
+.train {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 4;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font);
+  font-size: var(--fs);
+  line-height: var(--lh);
+  color: var(--muted);
+  /* it crosses screenshots as well as dark background, so it carries its own halo */
+  text-shadow: 0 0 4px var(--bg), 0 0 2px var(--bg), 0 0 1px var(--bg);
+  white-space: pre;
+  /* it floats over the page, so it must never swallow a click */
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) { .train { display: none !important; } }
+@media (max-width: 899px) { .train { display: none !important; } }
