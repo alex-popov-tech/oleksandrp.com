@@ -38,6 +38,30 @@ Excerpts win over `hero` on a project page. `src/excerpts/` is excluded from `ts
 
 Drop `public/cv/<name>.pdf` and map it in `src/cv.json`: `{ "<name>.pdf": "<label>" }`. One file makes the button a direct download; several make it a menu and add a `cv/` folder to the tree. No files, no button.
 
+## Icons
+
+The file-tree and statusline icons are real Nerd Font glyphs, not drawings. `src/fonts/symbols-nerd-font-subset.woff2` is Symbols Nerd Font Mono v3.5.1 (MIT, Ryan L McIntyre / ryanoasis/nerd-fonts) subset to the twelve codepoints this site uses, and Vite inlines it into the CSS as a data URI. `src/components/Icon.astro` maps a name to a glyph; `.nf-*` rules in `global.css` colour them.
+
+The codepoints are Private Use Area, so they render only with this font — the `@font-face` family is called `NerdIcons` so a Nerd Font installed on the visitor's machine can never be picked up instead, and `font-display: block` shows nothing rather than tofu while it loads.
+
+To add an icon, find its codepoint by glyph name and regenerate the subset:
+
+```sh
+# needs fonttools + brotli, and SymbolsNerdFontMono-Regular.ttf from
+# https://github.com/ryanoasis/nerd-fonts/releases (NerdFontsSymbolsOnly)
+python3 -c "
+from fontTools.ttLib import TTFont
+cmap = TTFont('SymbolsNerdFontMono-Regular.ttf').getBestCmap()
+print([(hex(cp), n) for cp, n in cmap.items() if 'rust' in n])"
+
+pyftsubset SymbolsNerdFontMono-Regular.ttf \
+  --unicodes=U+E0B0,U+E5FE,U+E5FF,U+E60C,U+E620,U+E628,U+E65E,U+E67D,U+EA7B,U+F418,U+F489,U+F48A \
+  --flavor=woff2 --layout-features='' --no-hinting --desubroutinize --name-IDs='' \
+  --output-file=src/fonts/symbols-nerd-font-subset.woff2
+```
+
+Current glyphs: `custom-folder` U+E5FF, `custom-folder_open` U+E5FE, `cod-file` U+EA7B, `oct-git_branch` U+F418, `seti-go2` U+E65E, `seti-lua` U+E620, `seti-typescript` U+E628, `seti-javascript` U+E60C, `oct-terminal` U+F489, `oct-markdown` U+F48A, `seti-pdf` U+E67D, `pl-left_hard_divider` U+E0B0.
+
 ## Theme
 
 `src/styles/theme.css` holds the palette (Gruvbox is there, commented out). The Shiki theme is set in `astro.config.mjs` and `src/lib/highlight.ts`.

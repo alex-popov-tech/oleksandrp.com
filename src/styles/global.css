@@ -1,6 +1,17 @@
 @import '@fontsource-variable/jetbrains-mono';
 @import './theme.css';
 
+@font-face {
+  /* Symbols Nerd Font Mono v3.5.1 (MIT), subset to the 12 glyphs this site uses.
+     See README > Icons for the pyftsubset command that regenerates it. */
+  font-family: 'NerdIcons';
+  src: url('../fonts/symbols-nerd-font-subset.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  /* icon glyphs live in the Private Use Area: show nothing rather than tofu while loading */
+  font-display: block;
+}
+
 :root {
   --font: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
   --fs: 15px;
@@ -173,7 +184,9 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
   overflow: hidden;
 }
 #statusline .mode { background: var(--accent); color: var(--bg); padding: 0 1ch; font-weight: 700; }
-#statusline .arrow { display: inline-flex; }
+#statusline .arrow { display: inline-flex; align-items: center; }
+/* the powerline divider has to fill the bar, so it is sized to the line height */
+.nf-arrow { color: var(--accent); font-size: var(--lh); line-height: 1; }
 #statusline .path { color: var(--fg); margin-left: 1ch; display: inline-flex; align-items: center; gap: 1ch; overflow: hidden; }
 #statusline .path .short { display: none; }
 #statusline .branch { color: var(--muted); margin-left: 2ch; display: inline-flex; align-items: center; gap: 1ch; }
@@ -181,6 +194,25 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 #cmdline { display: flex; align-items: center; background: var(--bg); color: var(--dim); padding: 0 1ch; white-space: nowrap; overflow: hidden; }
 #cmdline.err { color: var(--peach); }
 #cmdline input { font: inherit; color: var(--fg); background: transparent; border: 0; outline: 0; padding: 0; flex: 1; }
+
+/* ---- nerd font icons ---- */
+.nf {
+  font-family: 'NerdIcons';
+  font-size: 1.2em;
+  line-height: 1;
+  font-variant-ligatures: none;
+  speak: never;
+}
+.nf-folder, .nf-folder-open, .nf-readme { color: var(--accent); }
+.nf-file { color: var(--blue); }
+.nf-branch { color: var(--mauve); }
+.nf-go { color: #00add8; }
+.nf-lua { color: #51a0cf; }
+.nf-ts { color: #3178c6; }
+.nf-js { color: #f7df1e; }
+.nf-sh { color: var(--green); }
+.nf-md { color: var(--dim); }
+.nf-pdf { color: var(--peach); }
 
 /* ---- code cycler ---- */
 .ln .tx.src a[data-src] { color: var(--teal); }
