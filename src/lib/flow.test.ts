@@ -63,9 +63,12 @@ describe('renderFrame', () => {
     expect(whole(2)).not.toContain('power outage detected');
   });
 
-  it('labels the status page for the current state', () => {
-    expect(textAt(13, 13)).toContain('power on');
-    expect(textAt(8, 13)).toContain('outage');
+  it('leaves the state to colour rather than repeating it in words', () => {
+    // the bulb and the grid pylon carry their state as colour; no "~ on" / "power on" text
+    expect(whole(2)).toContain('status page');
+    expect(whole(2)).not.toContain('~ on');
+    expect(whole(8)).not.toContain('~ off');
+    expect(textAt(2, 13).trim()).toBe('status page');
   });
 
   it('names the phase for the header line', () => {

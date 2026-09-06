@@ -298,7 +298,7 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 
 /* ---- ascii flow diagram ---- */
 .flow { display: block; overflow-x: auto; }
-.flow .flow-grid { position: relative; width: 100ch; }
+.flow .flow-grid { position: relative; width: calc(var(--gutter) + 100ch); }
 /* the two SVG nodes sit on the character grid, sized in cells so they stay aligned */
 .flow .flow-node { position: absolute; overflow: visible; }
 .flow .plane { color: var(--blue); }

@@ -20,15 +20,16 @@ function runs(row: Cell[]): { text: string; color: Role; op: number }[] {
   return out;
 }
 
+/** the rows carry a gutter now, so the overlays start after it */
 const box = (b: { row: number; col: number; cols: number; rows: number }) =>
-  `left:${b.col}ch;top:calc(${b.row} * var(--lh));width:${b.cols}ch;height:calc(${b.rows} * var(--lh))`;
+  `left:calc(var(--gutter) + ${b.col}ch);top:calc(${b.row} * var(--lh));width:${b.cols}ch;height:calc(${b.rows} * var(--lh))`;
 
 const first = renderFrame(0);
 ---
 <ascii-flow class="flow" data-on={first.bulbOn ? '' : undefined}>
   <div class="flow-grid">
     {first.grid.map((row) => (
-      <div class="ln"><div class="tx flow-row">{runs(row).map((r) => (
+      <div class="ln"><span class="nr"></span><div class="tx flow-row">{runs(row).map((r) => (
         <span class:list={[`c-${r.color}`]} style={r.op === 1 ? undefined : `opacity:${r.op}`}>{r.text}</span>
       ))}</div></div>
     ))}
