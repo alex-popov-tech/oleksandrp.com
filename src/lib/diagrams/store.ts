@@ -115,7 +115,7 @@ export function renderFrame(tSeconds: number, opts: { speed?: number; plugins?: 
     const isSelected = i === selected;
     const rowMark = isSelected ? mark : '';
     if (isSelected) g.fillBg(r, 1, LIST_RIGHT, 'sel');
-    g.put(r, 2, '★', C.amber);
+    g.put(r, 2, '✶', C.amber);
     g.put(r, 3, plugin.stars.padEnd(5), C.amber);
     g.put(r, 9, plugin.name.padEnd(19), C.fg);
     if (rowMark) g.put(r, LIST_RIGHT - rowMark.length - 1, rowMark, C.grn);

@@ -97,6 +97,31 @@ pyftsubset SymbolsNerdFontMono-Regular.ttf \
   --output-file=src/fonts/symbols-nerd-font-subset.woff2
 ```
 
+### Box drawing and blocks
+
+`src/fonts/jetbrains-mono-symbols-subset.woff2` is JetBrains Mono Variable v2.304 (OFL, see
+`src/fonts/JetBrainsMono-OFL.txt`) subset to U+2190-21FF, U+2500-25FF and U+2700-27BF — the
+arrows, box drawing, blocks, geometric shapes and marks that the diagrams and the tree guides
+are drawn with. It is declared as a face of `JetBrains Mono Variable` over those ranges.
+
+This is not decoration, it is what keeps the character grid square. `@fontsource` cuts its
+files to their declared unicode-ranges and none of them cover these glyphs, so every browser
+was silently falling back to a system font for them: Menlo at 9.031px in Chromium, SF Mono at
+9.273px in WebKit, against JetBrains Mono's 9px cell. A 78-column diagram row came out 21px
+too wide in Safari and the box borders visibly stepped. In the real font these glyphs are
+600/1000 em, exactly like every letter, so the rows now measure to the pixel in both engines.
+
+Note what the font does *not* have: `★`, `⇡`, `⇣` and braille are all absent, so they fall
+back and shear their row. Use `✶` and `↑` `↓`. `src/lib/diagrams/glyphs.test.ts` whitelists
+what is safe and fails on anything new.
+
+```sh
+pyftsubset 'JetBrainsMono[wght].ttf' \
+  --unicodes='U+2190-21FF,U+2500-25FF,U+2700-27BF' \
+  --layout-features='' --no-hinting --desubroutinize --flavor=woff2 \
+  --output-file=src/fonts/jetbrains-mono-symbols-subset.woff2
+```
+
 Current glyphs: `custom-folder` U+E5FF, `custom-folder_open` U+E5FE, `oct-git_branch` U+F418, `seti-go2` U+E65E, `seti-lua` U+E620, `seti-typescript` U+E628, `seti-javascript` U+E60C, `oct-terminal` U+F489, `oct-markdown` U+F48A, `seti-pdf` U+E67D. The statusline's powerline divider is a CSS `clip-path` triangle rather than a glyph, so it matches the mode block exactly.
 
 ## The train

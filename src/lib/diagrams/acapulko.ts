@@ -57,7 +57,7 @@ const fill = Math.round(pct / 100 * 8);
 put(9, 1, '╭────────╮', C.fg);
 put(10, 1, '│', C.fg); put(10, 2, '█'.repeat(fill) + '░'.repeat(8 - fill), gridOn ? C.grn : C.blue); put(10, 10, '├┤', C.fg);
 put(11, 1, '╰────────╯', C.fg);
-put(12, 1, `deye ${Math.round(pct)}%`, C.mute); put(12, 10, gridOn ? '⇡' : '⇣', gridOn ? C.grn : C.blue);
+put(12, 1, `deye ${Math.round(pct)}%`, C.mute); put(12, 10, gridOn ? '↑' : '↓', gridOn ? C.grn : C.blue);
 
 putLines(4, 30, ['╭───────╮', '│       │', '│  pi5  │', '│       │', '╰───────╯'], C.fg);
 put(6, 33, 'pi5', C.org);

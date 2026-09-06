@@ -4,10 +4,13 @@ import { DIAGRAMS, DIAGRAM_IDS } from './index';
 /**
  * Every diagram is a character grid: one glyph, one cell. A glyph JetBrains Mono does not
  * carry falls back to another face at a different advance width and shears the row it is on
- * — braille (`⠋`) measures 10.26px against the 9px cell, for instance.
+ * — braille (`⠋`) measures 10.26px against the 9px cell, `⎿` measures 15px, and `★` is not
+ * in the font at all despite looking like it belongs.
  *
- * So the set below is a whitelist: each of these was measured in the browser at exactly one
- * cell. Adding a glyph to a diagram fails this test until it is measured and listed here.
+ * So the set below is a whitelist, and it is deliberately narrow: ASCII, plus the glyphs
+ * carried by the symbol subset in src/fonts (U+2190-21FF, U+2500-25FF, U+2700-27BF), which
+ * are 600/1000 em like every letter. Adding a glyph to a diagram fails this test until it is
+ * confirmed present in that subset — check with the pyftsubset recipe in README > Icons.
  */
 const SAFE = new Set([
   // ascii
@@ -17,9 +20,9 @@ const SAFE = new Set([
   // blocks
   ...'█▓▒░▀▄▌▐▖▗▘▝▙▚▞▛▜▟',
   // geometric
-  ...'▪▫●○◉◎◐◑◒◓◜◝◞◟▶◀★✓',
-  // arrows and punctuation
-  ...'⇡⇣→←↑↓·–—…',
+  ...'■□▪▫▲△▶▷▸◀◁◆◇◈◉○◌◎●',
+  // arrows, marks and punctuation
+  ...'←↑→↓↔↕⇥✓✕✗✶·–—…',
 ]);
 
 describe.each(DIAGRAM_IDS)('%s', (id) => {

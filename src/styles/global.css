@@ -2,6 +2,22 @@
 @import './theme.css';
 
 @font-face {
+  /* JetBrains Mono Variable v2.304 (OFL, see JetBrainsMono-OFL.txt), subset to the box
+     drawing, block, geometric and arrow glyphs the diagrams and the tree guides are built
+     from. @fontsource's files are cut to their declared unicode-ranges and carry none of
+     these, so every browser was falling back to a system face for them: Menlo at 9.031px in
+     Chromium, SF Mono at 9.273px in WebKit, against a 9px cell. That sheared a 78-column
+     diagram row by up to 21px in Safari. These glyphs are 600/1000 em in the real font,
+     exactly like every letter, so the grid holds. See README > Icons to regenerate. */
+  font-family: 'JetBrains Mono Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url('../fonts/jetbrains-mono-symbols-subset.woff2') format('woff2-variations');
+  unicode-range: U+2190-21FF, U+2500-25FF, U+2700-27BF;
+}
+
+@font-face {
   /* Symbols Nerd Font Mono v3.5.1 (MIT), subset to the 12 glyphs this site uses.
      See README > Icons for the pyftsubset command that regenerates it. */
   font-family: 'NerdIcons';
