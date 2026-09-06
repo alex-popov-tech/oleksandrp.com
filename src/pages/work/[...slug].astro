@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import Nvim from '../../layouts/Nvim.astro';
 import Pane from '../../components/Pane.astro';
 import Line from '../../components/Line.astro';
+import Tags from '../../components/Tags.astro';
+import { hardWrap } from '../../lib/text';
 import { paragraphs } from '../../lib/text';
 import { bracketLinks, crumbFor, pathFor, shortPathFor } from '../../lib/pages';
 
@@ -33,8 +35,8 @@ const paras = paragraphs(entry.body);
               <span>{s.title}</span>
               <span class="links">{bracketLinks(s).map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}</span>
             </Line>
-            <Line>{s.description}</Line>
-            <Line cls="tags">{s.tags.map((t) => <span>{t}</span>)}</Line>
+            {hardWrap(s.description).map((row) => <Line>{row}</Line>)}
+            <Line cls="tags"><Tags tags={s.tags} /></Line>
             <Line />
           </>
         ))}

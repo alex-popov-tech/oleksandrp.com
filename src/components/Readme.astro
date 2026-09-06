@@ -1,6 +1,7 @@
 ---
 import Line from './Line.astro';
 import Showcase from './Showcase.astro';
+import { hardWrap } from '../lib/text';
 import { README } from '../readme';
 ---
 {README.map((l) => {
@@ -10,7 +11,7 @@ import { README } from '../readme';
     case 'h2':
       return <Line cls="h2"><span class="punct">## </span>{l.text}</Line>;
     case 'p':
-      return <Line>{l.text}</Line>;
+      return hardWrap(l.text).map((row) => <Line>{row}</Line>);
     case 'sub':
       return <Line cls="sub">{l.text}</Line>;
     case 'link':

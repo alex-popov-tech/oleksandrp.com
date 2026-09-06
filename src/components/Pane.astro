@@ -1,5 +1,7 @@
 ---
 import Line from './Line.astro';
+import Tags from './Tags.astro';
+import { hardWrap } from '../lib/text';
 import type { BracketLink } from '../lib/pages';
 interface Props { title: string; links?: BracketLink[]; meta?: string; paragraphs: string[]; tags: string[] }
 const { title, links = [], meta, paragraphs, tags } = Astro.props;
@@ -16,11 +18,11 @@ const { title, links = [], meta, paragraphs, tags } = Astro.props;
 <Line />
 {paragraphs.map((p, i) => (
   <>
-    <Line>{p}</Line>
+    {hardWrap(p).map((row) => <Line>{row}</Line>)}
     {i < paragraphs.length - 1 && <Line />}
   </>
 ))}
 <Line />
-<Line cls="tags">{tags.map((t) => <span>{t}</span>)}</Line>
+<Line cls="tags"><Tags tags={tags} /></Line>
 <Line />
 <slot />
