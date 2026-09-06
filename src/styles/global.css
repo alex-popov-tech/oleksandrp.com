@@ -164,7 +164,8 @@ details.cv li a:hover { background: var(--sel); text-decoration: none; }
   transform: scaleY(1.5);
 }
 .row .chev { color: var(--dim); width: 2ch; flex: none; }
-.row .icon { width: 2ch; flex: none; display: inline-flex; align-items: center; }
+/* the nerd glyphs fill their 2ch cell, so the gap before the name has to be explicit */
+.row .icon { width: 2ch; flex: none; display: inline-flex; align-items: center; margin-right: 0.7ch; }
 .row .name { color: inherit; overflow: hidden; text-overflow: ellipsis; }
 .row.file .name:hover { color: var(--accent); text-decoration: none; }
 .row.folder { color: var(--accent); cursor: pointer; }
