@@ -109,3 +109,19 @@ export function countFiles(nodes: TreeNode[]): number {
   for (const node of nodes) n += node.kind === 'file' ? 1 : countFiles(node.children);
   return n;
 }
+
+/** Box-drawing columns for the tree, in the shape neo-tree.nvim draws them. */
+export const GUIDE = { vertical: '│  ', blank: '   ', tee: '├─ ', corner: '╰─ ' } as const;
+
+/**
+ * The guide string that precedes a row's icon.
+ *
+ * `ancestors[i]` says whether the ancestor folder at depth i+1 was the last of its siblings:
+ * a last ancestor leaves a blank column, any other keeps its pipe running down. The row itself
+ * gets a rounded corner when it is the last of its siblings, so nothing trails below it.
+ * Depth-0 rows sit directly under the root and draw no guides at all.
+ */
+export function guideFor(ancestors: boolean[], isLast: boolean): string {
+  const columns = ancestors.map((last) => (last ? GUIDE.blank : GUIDE.vertical)).join('');
+  return columns + (isLast ? GUIDE.corner : GUIDE.tee);
+}

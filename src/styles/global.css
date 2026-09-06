@@ -22,6 +22,8 @@ body {
   font-variant-ligatures: none;
   tab-size: 4;
   -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 a { color: var(--blue); text-decoration: none; }
 a:hover { color: var(--accent); text-decoration: underline; }
@@ -142,7 +144,14 @@ details.cv li a:hover { background: var(--sel); text-decoration: none; }
 /* ---- tree ---- */
 .tree { flex: 1; overflow-y: auto; overflow-x: hidden; padding: var(--lh) 0; }
 .row { display: flex; align-items: center; height: var(--lh); padding: 0 1ch; white-space: nowrap; color: var(--fg); }
-.row .guide { color: var(--guide); white-space: pre; }
+.row .guide {
+  color: var(--guide);
+  white-space: pre;
+  /* box-drawing glyphs are an em tall but rows are ~1.5em, so the pipes would read as a
+     dotted column; stretch them vertically to join up the way they do in a terminal */
+  display: inline-block;
+  transform: scaleY(1.5);
+}
 .row .chev { color: var(--dim); width: 2ch; flex: none; }
 .row .icon { width: 2ch; flex: none; display: inline-flex; align-items: center; }
 .row .name { color: inherit; overflow: hidden; text-overflow: ellipsis; }
@@ -155,7 +164,14 @@ details.cv li a:hover { background: var(--sel); text-decoration: none; }
 body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset: -1px; }
 
 /* ---- statusline and command line ---- */
-#statusline { display: flex; align-items: center; background: var(--bar); white-space: nowrap; overflow: hidden; }
+#statusline {
+  display: flex;
+  align-items: center;
+  background: var(--bar);
+  border-top: 1px solid var(--faint);
+  white-space: nowrap;
+  overflow: hidden;
+}
 #statusline .mode { background: var(--accent); color: var(--bg); padding: 0 1ch; font-weight: 700; }
 #statusline .arrow { display: inline-flex; }
 #statusline .path { color: var(--fg); margin-left: 1ch; display: inline-flex; align-items: center; gap: 1ch; overflow: hidden; }

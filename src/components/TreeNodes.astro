@@ -1,29 +1,33 @@
 ---
 import Icon from './Icon.astro';
-import type { TreeNode } from '../lib/tree';
-interface Props { nodes: TreeNode[]; current: string }
-const { nodes, current } = Astro.props;
-const guide = (depth: number) => (depth === 0 ? '' : '|  '.repeat(depth - 1) + '|- ');
+import { guideFor, type TreeNode } from '../lib/tree';
+interface Props { nodes: TreeNode[]; current: string; ancestors?: boolean[] }
+const { nodes, current, ancestors = [] } = Astro.props;
 ---
-{nodes.map((node) =>
-  node.kind === 'folder' ? (
+{nodes.map((node, i) => {
+  const isLast = i === nodes.length - 1;
+  // depth-0 rows hang straight off the root and draw no guides; deeper rows inherit
+  // a column per ancestor, blank once that ancestor has run out of siblings
+  const guide = node.depth === 0 ? '' : guideFor(ancestors, isLast);
+  const childAncestors = node.depth === 0 ? [] : [...ancestors, isLast];
+  return node.kind === 'folder' ? (
     <>
       <div class="row folder" data-row data-folder={node.path} data-depth={node.depth} data-folded={node.folded ? '' : undefined}>
-        <span class="guide">{guide(node.depth)}</span>
-        <span class="chev">{node.folded ? '>' : 'v'}</span>
+        <span class="guide">{guide}</span>
+        <span class="chev">{node.folded ? '▸' : '▾'}</span>
         <span class="icon"><Icon name={node.folded ? 'folder' : 'folder-open'} /></span>
         <span class="name">{node.name}</span>
         {(node.depth > 0 || node.folded) && <span class="count">{node.count}</span>}
       </div>
       <div class="children" data-children={node.path} hidden={node.folded}>
-        <Astro.self nodes={node.children} current={current} />
+        <Astro.self nodes={node.children} current={current} ancestors={childAncestors} />
       </div>
     </>
   ) : (
     <div class:list={['row', 'file', { sel: node.href === current }]} data-row data-depth={node.depth}>
-      <span class="guide">{guide(node.depth)}</span>
+      <span class="guide">{guide}</span>
       <span class="icon"><Icon name={node.icon} /></span>
       <a class="name" href={node.href} download={node.download ? '' : undefined}>{node.name}</a>
     </div>
-  ),
-)}
+  );
+})}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildTree, countFiles, fileName, type TreeEntry, type FolderNode } from './tree';
+import { buildTree, countFiles, fileName, guideFor, type TreeEntry, type FolderNode } from './tree';
 
 const entries: TreeEntry[] = [
   { section: 'projects', id: 'store', lang: 'lua', order: 1 },
@@ -59,5 +59,18 @@ describe('buildTree', () => {
 describe('countFiles', () => {
   it('counts every file including README', () => {
     expect(countFiles(buildTree(entries))).toBe(6);
+  });
+});
+
+describe('guideFor', () => {
+  it('uses a tee for a middle child and a rounded corner for the last', () => {
+    expect(guideFor([], false)).toBe('├─ ');
+    expect(guideFor([], true)).toBe('╰─ ');
+  });
+  it('keeps a pipe under open ancestors and a blank under finished ones', () => {
+    expect(guideFor([false], false)).toBe('│  ├─ ');
+    expect(guideFor([false], true)).toBe('│  ╰─ ');
+    expect(guideFor([true], false)).toBe('   ├─ ');
+    expect(guideFor([true, false], true)).toBe('   │  ╰─ ');
   });
 });
