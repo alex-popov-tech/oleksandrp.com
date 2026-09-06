@@ -1,17 +1,21 @@
 import { TRAIN_COLS, TRAIN_FRAMES, TRAIN_ROWS } from '../lib/train';
 
 const STEP_MS = 28;
+/** columns travelled per wheel pattern; sl uses 3, and at our step that reads frantic */
+const COLS_PER_FRAME = 4;
 const FIRST_RUN_MS = 12_000;
 const GAP_MIN_MS = 60_000;
 const GAP_MAX_MS = 150_000;
-/** never depart the instant a page loads, even if the stored slot is long past */
-const MIN_ARM_MS = 3_000;
+/** how often we ask whether the slot is due. A single long setTimeout gets throttled or
+    dropped in a background tab, which is how the train ended up departing exactly once. */
+const CHECK_MS = 10_000;
 /** the sprite is 63 columns wide; below this it would be wider than the screen */
 const MIN_WIDTH = 900;
 /** the next departure lives here so browsing between pages does not reset the wait */
 const SLOT_KEY = 'sl:next-departure';
 
 let timer: number | undefined;
+let running = false;
 
 const train = () => document.getElementById('train');
 
@@ -31,15 +35,22 @@ function writeSlot(at: number) {
   }
 }
 
-function armFor(delay: number) {
-  clearTimeout(timer);
-  timer = window.setTimeout(run, delay);
+function scheduleNext() {
+  writeSlot(Date.now() + GAP_MIN_MS + Math.random() * (GAP_MAX_MS - GAP_MIN_MS));
 }
 
-function scheduleNext() {
-  const delay = GAP_MIN_MS + Math.random() * (GAP_MAX_MS - GAP_MIN_MS);
-  writeSlot(Date.now() + delay);
-  armFor(delay);
+/**
+ * Is the train due? Runs on a slow interval rather than one long timer, so a slot that
+ * fell into the past while the tab was hidden or throttled still departs on the next tick
+ * instead of being lost.
+ */
+function tick() {
+  if (running) return;
+  // a hidden tab or a phone leaves the slot alone, so it departs once conditions allow
+  if (document.visibilityState === 'hidden' || window.innerWidth < MIN_WIDTH) return;
+  const due = readSlot();
+  if (!due) return writeSlot(Date.now() + FIRST_RUN_MS);
+  if (Date.now() >= due) run();
 }
 
 /** Width of one column of the buffer font, measured rather than assumed. */
@@ -53,6 +64,14 @@ function columnWidth(node: HTMLElement): number {
   return w || 9;
 }
 
+/**
+ * Dims whatever the row covers instead of painting a colour: the sidebar and the buffer are
+ * different shades, so a fixed fill showed as a lighter block over the tree. Set here rather
+ * than in the stylesheet because the CSS minifier collapses the pair of prefixed and
+ * unprefixed declarations down to the -webkit- one, which Chrome then ignores.
+ */
+const PLATE = 'brightness(0.32) blur(4px)';
+
 const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 /**
@@ -64,14 +83,14 @@ function rowHtml(row: string): string {
   const trimmed = row.replace(/\s+$/, '');
   if (trimmed.trim() === '') return '<span></span>';
   const lead = trimmed.length - trimmed.replace(/^ +/, '').length;
-  return `<span style="margin-left:${lead}ch">${escape(trimmed.slice(lead))}</span>`;
+  const style = `margin-left:${lead}ch;backdrop-filter:${PLATE};-webkit-backdrop-filter:${PLATE}`;
+  return `<span style="${style}">${escape(trimmed.slice(lead))}</span>`;
 }
 
 function run() {
   const node = train();
   if (!node) return;
-  // nothing to see on a phone, and no point animating a background tab
-  if (window.innerWidth < MIN_WIDTH || document.visibilityState === 'hidden') return scheduleNext();
+  running = true;
 
   const lh = parseFloat(getComputedStyle(document.body).lineHeight) || 22;
   const cw = columnWidth(node);
@@ -80,17 +99,19 @@ function run() {
   node.style.top = `${lh + Math.floor((Math.random() * room) / lh) * lh}px`;
 
   let col = Math.ceil(window.innerWidth / cw);
-  let frame = 0;
+  let travelled = 0;
   node.hidden = false;
 
   const step = () => {
+    const frame = Math.floor(travelled / COLS_PER_FRAME) % TRAIN_FRAMES.length;
     node.innerHTML = TRAIN_FRAMES[frame].map(rowHtml).join('\n');
-    node.style.transform = `translateX(${col * cw}px)`;
+    node.style.left = `${Math.round(col * cw)}px`;
     col -= 1;
-    frame = (frame + 1) % TRAIN_FRAMES.length;
+    travelled += 1;
     if (col < -TRAIN_COLS) {
       node.hidden = true;
       node.innerHTML = '';
+      running = false;
       return scheduleNext();
     }
     timer = window.setTimeout(step, STEP_MS);
@@ -104,11 +125,8 @@ declare global {
 
 if (!window.__trainBound && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   window.__trainBound = true;
-  const due = readSlot();
-  if (due) {
-    armFor(Math.max(MIN_ARM_MS, due - Date.now()));
-  } else {
-    writeSlot(Date.now() + FIRST_RUN_MS);
-    armFor(FIRST_RUN_MS);
-  }
+  if (!readSlot()) writeSlot(Date.now() + FIRST_RUN_MS);
+  window.setInterval(tick, CHECK_MS);
+  document.addEventListener('visibilitychange', tick);
+  tick();
 }

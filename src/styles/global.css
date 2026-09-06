@@ -310,14 +310,17 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
   /* it floats over the page, so it must never swallow a click */
   pointer-events: none;
   user-select: none;
-  will-change: transform;
+  /* deliberately no transform/will-change here: a transformed ancestor becomes a backdrop
+     root, and the rows' backdrop-filter would then see this empty box instead of the page.
+     Movement is done with `left` for the same reason. */
 }
-/* one plate per row, hugging that row's ink, so the train blanks a stepped outline
-   rather than dragging its whole bounding box across the page. The halo softens the
-   border instead of cutting a hard edge through the text underneath. */
+/* One plate per row, hugging that row's ink. It dims whatever is behind it rather than
+   painting a colour: the sidebar (--bar) and the buffer (--bg) are different shades, so a
+   fixed fill showed up as a lighter block whenever the train crossed the tree. */
 .train span {
-  background: rgb(var(--bg-rgb));
-  box-shadow: 0 0 7px 3px rgb(var(--bg-rgb));
+  /* inline-block so the row is an atomic box: backdrop-filter does not apply to a
+     non-atomic inline. The filter itself is set inline by scripts/train.ts. */
+  display: inline-block;
 }
 @media (prefers-reduced-motion: reduce) { .train { display: none !important; } }
 @media (max-width: 899px) { .train { display: none !important; } }

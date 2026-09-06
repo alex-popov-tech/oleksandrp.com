@@ -67,14 +67,21 @@ Current glyphs: `custom-folder` U+E5FF, `custom-folder_open` U+E5FE, `oct-git_br
 Every minute or two the little train from `sl -l` crosses the page. It is a fixed-position
 `<pre>` with `pointer-events: none` sitting below the drawer and the help dialog, so it can
 never swallow a click; it picks a random row on the text grid, steps one column at a time and
-cycles six wheel patterns so the drivers turn. Each row carries its own plate hugging that
-row's ink, with a soft halo, so it blanks a stepped outline rather than dragging its whole
-bounding box across the page. It stays in the shed under `prefers-reduced-motion` and on
-screens narrower than the 63-column sprite.
+advances a wheel pattern every fourth column so the drivers turn at a sane rate.
 
-The next departure is stored in `localStorage` under `sl:next-departure`, so browsing between
-pages does not restart the wait — otherwise someone reading through the projects would never
-see it.
+Each row dims what it covers with its own `backdrop-filter` rather than painting a fill: the
+sidebar and the buffer are different shades, so a fixed colour showed up as a block whenever
+the train crossed the tree. Two things this depends on, both of which silently break it:
+`.train` must carry no `transform`, since a transformed ancestor becomes a backdrop root and
+the filter would then see an empty box instead of the page — movement uses `left` for that
+reason — and the filter is set inline by `scripts/train.ts`, because the CSS minifier
+collapses the prefixed and unprefixed declarations down to the `-webkit-` one, which Chrome
+then ignores. Both are covered by e2e assertions.
+
+The next departure is stored in `localStorage` under `sl:next-departure` and polled every ten
+seconds rather than armed as one long timer, so browsing between pages does not restart the
+wait and a slot that falls due while the tab is hidden or throttled still departs on the next
+tick instead of being lost.
 
 The art in `src/lib/train.ts` is from [`sl`](https://github.com/mtoyoda/sl), the program you
 get when you typo `ls`:
