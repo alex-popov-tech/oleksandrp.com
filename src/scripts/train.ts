@@ -1,8 +1,8 @@
-import { TRAIN_COLS, TRAIN_FRAMES, TRAIN_ROWS } from '../lib/train';
+import { TRAIN_COLS, TRAIN_FRAMES, TRAIN_FRAMES_FLIPPED, TRAIN_ROWS } from '../lib/train';
 
 const STEP_MS = 28;
-/** columns travelled per wheel pattern; sl uses 3, and at our step that reads frantic */
-const COLS_PER_FRAME = 4;
+/** columns travelled per wheel pattern; this is sl's own value */
+const COLS_PER_FRAME = 3;
 const FIRST_RUN_MS = 12_000;
 const GAP_MIN_MS = 60_000;
 const GAP_MAX_MS = 150_000;
@@ -19,6 +19,8 @@ const LOOP_GAP_MS = 1_200;
 
 let timer: number | undefined;
 let running = false;
+/** alternate the direction each run, starting on a coin flip */
+let eastbound = Math.random() < 0.5;
 
 const train = () => document.getElementById('train');
 
@@ -97,18 +99,22 @@ function run() {
   const room = Math.max(0, pane.height - TRAIN_ROWS * lh - top - lh);
   node.style.top = `${top + Math.floor((Math.random() * room) / lh) * lh}px`;
 
-  let col = Math.ceil(pane.width / cw);
+  // eastbound runs left to right and needs the mirrored consist, or it drives in reverse
+  eastbound = !eastbound;
+  const frames = eastbound ? TRAIN_FRAMES_FLIPPED : TRAIN_FRAMES;
+  const lastCol = Math.ceil(pane.width / cw);
+  let col = eastbound ? -TRAIN_COLS : lastCol;
   node.hidden = false;
 
   const step = () => {
-    // sl indexes the pattern by column, and the column counts down as the train moves left.
-    // Deriving it from distance travelled instead spins the drivers backwards.
-    const n = TRAIN_FRAMES.length;
+    // sl indexes the pattern by column, which counts down as the train moves left. Deriving
+    // it from distance travelled instead spins the drivers backwards.
+    const n = frames.length;
     const frame = ((Math.floor(col / COLS_PER_FRAME) % n) + n) % n;
-    node.innerHTML = TRAIN_FRAMES[frame].map(rowHtml).join('\n');
+    node.innerHTML = frames[frame].map(rowHtml).join('\n');
     node.style.left = `${Math.round(col * cw)}px`;
-    col -= 1;
-    if (col < -TRAIN_COLS) {
+    col += eastbound ? 1 : -1;
+    if (eastbound ? col > lastCol : col < -TRAIN_COLS) {
       node.hidden = true;
       node.innerHTML = '';
       running = false;

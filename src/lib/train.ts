@@ -68,3 +68,29 @@ export const TRAIN_FRAMES: readonly (readonly string[])[] = [
 
 export const TRAIN_ROWS = 6;
 export const TRAIN_COLS = 63;
+
+/** Characters that have a mirror image; everything else (| _ - = + @ O ~) is its own. */
+const MIRRORED: Record<string, string> = {
+  '/': '\\',
+  '\\': '/',
+  '(': ')',
+  ')': '(',
+  '[': ']',
+  ']': '[',
+  '{': '}',
+  '}': '{',
+  '<': '>',
+  '>': '<',
+};
+
+/** Flip a row of art so the train faces the other way: reverse it, then mirror each glyph. */
+export function mirrorRow(row: string): string {
+  let out = '';
+  for (let i = row.length - 1; i >= 0; i--) out += MIRRORED[row[i]] ?? row[i];
+  return out;
+}
+
+/** The same consist facing right, for the left-to-right run. */
+export const TRAIN_FRAMES_FLIPPED: readonly (readonly string[])[] = TRAIN_FRAMES.map((frame) =>
+  frame.map(mirrorRow),
+);

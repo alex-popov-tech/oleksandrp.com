@@ -64,11 +64,15 @@ Current glyphs: `custom-folder` U+E5FF, `custom-folder_open` U+E5FE, `oct-git_br
 
 ## The train
 
-Every minute or two the little train from `sl -l` crosses the buffer. It is an absolutely
-positioned `<pre>` inside `#main` with `pointer-events: none`, so it can never swallow a
-click and is clipped at the pane edges; it picks a random row on the text grid and steps one
-column at a time, indexing the wheel pattern by column the way `sl` does — derive it from
-distance travelled instead and the drivers spin backwards.
+Every minute or two the little train from `sl -l` crosses the buffer, alternating direction
+each run. It is an absolutely positioned `<pre>` inside `#main` with `pointer-events: none`,
+so it can never swallow a click and is clipped at the pane edges; it picks a random row on
+the text grid and steps one column at a time, indexing the wheel pattern by column the way
+`sl` does — derive it from distance travelled instead and the drivers spin backwards.
+
+The eastbound run uses `TRAIN_FRAMES_FLIPPED`, the same consist mirrored by `mirrorRow`:
+each row reversed with `/ \ ( ) [ ] { } < >` swapped for their mirror images. Without it the
+engine would drive in reverse, funnel-last.
 
 Each row carries a plate hugging its ink, filled with `--bg`. That plate is invisible only
 because the train stays inside `#main`, which is uniformly `--bg`: it simply overwrites the
