@@ -4,9 +4,8 @@ lang: go
 order: 1
 repo: alex-popov-tech/advent_of_code_2024_golang
 tags: [Go, GitHub]
-hero:
-  type: video
-  src: /videos/aoc2024.mp4
+excerpts:
+  - advent_of_code/day11.go
 ---
 Advent of Code is an Advent calendar of small programming puzzles for a variety of skill levels that can be solved in any programming language you like. People use them as interview prep, company training, university coursework, practice problems, a speed contest, or to challenge each other.
 

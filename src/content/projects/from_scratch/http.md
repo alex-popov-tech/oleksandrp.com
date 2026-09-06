@@ -4,9 +4,6 @@ lang: go
 order: 5
 repo: alex-popov-tech/go_http
 tags: [Go, GitHub]
-hero:
-  type: image
-  src: ./http.png
 excerpts:
   - go_http/headers.go
 ---

@@ -4,9 +4,6 @@ lang: go
 order: 3
 repo: alex-popov-tech/bittorrent-go
 tags: [Go, GitHub]
-hero:
-  type: image
-  src: ./bittorrent.png
 excerpts:
   - bittorrent-go/handshake.go
   - bittorrent-go/bencode.go

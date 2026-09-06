@@ -4,9 +4,8 @@ lang: lua
 order: 1
 repo: alex-popov-tech/store.nvim
 tags: [GitHub, Lua, Neovim]
-hero:
-  type: image
-  src: ./store.png
+excerpts:
+  - store.nvim/sort.lua
 ---
 Store.nvim is a Neovim plugin that provides an intuitive modal interface for browsing and discovering awesome Neovim plugins.
 

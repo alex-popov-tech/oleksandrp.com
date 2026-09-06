@@ -5,9 +5,8 @@ order: 4
 repo: alex-popov-tech/dreampicai
 live: https://dreampicai.oleksandrp.com
 tags: [GitHub, Go, HTMX, Replicate, Supabase, Templ]
-hero:
-  type: image
-  src: ./dreampicai.png
+excerpts:
+  - dreampicai/generate.go
 ---
 Image generation hub that leverages multiple AI models which streamlines the complex process of AI image generation by providing a simple interface for model selection and prompt input.
 

@@ -4,9 +4,6 @@ lang: go
 order: 7
 repo: alex-popov-tech/go-interpreter
 tags: [Go, GitHub]
-hero:
-  type: image
-  src: ./interpreter.png
 excerpts:
   - go-interpreter/repl.go
 ---

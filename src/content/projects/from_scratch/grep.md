@@ -4,9 +4,6 @@ lang: go
 order: 6
 repo: alex-popov-tech/grep-go
 tags: [Go, GitHub]
-hero:
-  type: image
-  src: ./grep.png
 excerpts:
   - grep-go/backreference.go
 ---

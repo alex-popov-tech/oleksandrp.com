@@ -5,9 +5,8 @@ order: 2
 repo: alex-popov-tech/acapulko
 live: https://acapulko.oleksandrp.com/
 tags: [Go, Home Assistant, Telegram, Raspberry Pi, Docker, SSE]
-hero:
-  type: image
-  src: ./acapulko.png
+excerpts:
+  - acapulko/dtek.go
 ---
 Self-hosted power outage tracker for a single Ukrainian address, built to survive the war-driven blackouts. Combines live grid sensor data from Home Assistant with emergency outage announcements from the DTEK utility API.
 

@@ -4,9 +4,6 @@ lang: go
 order: 4
 repo: alex-popov-tech/dns-go
 tags: [Go, GitHub]
-hero:
-  type: image
-  src: ./dns.png
 excerpts:
   - dns-go/question.go
   - dns-go/header.go

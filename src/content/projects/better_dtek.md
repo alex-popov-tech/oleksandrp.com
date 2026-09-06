@@ -5,9 +5,8 @@ order: 3
 repo: alex-popov-tech/better-dtek
 live: https://dtek-theta.vercel.app
 tags: [Playwright, Redis, SvelteKit, TailwindCSS, TypeScript, Vercel, Vite]
-hero:
-  type: image
-  src: ./better_dtek.png
+excerpts:
+  - better-dtek/transform.ts
 ---
 Real-time web application for tracking power outages in Ukraine across DTEK regions.
 

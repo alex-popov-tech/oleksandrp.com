@@ -19,7 +19,7 @@ Node 24 (`.nvmrc`). Playwright needs `npx playwright install chromium` once.
 ## Add a project
 
 1. Create `src/content/projects/<slug>.md`, or `src/content/projects/from_scratch/<slug>.md` for a from-scratch build. The folder is the tree folder; `<slug>` plus the extension for `lang` is the file name shown.
-2. Frontmatter: `title`, `lang` (`go|lua|ts|js|sh|md`), `order` (sort within the folder), optional `repo` (`owner/name`), optional `live` URL, `tags`, optional `hero` (`type: image` with `src: ./<slug>.png` beside the file, or `type: video` with a `/videos/…` path), optional `excerpts`.
+2. Frontmatter: `title`, `lang` (`go|lua|ts|js|sh|md`), `order` (sort within the folder), optional `repo` (`owner/name`), optional `live` URL, `tags`, `excerpts`. A `hero` (`type: image` with `src: ./<slug>.png` beside the file, or `type: video` with a `/videos/…` path) is still supported by the schema but nothing uses one: every project shows code instead, because a product screenshot is the one thing on the page that is not a terminal.
 3. Body: the description, paragraphs separated by blank lines.
 
 ## Add a code excerpt

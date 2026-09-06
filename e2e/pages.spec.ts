@@ -1,5 +1,13 @@
 import { test, expect } from '@playwright/test';
 
+test('every project shows code, never a screenshot', async ({ page }) => {
+  for (const url of ['/projects/store', '/projects/dotfiles', '/projects/other/advent_of_code']) {
+    await page.goto(url);
+    await expect(page.locator('code-cycler'), url).toBeVisible();
+    await expect(page.locator('#buffer .tx.media'), url).toHaveCount(0);
+  }
+});
+
 test('a project page renders the pane template', async ({ page }) => {
   await page.goto('/projects/from_scratch/redis');
   const lines = page.locator('#buffer .ln');
@@ -14,11 +22,6 @@ test('a work page shows role, dates and shipped items', async ({ page }) => {
   await page.goto('/work/lokalise');
   await expect(page.locator('#buffer .ln').first()).toContainText('[ROLE]');
   await expect(page.locator('#buffer .ln').first()).toContainText('[YYYY] - [YYYY]');
-});
-
-test('a project with a video hero renders it', async ({ page }) => {
-  await page.goto('/projects/other/advent_of_code');
-  await expect(page.locator('#buffer video')).toHaveAttribute('src', '/videos/aoc2024.mp4');
 });
 
 test('unknown paths answer 404', async ({ page }) => {
@@ -37,10 +40,6 @@ test('routes have no trailing slash', async ({ page }) => {
   expect(res?.status()).toBe(404);
 });
 
-test('a project without excerpts shows its screenshot', async ({ page }) => {
-  await page.goto('/projects/store');
-  await expect(page.locator('#buffer .tx.media img')).toBeVisible();
-});
 
 test('the tree cannot be text-selected but the buffer can', async ({ page, isMobile }) => {
   test.skip(isMobile, 'the tree is a drawer on phones');

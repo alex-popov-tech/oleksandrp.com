@@ -5,9 +5,8 @@ order: 12
 repo: alex-popov-tech/go_pay_taxes_web
 live: https://alex-popov-tech.github.io/go_pay_taxes_web/
 tags: [React, TailwindCSS, Github, TypeScript, Vite]
-hero:
-  type: image
-  src: ./go_pay_taxes.png
+excerpts:
+  - go_pay_taxes_web/utils.ts
 ---
 Web application designed to assist Ukrainian developers in calculating and managing their taxes.
 

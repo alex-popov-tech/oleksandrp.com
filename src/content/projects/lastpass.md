@@ -5,9 +5,8 @@ order: 8
 repo: alex-popov-tech/extensions/tree/main/extensions/lastpass
 live: https://www.raycast.com/alex-popov-tech/lastpass
 tags: [Node.js, Raycast, React]
-hero:
-  type: image
-  src: ./lastpass.png
+excerpts:
+  - lastpass/cli.ts
 ---
 The LastPass Raycast Extension project provides an integration for LastPass within the Raycast productivity tool.
 

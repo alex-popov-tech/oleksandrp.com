@@ -4,9 +4,6 @@ lang: go
 order: 2
 repo: alex-popov-tech/git-go
 tags: [Go, Git, GitHub]
-hero:
-  type: image
-  src: ./git.png
 excerpts:
   - git-go/blob.go
   - git-go/hashobject.go
