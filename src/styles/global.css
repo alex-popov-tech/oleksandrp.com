@@ -381,3 +381,8 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 }
 @media (prefers-reduced-motion: reduce) { .train { display: none !important; } }
 @media (max-width: 899px) { .train { display: none !important; } }
+
+/* ---- margin streams ---- */
+/* grep's highlight, the selection colour pulled towards green — the same construction as
+   the diagram's install flash, so a palette swap carries it. */
+.stream .bg-match { background: color-mix(in srgb, var(--green) 18%, var(--sel)); }

@@ -1,0 +1,65 @@
+/**
+ * Shared machinery for the margin streams — the animated text strips that sit in the right
+ * margin of the from_scratch file views.
+ *
+ * A stream is a pure `render(t, rows)` over a character grid, like a diagram, with one
+ * difference that shapes everything here: its height is not fixed. The strip fills whatever
+ * pane it is given, so `rows` arrives at render time and there is no server-drawn first
+ * frame to keep in step. See docs/superpowers/specs/2026-09-07-from-scratch-margin-streams-design.md.
+ *
+ * Colours are role tokens rather than the hex the design handoff names, so a stream themes
+ * with the rest of the site and survives a palette swap.
+ */
+import type { Cell } from '../diagram';
+
+export interface Stream {
+  /** the strip is exactly this many columns wide */
+  cols: number;
+  /** the grid for this second, at whatever height the pane allows */
+  render(t: number, rows: number): Cell[][];
+}
+
+/** Lines per second, and how fast rain falls. The handoff's slider, fixed at its default. */
+export const DENSITY = 1;
+/** The brightest any cell gets. The strip is background, so it never reaches full white. */
+export const MAX_OP = 0.9;
+/** How many rows the top and bottom fades take. */
+export const FADE_ROWS = 5;
+
+/**
+ * Deterministic pseudo-random from three coordinates. A sine hash rather than a seeded PRNG
+ * because it has no state: `render(t, rows)` stays a pure function of its arguments, which is
+ * what makes every test below possible.
+ */
+export function rnd(a: number, b: number, c: number): number {
+  const x = Math.sin(a * 12.9898 + b * 78.233 + c * 37.719) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+export function pick<T>(arr: readonly T[], a: number, b: number, c: number): T {
+  return arr[Math.floor(rnd(a, b, c) * arr.length)];
+}
+
+/** One byte of the object store, as git would print it. */
+export function hex(a: number, b: number, c: number): string {
+  return Math.floor(rnd(a, b, c) * 256)
+    .toString(16)
+    .padStart(2, '0');
+}
+
+/**
+ * The opacity multiplier for a row: the strip fades out over its top and bottom rows so it
+ * has no hard edge against the pane. Never reaches zero, so a row is never drawn invisibly.
+ */
+export function edge(r: number, rows: number): number {
+  return Math.min(1, (r + 1) / FADE_ROWS, (rows - r) / FADE_ROWS);
+}
+
+/** A cell that shows nothing. `runs()` folds a row of these into a single span. */
+export const blankCell = (): Cell => ({ ch: ' ', color: 'fg', op: 0 });
+
+export const isBlank = (cell: Cell): boolean => cell.op === 0;
+
+export function blankGrid(cols: number, rows: number): Cell[][] {
+  return Array.from({ length: rows }, () => Array.from({ length: cols }, blankCell));
+}

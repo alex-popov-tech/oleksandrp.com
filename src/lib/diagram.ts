@@ -12,8 +12,8 @@
 export type Role =
   | 'fg' | 'muted' | 'dim' | 'faint' | 'accent' | 'blue' | 'green' | 'peach' | 'teal' | 'orange' | 'mauve' | 'red';
 
-/** Row highlights. Only store.nvim uses these, but the cell has to carry them for everyone. */
-export type Bg = 'sel' | 'flash';
+/** Row and span highlights: store.nvim's selection and install flash, and grep's matches. */
+export type Bg = 'sel' | 'flash' | 'match';
 
 export interface Cell {
   ch: string;
