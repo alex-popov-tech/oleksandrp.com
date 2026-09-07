@@ -6,6 +6,9 @@ repo: automician/playright
 tags: [Node.js, Playwright, TypeScript]
 excerpts:
   - playright/conditions.ts
+  - playright/wait.ts
+  - playright/attribute.ts
+  - playright/queries.ts
 ---
 Play the right test- and user-oriented way with Playwright ;)
 

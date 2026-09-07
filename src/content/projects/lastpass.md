@@ -7,6 +7,9 @@ live: https://www.raycast.com/alex-popov-tech/lastpass
 tags: [Node.js, Raycast, React]
 excerpts:
   - lastpass/cli.ts
+  - lastpass/execute.ts
+  - lastpass/authorize.ts
+  - lastpass/favicon.ts
 ---
 The LastPass Raycast Extension project provides an integration for LastPass within the Raycast productivity tool.
 

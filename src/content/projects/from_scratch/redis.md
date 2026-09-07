@@ -8,6 +8,8 @@ stream: redis
 excerpts:
   - redis-go/unmarshal.go
   - redis-go/bulkstring.go
+  - redis-go/streamid.go
+  - redis-go/acks.go
 ---
 A Redis-compatible server built from scratch in Go, speaking the real RESP wire protocol over TCP — you can talk to it with redis-cli. Concurrent clients are handled with a goroutine-per-connection model over a thread-safe keyspace.
 

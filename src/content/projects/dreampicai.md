@@ -7,6 +7,9 @@ live: https://dreampicai.oleksandrp.com
 tags: [GitHub, Go, HTMX, Replicate, Supabase, Templ]
 excerpts:
   - dreampicai/generate.go
+  - dreampicai/cookies.go
+  - dreampicai/route.go
+  - dreampicai/download.go
 ---
 Image generation hub that leverages multiple AI models which streamlines the complex process of AI image generation by providing a simple interface for model selection and prompt input.
 

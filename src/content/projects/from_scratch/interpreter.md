@@ -7,6 +7,9 @@ tags: [Go, GitHub]
 stream: interpreter
 excerpts:
   - go-interpreter/repl.go
+  - go-interpreter/readstring.go
+  - go-interpreter/precedence.go
+  - go-interpreter/scope.go
 ---
 Interpreter for the Monkey programming language, built in Go following 'Writing An Interpreter In Go' by Thorsten Ball.
 

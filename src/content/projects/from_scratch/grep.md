@@ -7,6 +7,9 @@ tags: [Go, GitHub]
 stream: grep
 excerpts:
   - grep-go/backreference.go
+  - grep-go/range.go
+  - grep-go/group.go
+  - grep-go/alternation.go
 ---
 A grep built from scratch in Go with no regex libraries — the pattern is compiled by hand into a token list, and matching is a backtracking DFS where every token reports all the ways it could consume the input, greedy-first.
 

@@ -21,6 +21,7 @@ export const SHIKI_LANG: Record<string, string> = {
   go: 'go',
   lua: 'lua',
   ts: 'typescript',
+  tsx: 'tsx',
   js: 'javascript',
   sh: 'bash',
   svelte: 'svelte',

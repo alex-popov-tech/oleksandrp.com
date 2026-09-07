@@ -8,6 +8,8 @@ stream: dns
 excerpts:
   - dns-go/question.go
   - dns-go/header.go
+  - dns-go/compression.go
+  - dns-go/answer.go
 ---
 A DNS server built from scratch in Go with no DNS libraries — it parses and serializes raw DNS packets byte by byte, across the header, question, and answer sections.
 

@@ -8,6 +8,9 @@ tags: [Go, Home Assistant, Telegram, Raspberry Pi, Docker, SSE]
 diagram: acapulko-flow
 excerpts:
   - acapulko/dtek.go
+  - acapulko/gridstate.go
+  - acapulko/debounce.go
+  - acapulko/datetime.go
 ---
 Self-hosted power outage tracker for a single Ukrainian address, built to survive the war-driven blackouts. Combines live grid sensor data from Home Assistant with emergency outage announcements from the DTEK utility API.
 

@@ -7,6 +7,9 @@ tags: [GitHub, Lua, Neovim]
 diagram: store-browse
 excerpts:
   - store.nvim/sort.lua
+  - store.nvim/filter.lua
+  - store.nvim/open_url.lua
+  - store.nvim/debounce.lua
 ---
 Store.nvim is a Neovim plugin that provides an intuitive modal interface for browsing and discovering awesome Neovim plugins.
 

@@ -8,6 +8,9 @@ tags: [Playwright, Redis, SvelteKit, TailwindCSS, TypeScript, Vercel, Vite]
 diagram: dtek-schedule
 excerpts:
   - better-dtek/transform.ts
+  - better-dtek/outage-type.ts
+  - better-dtek/set-cookie.ts
+  - better-dtek/registry.ts
 ---
 Real-time web application for tracking power outages in Ukraine across DTEK regions.
 

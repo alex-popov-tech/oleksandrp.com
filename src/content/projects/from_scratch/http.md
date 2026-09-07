@@ -7,6 +7,9 @@ tags: [Go, GitHub]
 stream: http
 excerpts:
   - go_http/headers.go
+  - go_http/requestline.go
+  - go_http/readline.go
+  - go_http/bodysource.go
 ---
 An HTTP/1.1 server built from scratch in Go directly on raw TCP, without using net/http for the server itself — it carves the request line, header block, and body out of the byte stream by hand, validates field names against the RFC tchar set, and reads bodies strictly against Content-Length.
 

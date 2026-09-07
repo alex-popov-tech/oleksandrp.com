@@ -36,7 +36,7 @@ every visual change and have never caught anything.
 ## Add a project
 
 1. Create `src/content/projects/<slug>.md`, or `src/content/projects/from_scratch/<slug>.md` for a from-scratch build. The folder is the tree folder; `<slug>` plus the extension for `lang` is the file name shown.
-2. Frontmatter: `title`, `lang` (`go|lua|ts|js|sh|md`), `order` (sort within the folder), optional `repo` (`owner/name`), optional `live` URL, `tags`, `excerpts`, optional `diagram`. A `hero` (`type: image` with `src: ./<slug>.png` beside the file, or `type: video` with a `/videos/…` path) is still supported by the schema but nothing uses one: every project shows code instead, because a product screenshot is the one thing on the page that is not a terminal.
+2. Frontmatter: `title`, `lang` (`go|lua|ts|js|sh|md`), `order` (sort within the folder — the tree runs newest first, so `order: 1` is the project you touched most recently), optional `repo` (`owner/name`), optional `live` URL, `tags`, `excerpts`, optional `diagram`. A `hero` (`type: image` with `src: ./<slug>.png` beside the file, or `type: video` with a `/videos/…` path) is still supported by the schema but nothing uses one: every project shows code instead, because a product screenshot is the one thing on the page that is not a terminal.
 3. Body: the description, paragraphs separated by blank lines.
 
 ## Add a diagram
@@ -82,13 +82,15 @@ A stream is **not** content, and that is the whole difference from a diagram:
   strip: a frozen frame of falling hex is noise, not a picture, so there is nothing worth
   keeping.
 - `scripts/stream.ts` measures the pane and shows the strip only where there is room for the
-  gutter, the full 80-column prose column, a 2-column gap, the strip's own 2-column inset from
-  the pane edge, and its own column count, all at once. It also stands down below a 900px
-  viewport outright, without even measuring — the same floor `scripts/train.ts` uses for the
-  train, since the phone/drawer layout changes the gutter and font size enough that the column
-  math alone would let a strip pass at widths the train never runs at. Below either threshold it
-  draws nothing, and because it carries `.page-effect` only while it is actually drawing, the
-  train takes the page back.
+  gutter, the full prose column, a 2-column gap, the strip's own 2-column inset from the pane
+  edge, and its own column count, all at once — and only where the pane leaves at least eight
+  rows below the title. Measurement is the only rule; there is no viewport floor, because a
+  tablet in landscape has the columns to spare and the arithmetic already knows it. The strip
+  starts below the title row rather than at a counted offset, so `title & links` always spans
+  the pane and the animation begins on the row under it.
+- It carries `.page-effect` from the server, not from the measurement: a page that declares a
+  stream has an animation of its own, so the train stays in the shed whether or not the strip
+  found room today. Two things moving on one page is one too many.
 
 **Write the copy against the protocol, not from the repo.** These projects are implementations,
 not transcripts, so there are no sample sessions to copy — the lines are written by hand, and
@@ -103,6 +105,8 @@ real 16 KiB BitTorrent block size, ERE that grep-go actually supports. The tests
 1. Copy the lines verbatim into `src/excerpts/<repo>/<name>.<ext>`.
 2. Make the first line a comment holding the GitHub permalink with a line range, e.g. `// https://github.com/alex-popov-tech/redis-go/blob/<sha>/app/internal/resp/unmarshal.go#L7-L25`. The header of the block is built from it.
 3. List the file under `excerpts:` in the project's frontmatter.
+
+The extension picks the Shiki grammar (`SHIKI_LANG` in `src/lib/excerpts.ts`), so it follows the source file, not the project's `lang` — a `.tsx` excerpt on a `lang: ts` project is fine. Every project carries three to five of these and the cycler types them in a loop, so give it that many: different files where the repo has them, different ranges of one file where it doesn't. Keep each under about thirty lines — the block is padded to the tallest snippet, so one long excerpt leaves the short ones sitting in empty rows.
 
 Excerpts win over `hero` on a project page. `src/excerpts/` is excluded from `tsconfig.json` — the files are verbatim fragments, not project source.
 
