@@ -1,11 +1,10 @@
 export type Lang = 'go' | 'lua' | 'ts' | 'js' | 'sh' | 'md';
-export type Section = 'work' | 'projects';
 
 export const EXT: Record<Lang, string> = { go: '.go', lua: '.lua', ts: '.ts', js: '.js', sh: '.sh', md: '.md' };
-export const SECTION_ORDER: Section[] = ['work', 'projects'];
+/** The one content root, and the first segment of every content URL. */
+export const SECTION = 'projects';
 
 export interface TreeEntry {
-  section: Section;
   /** collection entry id, e.g. 'from_scratch/redis' */
   id: string;
   lang: Lang;
@@ -52,11 +51,7 @@ export function fileName(id: string, lang: Lang): string {
 export function buildTree(entries: TreeEntry[], opts: TreeOptions = {}): TreeNode[] {
   const folded = new Set(opts.folded ?? []);
   const roots: TreeNode[] = [];
-  for (const section of SECTION_ORDER) {
-    const own = entries.filter((e) => e.section === section);
-    if (own.length === 0) continue;
-    roots.push(folder(section, section, 0, section, '', own, folded));
-  }
+  if (entries.length > 0) roots.push(folder(SECTION, SECTION, 0, '', entries, folded));
   if (opts.cv && opts.cv.length > 0) {
     roots.push({
       kind: 'folder',
@@ -76,7 +71,6 @@ function folder(
   name: string,
   path: string,
   depth: number,
-  section: Section,
   prefix: string,
   entries: TreeEntry[],
   folded: Set<string>,
@@ -95,11 +89,11 @@ function folder(
   }
   const children: TreeNode[] = [];
   for (const sub of [...subfolders.keys()].sort()) {
-    children.push(folder(sub, `${path}/${sub}`, depth + 1, section, `${prefix}${sub}/`, subfolders.get(sub)!, folded));
+    children.push(folder(sub, `${path}/${sub}`, depth + 1, `${prefix}${sub}/`, subfolders.get(sub)!, folded));
   }
   files.sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
   for (const e of files) {
-    children.push({ kind: 'file', name: fileName(e.id, e.lang), href: `/${section}/${e.id}`, icon: e.lang, depth: depth + 1 });
+    children.push({ kind: 'file', name: fileName(e.id, e.lang), href: `/${SECTION}/${e.id}`, icon: e.lang, depth: depth + 1 });
   }
   return { kind: 'folder', name, path, depth, count: entries.length, folded: folded.has(path), children };
 }

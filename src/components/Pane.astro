@@ -3,14 +3,13 @@ import Line from './Line.astro';
 import Tags from './Tags.astro';
 import { hardWrap } from '../lib/text';
 import type { BracketLink } from '../lib/pages';
-interface Props { title: string; links?: BracketLink[]; meta?: string; paragraphs: string[]; tags: string[] }
-const { title, links = [], meta, paragraphs, tags } = Astro.props;
+interface Props { title: string; links?: BracketLink[]; paragraphs: string[]; tags: string[] }
+const { title, links = [], paragraphs, tags } = Astro.props;
 ---
 <Line cls="title">
   <span>{title}</span>
-  {(links.length > 0 || meta) && (
+  {links.length > 0 && (
     <span class="links">
-      {meta && <span class="dim">{meta}</span>}
       {links.map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}
     </span>
   )}

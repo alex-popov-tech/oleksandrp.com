@@ -2,11 +2,10 @@ import { describe, it, expect } from 'vitest';
 import { buildTree, countFiles, fileName, guideFor, type TreeEntry, type FolderNode } from './tree';
 
 const entries: TreeEntry[] = [
-  { section: 'projects', id: 'store', lang: 'lua', order: 1 },
-  { section: 'projects', id: 'from_scratch/git', lang: 'go', order: 2 },
-  { section: 'projects', id: 'from_scratch/redis', lang: 'go', order: 1 },
-  { section: 'projects', id: 'other/advent_of_code', lang: 'go', order: 1 },
-  { section: 'work', id: 'lokalise', lang: 'md', order: 1 },
+  { id: 'store', lang: 'lua', order: 1 },
+  { id: 'from_scratch/git', lang: 'go', order: 2 },
+  { id: 'from_scratch/redis', lang: 'go', order: 1 },
+  { id: 'other/advent_of_code', lang: 'go', order: 1 },
 ];
 
 const folder = (nodes: ReturnType<typeof buildTree>, name: string) =>
@@ -20,9 +19,9 @@ describe('fileName', () => {
 });
 
 describe('buildTree', () => {
-  it('orders sections work, projects and ends with README', () => {
+  it('puts projects first and ends with README', () => {
     const tree = buildTree(entries);
-    expect(tree.map((n) => n.name)).toEqual(['work', 'projects', 'README.sh']);
+    expect(tree.map((n) => n.name)).toEqual(['projects', 'README.sh']);
     expect(tree.at(-1)).toMatchObject({ kind: 'file', href: '/', icon: 'sh', depth: 0 });
   });
   it('puts subfolders before files and sorts files by order', () => {
@@ -42,23 +41,22 @@ describe('buildTree', () => {
   it('folds the folders named in options', () => {
     const tree = buildTree(entries, { folded: ['projects'] });
     expect(folder(tree, 'projects').folded).toBe(true);
-    expect(folder(tree, 'work').folded).toBe(false);
+    expect(folder(buildTree(entries), 'projects').folded).toBe(false);
   });
   it('adds a cv folder before README only when files exist', () => {
     expect(buildTree(entries).some((n) => n.name === 'cv')).toBe(false);
     const tree = buildTree(entries, { cv: [{ name: 'golang.pdf', href: '/cv/golang.pdf' }] });
-    expect(tree.map((n) => n.name)).toEqual(['work', 'projects', 'cv', 'README.sh']);
+    expect(tree.map((n) => n.name)).toEqual(['projects', 'cv', 'README.sh']);
     expect(folder(tree, 'cv').children[0]).toMatchObject({ kind: 'file', name: 'golang.pdf', icon: 'pdf', download: true, depth: 1 });
   });
-  it('omits empty sections', () => {
-    const tree = buildTree(entries.filter((e) => e.section !== 'work'));
-    expect(tree.map((n) => n.name)).toEqual(['projects', 'README.sh']);
+  it('omits the projects folder when there is nothing in it', () => {
+    expect(buildTree([]).map((n) => n.name)).toEqual(['README.sh']);
   });
 });
 
 describe('countFiles', () => {
   it('counts every file including README', () => {
-    expect(countFiles(buildTree(entries))).toBe(6);
+    expect(countFiles(buildTree(entries))).toBe(5);
   });
 });
 

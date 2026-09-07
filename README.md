@@ -119,10 +119,6 @@ The extension picks the Shiki grammar (`SHIKI_LANG` in `src/lib/excerpts.ts`), s
 
 Excerpts win over `hero` on a project page. `src/excerpts/` is excluded from `tsconfig.json` — the files are verbatim fragments, not project source.
 
-## Add a job
-
-`src/content/work/<slug>.md` with `title`, `role`, `from`, `to`, `order`, `tags`, optional `shipped` (list of `{ title, repo?, live?, tags, description }`). Body: what you owned there.
-
 ## Add a CV
 
 Drop `public/cv/<name>.pdf` and map it in `src/cv.json`: `{ "<name>.pdf": "<label>" }`. One file makes the button a direct download; several make it a menu and add a `cv/` folder to the tree. No files, no button.

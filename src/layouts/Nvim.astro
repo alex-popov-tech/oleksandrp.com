@@ -28,11 +28,8 @@ interface Props {
 }
 const { title, description, crumb, short, path, shortPath, stream } = Astro.props;
 
-const [projects, work] = await Promise.all([getCollection('projects'), getCollection('work')]);
-const entries: TreeEntry[] = [
-  ...work.map((e) => ({ section: 'work' as const, id: e.id, lang: e.data.lang, order: e.data.order })),
-  ...projects.map((e) => ({ section: 'projects' as const, id: e.id, lang: e.data.lang, order: e.data.order })),
-];
+const projects = await getCollection('projects');
+const entries: TreeEntry[] = projects.map((e) => ({ id: e.id, lang: e.data.lang, order: e.data.order }));
 const tree = buildTree(entries, { folded: FOLDED, cv: cvFiles() });
 const current = currentPath(Astro.url.pathname);
 const fullTitle = title === SITE.name ? title : `${title} · ${SITE.name}`;

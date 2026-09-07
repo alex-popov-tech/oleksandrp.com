@@ -38,27 +38,4 @@ const projects = defineCollection({
   schema: projectSchema,
 });
 
-const work = defineCollection({
-  loader: glob({ pattern: '*.md', base: './src/content/work' }),
-  schema: z.object({
-    title: z.string(),
-    role: z.string(),
-    from: z.string(),
-    to: z.string(),
-    lang: lang.default('md'),
-    order: z.number().int(),
-    tags: z.array(z.string()).default([]),
-    shipped: z
-      .array(
-        z.object({
-          title: z.string(),
-          ...link,
-          tags: z.array(z.string()).default([]),
-          description: z.string(),
-        }),
-      )
-      .default([]),
-  }),
-});
-
-export const collections = { projects, work };
+export const collections = { projects };

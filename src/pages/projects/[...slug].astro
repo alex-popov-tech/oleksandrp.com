@@ -22,10 +22,10 @@ const paras = paragraphs(entry.body);
 <Nvim
   title={d.title}
   description={paras[0] ?? d.title}
-  crumb={crumbFor('projects', entry.id, d.lang)}
+  crumb={crumbFor(entry.id, d.lang)}
   short={fileName(entry.id, d.lang)}
-  path={pathFor('projects', entry.id, d.lang)}
-  shortPath={shortPathFor('projects', entry.id, d.lang)}
+  path={pathFor(entry.id, d.lang)}
+  shortPath={shortPathFor(entry.id, d.lang)}
   stream={d.stream}
 >
   <Pane title={d.title} links={bracketLinks(d)} paragraphs={paras} tags={d.tags}>
