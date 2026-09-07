@@ -110,7 +110,12 @@ button.ghost { font: inherit; color: inherit; background: none; border: 0; paddi
 #sidebar .winbar { background: var(--bar); }
 #main .winbar { background: var(--bg); }
 .winbar .crumb { overflow: hidden; text-overflow: ellipsis; }
-.winbar .crumb .short { display: none; }
+/* the drawer button carries the file name beside its chevron, so the whole thing is one
+   tap target rather than a single character */
+/* no `display` here: .phone-only owns that, and an id would outrank it on desktop */
+#drawer-open { align-items: center; gap: 1ch; min-height: var(--lh); color: var(--dim); }
+#drawer-open .here { color: var(--fg); }
+#drawer-open:hover .here { color: var(--accent); }
 .winbar .spacer { flex: 1; }
 /* hidden on desktop; the phone media query brings it back inside the drawer */
 .drawer-status { display: none; }
@@ -307,7 +312,7 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
   .drawer-status { display: flex; }
   .drawer-status .mode { background: var(--accent); color: var(--bg); padding: 0 1ch; font-weight: 700; }
   .winbar .crumb .long, #statusline .path .long, .cta .long { display: none; }
-  .winbar .crumb .short, #statusline .path .short, .cta .short { display: inline; }
+  #statusline .path .short, .cta .short { display: inline; }
   #statusline .branch, #statusline .arrow { display: none; }
   .ln .tx { padding-right: 1ch; }
   .ln .tx.title .links { flex-basis: 100%; margin-left: 0; }
@@ -387,13 +392,14 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 
 /* ---- margin streams ---- */
 /* The animated strip in a file view's right margin. It is not content: it sits over the
-   pane, pinned below the title row, and stays put while the buffer scrolls under it.
-   It never covers prose: scripts/stream.ts hides it unless the pane is wide enough for the
-   full 80-column prose column as well, and it is a desktop effect only, hidden below 900px
-   the same as .train. */
+   pane, below the title row, and stays put while the buffer scrolls under it. It never
+   covers prose — scripts/stream.ts shows it only where the pane fits the whole prose column
+   alongside it, and sets `top` from the measured title row, which wraps to two lines in the
+   drawer layout. Measurement is the only rule: a tablet with a roomy margin gets a strip
+   even in that layout, and a phone fails the column test on its own. */
 .stream {
   position: absolute;
-  top: calc(3 * var(--lh));
+  top: calc(3 * var(--lh)); /* replaced by the measured offset once JS runs */
   right: 2ch;
   width: calc(var(--cols) * 1ch);
   z-index: 3; /* under the train's 4 */
@@ -407,7 +413,6 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
    span is drawn at opacity 0, and opacity takes its background with it, so the cursor line
    shows through the strip's whitespace while glyphs still cover the code beneath. */
 .stream span { background: rgb(var(--bg-rgb)); }
-@media (max-width: 899px) { .stream { display: none !important; } }
 
 /* grep's highlight, the selection colour pulled towards green — the same construction as
    the diagram's install flash, so a palette swap carries it. */

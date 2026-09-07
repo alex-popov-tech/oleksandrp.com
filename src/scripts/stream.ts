@@ -10,12 +10,10 @@ const FPS = 20;
 const GAP = 2;
 /** The strip's inset from the pane's right edge — must match `right` in the .stream rule. */
 const INSET = 2;
-/** Rows above the strip: the winbar, the buffer's top padding, and the title line. */
-const TOP_ROWS = 3;
+/** Fallback rows above the strip when the title line cannot be found: winbar, padding, title. */
+const FALLBACK_TOP_ROWS = 3;
 /** Below this the strip is too short to read as a column at all. */
 const MIN_ROWS = 8;
-/** The strip is a desktop effect, same threshold as the train's MIN_WIDTH in scripts/train.ts. */
-const MIN_WIDTH = 900;
 
 /** One chunk per engine: a page downloads its own renderer and no others. */
 const LOADERS: Record<StreamId, () => Promise<Stream>> = {
@@ -62,25 +60,40 @@ class MarginStream extends HTMLElement {
   }
 
   /**
+   * Where the strip starts: just under the title line, measured rather than assumed. The
+   * title is one row on a wide pane but wraps to two once the layout moves its [github] link
+   * onto its own line, so a fixed offset would drop the strip on top of it.
+   */
+  private topOffset(pane: Element, lh: number): number {
+    const title = pane.querySelector('#buffer .tx.title')?.closest('.ln');
+    if (!title) return FALLBACK_TOP_ROWS * lh;
+    const bottom = title.getBoundingClientRect().bottom - pane.getBoundingClientRect().top;
+    // land on a row boundary, so the strip stays on the buffer's grid
+    return Math.ceil(bottom / lh) * lh;
+  }
+
+  /**
    * Measure the pane and decide whether the strip belongs here at all. It shows only where
-   * there is room for the whole prose column, a gap, and the strip; below that the text and
-   * the animation would be fighting over the same columns, so nothing is drawn. It is also a
-   * desktop effect only, same as the train it stands in for — below MIN_WIDTH it stands down
-   * without even measuring, since the phone/drawer layout changes --fs and --gutter enough
-   * that the column math alone would let a strip pass at widths the train never runs at.
+   * there is room for the whole prose column, a gap and the strip, so the text and the
+   * animation never fight over the same columns.
+   *
+   * Measurement is the whole rule: there is no width below which the strip is refused on
+   * principle. A tablet in landscape has a roomy right margin even in the drawer layout, and
+   * a phone fails the column test on its own without needing a breakpoint to say so.
    */
   private layout() {
     const pane = this.parentElement;
     if (!pane || !this.stream) return;
-    if (window.innerWidth < MIN_WIDTH) return this.stand();
 
     const ch = columnWidth(this);
     const lh = parseFloat(getComputedStyle(this).lineHeight) || 22;
     const gutter = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gutter')) || 4;
     const fits = pane.clientWidth / ch >= gutter + WRAP_COLUMNS + GAP + INSET + this.stream.cols;
-    const rows = Math.floor((pane.clientHeight - TOP_ROWS * lh) / lh);
+    const top = this.topOffset(pane, lh);
+    const rows = Math.floor((pane.clientHeight - top) / lh);
 
     if (!fits || rows < MIN_ROWS) return this.stand();
+    this.style.top = `${top}px`;
     if (rows !== this.rows.length) this.build(rows);
     this.hidden = false;
     // the train is the fallback, and stays in the shed while the strip is running

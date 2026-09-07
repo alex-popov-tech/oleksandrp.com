@@ -5,6 +5,7 @@ import Pane from '../../components/Pane.astro';
 import Line from '../../components/Line.astro';
 import Tags from '../../components/Tags.astro';
 import { hardWrap } from '../../lib/text';
+import { fileName } from '../../lib/tree';
 import { paragraphs } from '../../lib/text';
 import { bracketLinks, crumbFor, pathFor, shortPathFor } from '../../lib/pages';
 
@@ -20,7 +21,7 @@ const paras = paragraphs(entry.body);
   title={d.title}
   description={paras[0] ?? d.title}
   crumb={crumbFor('work', entry.id, d.lang)}
-  short="work"
+  short={fileName(entry.id, d.lang)}
   path={pathFor('work', entry.id, d.lang)}
   shortPath={shortPathFor('work', entry.id, d.lang)}
 >

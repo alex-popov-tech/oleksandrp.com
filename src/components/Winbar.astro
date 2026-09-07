@@ -1,11 +1,19 @@
 ---
+/**
+ * The window bar. On a wide pane it shows the full breadcrumb; in the drawer layout the
+ * breadcrumb gives way to a button that opens the file tree, labelled with the file you are
+ * looking at. The label sits inside the button so the whole `< git.go` is the tap target —
+ * a lone chevron is a hard thing to hit with a thumb.
+ */
 import CvButton from './CvButton.astro';
 interface Props { crumb: string; short: string; isReadme: boolean }
 const { crumb, short, isReadme } = Astro.props;
 ---
 <div class="winbar">
-  <button id="drawer-open" class="ghost phone-only" popovertarget="sidebar" popovertargetaction="show" aria-label="Open file tree">{isReadme ? '≡' : '<'}</button>
-  <span class="crumb"><span class="long">{crumb}</span><span class="short">{short}</span></span>
+  <button id="drawer-open" class="ghost phone-only" popovertarget="sidebar" popovertargetaction="show" aria-label="Open file tree">
+    <span class="mark">{isReadme ? '≡' : '<'}</span><span class="here">{short}</span>
+  </button>
+  <span class="crumb"><span class="long">{crumb}</span></span>
   <span class="spacer"></span>
   <CvButton />
 </div>

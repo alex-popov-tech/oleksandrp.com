@@ -9,6 +9,7 @@ import Diagram from '../../components/Diagram.astro';
 import { loadExcerpt } from '../../lib/excerpt-files';
 import { paragraphs } from '../../lib/text';
 import { bracketLinks, crumbFor, pathFor, shortPathFor } from '../../lib/pages';
+import { fileName } from '../../lib/tree';
 
 export async function getStaticPaths() {
   const entries = await getCollection('projects');
@@ -17,13 +18,12 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const d = entry.data;
 const paras = paragraphs(entry.body);
-const parent = entry.id.includes('/') ? entry.id.slice(0, entry.id.lastIndexOf('/')) : 'projects';
 ---
 <Nvim
   title={d.title}
   description={paras[0] ?? d.title}
   crumb={crumbFor('projects', entry.id, d.lang)}
-  short={parent}
+  short={fileName(entry.id, d.lang)}
   path={pathFor('projects', entry.id, d.lang)}
   shortPath={shortPathFor('projects', entry.id, d.lang)}
   stream={d.stream}
