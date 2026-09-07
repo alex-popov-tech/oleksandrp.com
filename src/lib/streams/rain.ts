@@ -67,10 +67,10 @@ export function rain(
       const color: Role = k === 0 && !token.hot && dim ? 'fg' : token.color;
 
       let free = true;
-      for (let i = 0; i < token.text.length; i++) if (taken[r][x + i]) { free = false; break; }
+      for (let i = 0; i < token.text.length && x + i < cols; i++) if (taken[r][x + i]) { free = false; break; }
       // a half-drawn word is unreadable noise, so it is all or nothing
       if (!free) continue;
-      for (let i = 0; i < token.text.length; i++) {
+      for (let i = 0; i < token.text.length && x + i < cols; i++) {
         taken[r][x + i] = true;
         g[r][x + i] = { ch: token.text[i], color, op };
       }

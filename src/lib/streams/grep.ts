@@ -7,7 +7,7 @@
  * command above it.
  */
 import type { Cell } from '../diagram';
-import { DENSITY, MAX_OP, blankGrid, edge, type Stream } from './engine';
+import { MAX_OP, blankGrid, edge, scrollIndex, type Stream } from './engine';
 
 export interface GrepSession {
   /** the ERE, exactly as it appears in the command line above the output */
@@ -77,18 +77,15 @@ const ROWS: readonly Row[] = SESSIONS.flatMap((s): Row[] => [
   { kind: 'gap' },
 ]);
 
-/** The strip scrolls at this many lines a second. */
-const RATE = 1.1;
 const SEED = 4;
 
 export const grep: Stream = {
   cols: COLS,
   render(t, rows) {
     const g = blankGrid(COLS, rows);
-    const head = Math.floor(t * RATE * DENSITY + SEED * 5);
 
     for (let r = rows - 1; r >= 0; r--) {
-      const i = head - (rows - 1 - r);
+      const i = scrollIndex(t, r, rows, SEED * 5);
       if (i < 0) continue;
       const row = ROWS[i % ROWS.length];
       if (row.kind === 'gap') continue;

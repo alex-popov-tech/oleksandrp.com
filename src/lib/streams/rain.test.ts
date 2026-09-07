@@ -75,7 +75,7 @@ describe('rain', () => {
   it('holds a highlighted word above MIN_HOT_OP away from the fades', () => {
     const rows = 30;
     const hot: Vocab = () => ({ text: 'commit', color: 'accent', hot: true });
-    const g = rain(3, 18, rows, hot, [[0, 1, LANE]], 1, 22, 0.15);
+    const g = rain(3, 20, rows, hot, [[0, 1, LANE]], 1, 22, 0.15);
     for (let r = FADE_ROWS; r < rows - FADE_ROWS; r++) {
       for (const cell of g[r]) {
         if (cell.op > 0) expect(cell.op).toBeGreaterThanOrEqual(MIN_HOT_OP * MAX_OP - 1e-9);
@@ -86,14 +86,14 @@ describe('rain', () => {
   it('lets an ordinary word fade down the trail', () => {
     const rows = 30;
     const cold: Vocab = () => ({ text: 'abcdef', color: 'fg' });
-    const g = rain(3, 18, rows, cold, [[0, 1, LANE]], 1, 22, 0.15);
+    const g = rain(3, 20, rows, cold, [[0, 1, LANE]], 1, 22, 0.15);
     const ops = g.flat().map((c) => c.op).filter((op) => op > 0);
     expect(Math.min(...ops)).toBeLessThan(MIN_HOT_OP * MAX_OP);
   });
 
   it('drops a word too long for its lane rather than spilling into the next', () => {
     const tooLong: Vocab = () => ({ text: 'RETURNING', color: 'fg' });
-    const g = rain(3, 18, 20, tooLong, [[0, 1, LANE]], 1, 10, 0.15);
+    const g = rain(3, 20, 20, tooLong, [[0, 1, LANE]], 1, 10, 0.15);
     for (const row of g) for (const cell of row) expect(cell.op).toBe(0);
   });
 });

@@ -25,6 +25,8 @@ export const DENSITY = 1;
 export const MAX_OP = 0.9;
 /** How many rows the top and bottom fades take. */
 export const FADE_ROWS = 5;
+/** Both scrolling engines advance a line at this rate, in lines per second. */
+export const SCROLL_RATE = 1.1;
 
 /**
  * Deterministic pseudo-random from three coordinates. A sine hash rather than a seeded PRNG
@@ -55,8 +57,26 @@ export function edge(r: number, rows: number): number {
   return Math.min(1, (r + 1) / FADE_ROWS, (rows - r) / FADE_ROWS);
 }
 
+/**
+ * Which script entry belongs on row `r` of a strip that scrolls upward, newest at the bottom,
+ * or -1 before the script has reached that row. `seed` offsets each strip so two of them on
+ * neighbouring pages are not in lockstep.
+ */
+export function scrollIndex(t: number, r: number, rows: number, seed: number): number {
+  const head = Math.floor(t * SCROLL_RATE * DENSITY + seed);
+  const i = head - (rows - 1 - r);
+  return i < 0 ? -1 : i;
+}
+
+/**
+ * Whether row `r` carries the newest entry — always the strip's bottom row, since
+ * `scrollIndex` advances one entry per row on the way there. Exposed so a caller never has to
+ * recompute the head position itself just to compare against it.
+ */
+export const isScrollHead = (r: number, rows: number): boolean => r === rows - 1;
+
 /** A cell that shows nothing. `runs()` folds a row of these into a single span. */
-export const blankCell = (): Cell => ({ ch: ' ', color: 'fg', op: 0 });
+const blankCell = (): Cell => ({ ch: ' ', color: 'fg', op: 0 });
 
 export const isBlank = (cell: Cell): boolean => cell.op === 0;
 

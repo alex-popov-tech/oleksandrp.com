@@ -402,7 +402,7 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 .stream > div { height: var(--lh); }
 /* One plate per span rather than one over the strip, exactly as .train span does: a blank
    span is drawn at opacity 0, and opacity takes its background with it, so the cursor line
-   shows through the strip's whitespace while glyphs still occlude the code beneath. */
+   shows through the strip's whitespace while glyphs still cover the code beneath. */
 .stream span { background: rgb(var(--bg-rgb)); }
 @media (max-width: 899px) { .stream { display: none !important; } }
 

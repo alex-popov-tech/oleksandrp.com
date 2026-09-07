@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { blankGrid, edge, hex, isBlank, pick, rnd, FADE_ROWS } from './engine';
+import { blankGrid, edge, hex, isBlank, pick, rnd, scrollIndex, FADE_ROWS } from './engine';
 
 describe('rnd', () => {
   it('is deterministic', () => {
@@ -52,6 +52,26 @@ describe('edge', () => {
     // a short pane must not fade to nothing everywhere
     expect(edge(2, 5)).toBeGreaterThan(0);
     expect(FADE_ROWS).toBe(5);
+  });
+});
+
+describe('scrollIndex', () => {
+  it('is -1 before the script has scrolled up to that row', () => {
+    expect(scrollIndex(0, 0, 5, 0)).toBe(-1);
+    expect(scrollIndex(0, 2, 10, 0)).toBe(-1);
+  });
+
+  it('advances one entry per row, upward toward the bottom', () => {
+    const rows = 10;
+    for (let r = 0; r < rows - 1; r++) {
+      expect(scrollIndex(20, r + 1, rows, 3)).toBe(scrollIndex(20, r, rows, 3) + 1);
+    }
+  });
+
+  it('advances as t advances', () => {
+    const later = scrollIndex(10, 5, 10, 0);
+    const earlier = scrollIndex(1, 5, 10, 0);
+    expect(later).toBeGreaterThan(earlier);
   });
 });
 

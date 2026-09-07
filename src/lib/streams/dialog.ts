@@ -8,7 +8,7 @@
  * check the parts that can be checked mechanically.
  */
 import type { Cell, Role } from '../diagram';
-import { DENSITY, MAX_OP, blankGrid, edge, type Stream } from './engine';
+import { MAX_OP, blankGrid, edge, isScrollHead, scrollIndex, type Stream } from './engine';
 
 export interface DialogLine {
   side: 'c' | 's';
@@ -17,8 +17,6 @@ export interface DialogLine {
   meta?: boolean;
 }
 
-/** The strip scrolls at this many lines a second. */
-const RATE = 1.1;
 /** The markers are punctuation, so they sit back from the line they mark. */
 const MARKER_OP = 0.6;
 
@@ -41,17 +39,16 @@ export function dialog(
   seed: number,
 ): Cell[][] {
   const g = blankGrid(cols, rows);
-  const head = Math.floor(t * RATE * DENSITY + seed * 7);
 
   for (let r = rows - 1; r >= 0; r--) {
-    const i = head - (rows - 1 - r);
+    const i = scrollIndex(t, r, rows, seed * 7);
     if (i < 0) continue;
     const line = script[i % script.length];
     const color = tone(line);
     const text = line.side === 'c' ? `▶ ${line.text}` : `${line.text} ◀`;
     const x = line.side === 'c' ? 0 : Math.max(0, cols - text.length);
     // the newest line is the one being spoken
-    const op = (i === head ? 1 : 0.85) * MAX_OP * edge(r, rows);
+    const op = (isScrollHead(r, rows) ? 1 : 0.85) * MAX_OP * edge(r, rows);
 
     for (let k = 0; k < text.length && x + k < cols; k++) {
       const marker = line.side === 'c' ? k < 2 : k >= text.length - 2;
