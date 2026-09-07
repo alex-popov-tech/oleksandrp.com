@@ -26,6 +26,7 @@ const parent = entry.id.includes('/') ? entry.id.slice(0, entry.id.lastIndexOf('
   short={parent}
   path={pathFor('projects', entry.id, d.lang)}
   shortPath={shortPathFor('projects', entry.id, d.lang)}
+  stream={d.stream}
 >
   <Pane title={d.title} links={bracketLinks(d)} paragraphs={paras} tags={d.tags}>
     {d.diagram && <Diagram id={d.diagram} />}

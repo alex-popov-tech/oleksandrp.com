@@ -1,0 +1,15 @@
+---
+/**
+ * The animated text stream in a file view's right margin.
+ *
+ * Unlike a diagram this is not content: the layout renders it into #main beside the train,
+ * never through the buffer slot, so numberLines never sees it and it inherits the pane's
+ * clipping. Nothing is drawn here either — the strip's height is whatever the pane allows,
+ * which only the browser knows — so it starts hidden and scripts/stream.ts brings it up.
+ */
+import type { StreamId } from '../lib/streams';
+
+interface Props { id: StreamId }
+const { id } = Astro.props;
+---
+<margin-stream class="stream" data-id={id} aria-hidden="true" hidden></margin-stream>

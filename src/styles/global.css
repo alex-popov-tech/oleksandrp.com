@@ -383,6 +383,27 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 @media (max-width: 899px) { .train { display: none !important; } }
 
 /* ---- margin streams ---- */
+/* The animated strip in a file view's right margin. It is not content: it sits over the
+   pane, pinned below the title row, and stays put while the buffer scrolls under it.
+   The background is the pane's own colour — the trick .train span uses — so where one of
+   the handful of code lines long enough to reach it does, the strip reads as being in front
+   of it rather than tangled with it, and the top and bottom fades resolve against the right
+   ground. It never covers prose: scripts/stream.ts hides it unless the pane is wide enough
+   for the full 80-column prose column as well. */
+.stream {
+  position: absolute;
+  top: calc(3 * var(--lh));
+  right: 2ch;
+  width: calc(var(--cols) * 1ch);
+  z-index: 3; /* under the train's 4 */
+  white-space: pre;
+  background: var(--bg);
+  /* it floats over the buffer, so it must never swallow a click or a drag */
+  pointer-events: none;
+  user-select: none;
+}
+.stream > div { height: var(--lh); }
+
 /* grep's highlight, the selection colour pulled towards green — the same construction as
    the diagram's install flash, so a palette swap carries it. */
 .stream .bg-match { background: color-mix(in srgb, var(--green) 18%, var(--sel)); }

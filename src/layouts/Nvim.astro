@@ -9,6 +9,8 @@ import Cmdline from '../components/Cmdline.astro';
 import Shell from '../components/Shell.astro';
 import HelpOverlay from '../components/HelpOverlay.astro';
 import Train from '../components/Train.astro';
+import MarginStream from '../components/MarginStream.astro';
+import type { StreamId } from '../lib/streams';
 import { buildTree, type TreeEntry } from '../lib/tree';
 import { numberLines } from '../lib/numbers';
 import { cvFiles } from '../lib/cv-files';
@@ -22,8 +24,9 @@ interface Props {
   short: string;
   path: string;
   shortPath: string;
+  stream?: StreamId;
 }
-const { title, description, crumb, short, path, shortPath } = Astro.props;
+const { title, description, crumb, short, path, shortPath, stream } = Astro.props;
 
 const [projects, work] = await Promise.all([getCollection('projects'), getCollection('work')]);
 const entries: TreeEntry[] = [
@@ -61,6 +64,7 @@ const body = numberLines(await Astro.slots.render('default'));
         <Winbar crumb={crumb} short={short} isReadme={current === '/'} />
         <main id="buffer" tabindex="-1" set:html={body} />
         <Train />
+        {stream && <MarginStream id={stream} />}
       </div>
       <Statusline path={path} shortPath={shortPath} />
       <Cmdline />
@@ -70,6 +74,7 @@ const body = numberLines(await Astro.slots.render('default'));
     <script>
       import '../scripts/cycler';
       import '../scripts/diagram';
+      import '../scripts/stream';
       import '../scripts/session';
       import '../scripts/nvim';
       import '../scripts/train';
