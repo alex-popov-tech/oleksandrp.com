@@ -69,6 +69,24 @@ class MarginStream extends HTMLElement {
   }
 
   /**
+   * How many columns of prose survive once the strip's are reserved.
+   *
+   * Reserve them first and measure a real line, rather than deriving the number from the
+   * pane's width: the line box already knows about the gutter and about its own right inset,
+   * and that inset is 2ch on a wide pane and 1ch in the drawer layout. Subtracting a guess
+   * for those was off by two columns, which showed up as a paragraph soft-wrapping on a pane
+   * the strip had just declared roomy enough.
+   */
+  private proseColumns(pane: HTMLElement, ch: number): number {
+    pane.style.setProperty('--strip', `${this.stream!.cols + GAP}ch`);
+    const tx = pane.querySelector('#buffer .ln .tx:not(.title)');
+    if (!tx) return 0;
+    const cs = getComputedStyle(tx);
+    const inner = tx.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    return inner / ch;
+  }
+
+  /**
    * Measure the pane and decide whether the strip belongs here.
    *
    * The buffer reserves the strip's columns rather than the strip stealing them, so text
@@ -83,10 +101,7 @@ class MarginStream extends HTMLElement {
 
     const ch = columnWidth(this);
     const lh = parseFloat(getComputedStyle(this).lineHeight) || 22;
-    const gutter = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gutter')) || 4;
-    // the pane's width never changes with the strip, so this measures the same either way
-    const left = pane.clientWidth / ch - (this.stream.cols + GAP);
-    const fits = left >= gutter + WRAP_COLUMNS;
+    const fits = this.proseColumns(pane, ch) >= WRAP_COLUMNS;
     // the title spans the full pane, so the strip begins on the row after it
     const top = this.topOffset(pane, lh);
     const rows = Math.floor((pane.clientHeight - top) / lh);
@@ -94,8 +109,6 @@ class MarginStream extends HTMLElement {
     if (!fits || rows < MIN_ROWS) return this.stand();
     this.style.top = `${top}px`;
     if (rows !== this.rows.length) this.build(rows);
-    // the buffer keeps its full width and holds this many columns clear on the right instead
-    pane.style.setProperty('--strip', `${this.stream.cols + GAP}ch`);
     this.hidden = false;
     this.sync();
   }
