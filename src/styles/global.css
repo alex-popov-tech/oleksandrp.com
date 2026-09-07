@@ -319,6 +319,7 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 .diagram .diagram-row { white-space: pre; overflow-wrap: normal; }
 .diagram .ln .tx { padding-right: 0; }
 .c-fg { color: var(--fg); }
+.c-muted { color: var(--muted); }
 .c-dim { color: var(--dim); }
 .c-faint { color: var(--faint); }
 .c-accent { color: var(--accent); }

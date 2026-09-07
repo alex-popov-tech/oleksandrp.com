@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { COLS, ROWS, SAMPLE, renderFrame } from './schedule';
 import type { Role } from '../diagram';
 
-const ROLES: Role[] = ['fg', 'dim', 'faint', 'accent', 'blue', 'green', 'peach', 'teal', 'orange', 'red', 'mauve'];
+const ROLES: Role[] = ['fg', 'muted', 'dim', 'faint', 'accent', 'blue', 'green', 'peach', 'teal', 'orange', 'red', 'mauve'];
 const whole = (t: number) => renderFrame(t).grid.map((r) => r.map((c) => c.ch).join('')).join('\n');
 const rowAt = (t: number, row: number) => renderFrame(t).grid[row].map((c) => c.ch).join('');
 /** the left column only: the agenda shares these rows */

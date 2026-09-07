@@ -12,10 +12,10 @@ describe('README.sh', () => {
     expect(commands).toEqual([
       '❯ whoami',
       '❯ cat about.txt',
-      '❯ ll projects/',
+      '❯ stat projects/',
       '❯ cat start-here.md',
-      '❯ ls ~/zmk/',
-      '❯ cat ~/zmk/skean/config/skean.keymap | grep -A4 GALLIUM',
+      '❯ ls ~/keyboards/zmk/',
+      '❯ cat ~/keyboards/zmk/skean/config/skean.keymap | grep -A4 GALLIUM',
       '❯ echo $EDITOR $SHELL',
       '❯ open github.com/alex-popov-tech',
     ]);

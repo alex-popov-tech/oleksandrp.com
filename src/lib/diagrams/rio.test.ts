@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { SCENARIOS, SCENARIO_S, renderFrame } from './rio';
 import type { Role } from '../diagram';
 
-const ROLES: Role[] = ['fg', 'dim', 'faint', 'accent', 'blue', 'green', 'peach', 'teal', 'orange', 'red', 'mauve'];
+const ROLES: Role[] = ['fg', 'muted', 'dim', 'faint', 'accent', 'blue', 'green', 'peach', 'teal', 'orange', 'red', 'mauve'];
 const rows = (t: number) => renderFrame(t).grid.map((r) => r.map((c) => c.ch).join(''));
 const whole = (t: number) => rows(t).join('\n');
 /** the panes are side by side: 1-36 is the session without rio, 38 on is the one with it */

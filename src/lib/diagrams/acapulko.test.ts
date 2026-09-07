@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { COLS, LOOP_S, ROWS, renderFrame } from './acapulko';
 import type { Role } from '../diagram';
 
-const ROLES: Role[] = ['fg', 'dim', 'faint', 'accent', 'blue', 'green', 'peach', 'teal', 'orange', 'red'];
+const ROLES: Role[] = ['fg', 'muted', 'dim', 'faint', 'accent', 'blue', 'green', 'peach', 'teal', 'orange', 'red'];
 const textAt = (t: number, row: number) =>
   renderFrame(t).grid[row].map((c) => c.ch).join('').trimEnd();
 const whole = (t: number) => renderFrame(t).grid.map((r) => r.map((c) => c.ch).join('')).join('\n');

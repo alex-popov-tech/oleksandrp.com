@@ -10,7 +10,7 @@
  */
 
 export type Role =
-  | 'fg' | 'dim' | 'faint' | 'accent' | 'blue' | 'green' | 'peach' | 'teal' | 'orange' | 'mauve' | 'red';
+  | 'fg' | 'muted' | 'dim' | 'faint' | 'accent' | 'blue' | 'green' | 'peach' | 'teal' | 'orange' | 'mauve' | 'red';
 
 /** Row highlights. Only store.nvim uses these, but the cell has to carry them for everyone. */
 export type Bg = 'sel' | 'flash';

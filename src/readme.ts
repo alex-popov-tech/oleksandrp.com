@@ -23,8 +23,8 @@ const START_HERE = [
   { name: 'acapulko.go', href: '/projects/acapulko', note: 'an outage tracker on a Raspberry Pi, still running' },
 ];
 
-/** ~/me/zmk, one directory per board */
-const BOARDS = ['corne/', 'dao/', 'jorne/', 'pockettype/', 'seagull/', 'skean/', 'skeletyl/'];
+/** ~/me/zmk, one directory per board — 5x12-ortho is the one with its own pcb and case */
+const BOARDS = ['5x12-ortho/', 'corne/', 'dao/', 'jorne/', 'seagull/', 'skean/', 'skeletyl/'];
 
 /**
  * The keys the eight fingers rest on. G and P sit on the same row but belong to the index
@@ -96,43 +96,36 @@ export const SCRIPT: Command[] = [
     cmd: 'whoami',
     out: [[
       { text: 'oleksandr popov', color: 'fg' },
-      { text: '  —  neovimmer · web dev · likes to re-invent the wheel', color: 'dim' },
+      { text: '  —  neovimmer · web dev · likes to re-invent the wheel', color: 'muted' },
     ]],
   },
   {
     cmd: 'cat about.txt',
     // hard-wrapped like a README on disk, and free to reflow again on a narrow screen
     out: BIO.flatMap((paragraph, i): Output[] => {
-      const lines: Output[] = hardWrap(paragraph, 76).map((line) => [{ text: line, color: 'dim' } as Span]);
+      const lines: Output[] = hardWrap(paragraph, 76).map((line) => [{ text: line, color: 'fg' } as Span]);
       return i === 0 ? [...lines, []] : lines;
     }),
   },
-  { cmd: 'll projects/', out: languageTable() },
+  { cmd: 'stat projects/', out: languageTable() },
   {
     cmd: 'cat start-here.md',
     out: START_HERE.map((p) => [
       { text: p.name.padEnd(14), color: 'blue', href: p.href },
-      { text: p.note, color: 'dim' },
+      { text: p.note, color: 'muted' },
     ]),
   },
   {
-    cmd: 'ls ~/zmk/',
-    out: [
-      [
-        { text: '5x12-ortho/  ', color: 'blue' },
-        { text: 'own pcb + case', color: 'faint' },
-      ],
-      [{ text: BOARDS.join('  '), color: 'blue' }],
-      [{ text: `${BOARDS.length + 1} boards · zmk · nice!nano / nrfmicro · one designed from scratch`, color: 'faint' }],
-    ],
+    cmd: 'ls ~/keyboards/zmk/',
+    out: [[{ text: BOARDS.join('  '), color: 'blue' }]],
   },
   {
-    cmd: 'cat ~/zmk/skean/config/skean.keymap | grep -A4 GALLIUM',
+    cmd: 'cat ~/keyboards/zmk/skean/config/skean.keymap | grep -A4 GALLIUM',
     out: [
       [
-        { text: 'layer 0 · GALLIUM · home row ', color: 'dim' },
+        { text: 'layer 0 · GALLIUM · home row ', color: 'muted' },
         { text: 'N R T S · H A E I', color: 'accent' },
-        { text: ' · combos for ⌃ ⌘ ⌥', color: 'dim' },
+        { text: ' · combos for ⌃ ⌘ ⌥', color: 'muted' },
       ],
       ...KEYBOARD.map(([line, home]) => pre(keyRow(line, home))),
     ],
