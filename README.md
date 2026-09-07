@@ -82,15 +82,15 @@ A stream is **not** content, and that is the whole difference from a diagram:
   strip: a frozen frame of falling hex is noise, not a picture, so there is nothing worth
   keeping.
 - `scripts/stream.ts` reserves the strip's columns, measures a real buffer line, and keeps the
-  strip only if the prose column still holds its 76 — and only where the pane leaves at least
-  eight rows below the title. It asks the question directly rather than deriving the answer
-  from the pane's width: the line box already accounts for the gutter and for its own right
-  inset, which is 2ch wide but 1ch in the drawer layout, and subtracting a guess for those was
-  two columns optimistic — enough to put a strip beside a paragraph that then soft-wrapped.
-  Measurement is the only rule; there is no viewport floor, because a tablet in landscape has
-  the columns to spare and the arithmetic already knows it. The strip
-  starts below the title row rather than at a counted offset, so `title & links` always spans
-  the pane and the animation begins on the row under it.
+  strip only if the prose column still holds its `WRAP_COLUMNS` — and only where the pane
+  leaves at least eight rows below the title. It asks that question directly rather than
+  deriving the answer from the pane's width: the line box already accounts for the gutter and
+  for its own right inset, which is 2ch wide but 1ch in the drawer layout, and subtracting a
+  guess for those ran two columns optimistic — enough to put a strip beside a paragraph that
+  then soft-wrapped. Measurement is the only rule; there is no viewport floor, because the
+  columns are what decide and the arithmetic already knows how many there are.
+- The strip starts below the title row rather than at a counted offset, so `title & links`
+  always spans the pane and the animation begins on the row under it.
 - It carries `.page-effect` from the server, not from the measurement: a page that declares a
   stream has an animation of its own, so the train stays in the shed whether or not the strip
   found room today. Two things moving on one page is one too many.

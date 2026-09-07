@@ -10,11 +10,14 @@ export function paragraphs(body: string | undefined): string[] {
 /**
  * Column the prose is hard-wrapped to, the way a README is stored on disk.
  *
- * 76 rather than a terminal's 80: the margin stream is a column beside the buffer, so the
- * buffer has to stay at least this wide or the hard-wrapped lines would soft-wrap again.
- * Four columns off the default is what buys every strip a home on a 1280px screen.
+ * 65 rather than a terminal's 80: the margin stream is a column beside the buffer, so the
+ * buffer has to stay at least this wide or the hard-wrapped lines would soft-wrap again —
+ * and every column the prose gives up is one the strip can have. 65 is the knee. It puts
+ * all seven strips on a tablet at 810px and up, in either orientation; 66 loses http on an
+ * 1180px landscape iPad, and going below buys only the mini in landscape, at a measure
+ * narrow enough to notice on a desktop.
  */
-export const WRAP_COLUMNS = 76;
+export const WRAP_COLUMNS = 65;
 
 /**
  * Greedy word wrap, like `gq` in vim: break on spaces only, never inside a word.
