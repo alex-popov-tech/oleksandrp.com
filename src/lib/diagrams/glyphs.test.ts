@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { DIAGRAMS, DIAGRAM_IDS } from './index';
 import { SCRIPT } from '../../readme';
 import { renderSession } from '../session';
+import { STREAMS, STREAM_IDS } from '../streams';
 
 /**
  * Every diagram is a character grid: one glyph, one cell. A glyph JetBrains Mono does not
@@ -57,5 +58,29 @@ describe('README.sh', () => {
     }
     for (const { cmd } of SCRIPT) for (const ch of cmd) used.add(ch);
     expect([...used].filter((ch) => !SAFE.has(ch))).toEqual([]);
+  });
+});
+
+describe.each(STREAM_IDS)('stream %s', (id) => {
+  const stream = STREAMS[id];
+
+  it('draws only glyphs that are one cell wide in JetBrains Mono', () => {
+    const used = new Set<string>();
+    // two heights, because a stream takes its row count as an argument: a short strip shows a
+    // different window of a script than a tall one does
+    for (const rows of [12, 30]) {
+      for (let t = 0; t < 70; t += 0.25) {
+        for (const row of stream.render(t, rows)) for (const cell of row) used.add(cell.ch);
+      }
+    }
+    expect([...used].filter((ch) => !SAFE.has(ch))).toEqual([]);
+  });
+
+  it('fills the grid it is asked for', () => {
+    for (const rows of [12, 30]) {
+      const grid = stream.render(0, rows);
+      expect(grid).toHaveLength(rows);
+      for (const row of grid) expect(row).toHaveLength(stream.cols);
+    }
   });
 });

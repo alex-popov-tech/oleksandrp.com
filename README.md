@@ -59,6 +59,45 @@ against the 9px cell, `⎿` measures 15px. `glyphs.test.ts` holds a whitelist of
 in a browser at exactly one cell and fails on anything new, so the check happens before the
 diagram ships rather than after someone spots a crooked border.
 
+## Add a margin stream
+
+A project can carry an animated text stream in the right margin of its file view, opted into
+with `stream: <id>` in its frontmatter. The seven `from_scratch` projects each have one. Like a
+diagram it is a pure `render(t, rows)` over a character grid, in `src/lib/streams/`, registered
+in `src/lib/streams/index.ts`; the content schema validates the id against that list, so a typo
+fails the build.
+
+Three engines cover all seven: `rain.ts` drops words down fixed lanes — git the object store it
+reads and writes, the interpreter what the Monkey lexer emits — three six-column lanes with a
+gutter between them, 20 columns wide. `grep.ts` scrolls real `grep -nE` sessions with the
+matches lit, 28 columns. `dialog.ts` scrolls a client/server exchange, 30 columns for http and
+26 for redis, dns and bittorrent.
+
+A stream is **not** content, and that is the whole difference from a diagram:
+
+- The layout renders it into `#main` beside the train, never through the buffer slot, so it
+  never picks up a line number and it inherits the pane's clipping.
+- It takes `rows` as an argument and fills whatever pane it is given, so there is no fixed grid
+  and **no server-rendered first frame**. Under `prefers-reduced-motion` the page simply has no
+  strip: a frozen frame of falling hex is noise, not a picture, so there is nothing worth
+  keeping.
+- `scripts/stream.ts` measures the pane and shows the strip only where there is room for the
+  gutter, the full 80-column prose column, a 2-column gap, the strip's own 2-column inset from
+  the pane edge, and its own column count, all at once. It also stands down below a 900px
+  viewport outright, without even measuring — the same floor `scripts/train.ts` uses for the
+  train, since the phone/drawer layout changes the gutter and font size enough that the column
+  math alone would let a strip pass at widths the train never runs at. Below either threshold it
+  draws nothing, and because it carries `.page-effect` only while it is actually drawing, the
+  train takes the page back.
+
+**Write the copy against the protocol, not from the repo.** These projects are implementations,
+not transcripts, so there are no sample sessions to copy — the lines are written by hand, and
+they have to be right: true RESP array counts and bulk-string lengths, real DNS records, the
+real 16 KiB BitTorrent block size, ERE that grep-go actually supports. The tests in
+`src/lib/streams/*.test.ts` check what can be checked mechanically; the rest is on you.
+
+**One glyph, one cell**, exactly as for diagrams — `glyphs.test.ts` covers the streams too.
+
 ## Add a code excerpt
 
 1. Copy the lines verbatim into `src/excerpts/<repo>/<name>.<ext>`.

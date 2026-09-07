@@ -38,6 +38,12 @@ test('prefers-reduced-motion silences everything that moves', async ({ page }) =
   expect(await row.textContent()).toBe(before);
   await expect(page.locator('#train')).toBeHidden();
 
+  // the margin stream on a from_scratch page draws nothing either
+  await page.goto('/projects/from_scratch/redis');
+  const stream = page.locator('margin-stream');
+  await expect(stream).toBeHidden();
+  await expect(stream.locator('> *')).toHaveCount(0);
+
   // README.sh is shown in full rather than typed out
   await page.goto('/');
   await expect(page.locator('shell-session')).toContainText('github.com/alex-popov-tech');
