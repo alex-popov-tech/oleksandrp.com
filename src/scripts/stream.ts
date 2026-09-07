@@ -55,6 +55,20 @@ class MarginStream extends HTMLElement {
   }
 
   /**
+   * Where the strip starts: the row after the title, measured rather than counted. The title
+   * is one row on a wide pane and two once the layout drops its [github] link onto its own
+   * line, and the strip must never begin beside it — the page is a title across the top, then
+   * text and animation side by side underneath.
+   */
+  private topOffset(pane: Element, lh: number): number {
+    const title = pane.querySelector('#buffer .tx.title')?.closest('.ln');
+    if (!title) return lh;
+    const bottom = title.getBoundingClientRect().bottom - pane.getBoundingClientRect().top;
+    // land on a row boundary so the strip stays on the buffer's grid
+    return Math.ceil(bottom / lh) * lh;
+  }
+
+  /**
    * Measure the pane and decide whether the strip belongs here.
    *
    * The buffer reserves the strip's columns rather than the strip stealing them, so text
@@ -73,10 +87,12 @@ class MarginStream extends HTMLElement {
     // the pane's width never changes with the strip, so this measures the same either way
     const left = pane.clientWidth / ch - (this.stream.cols + GAP);
     const fits = left >= gutter + WRAP_COLUMNS;
-    // the strip starts one row down, level with the buffer's first line
-    const rows = Math.floor((pane.clientHeight - lh) / lh);
+    // the title spans the full pane, so the strip begins on the row after it
+    const top = this.topOffset(pane, lh);
+    const rows = Math.floor((pane.clientHeight - top) / lh);
 
     if (!fits || rows < MIN_ROWS) return this.stand();
+    this.style.top = `${top}px`;
     if (rows !== this.rows.length) this.build(rows);
     // the buffer keeps its full width and holds this many columns clear on the right instead
     pane.style.setProperty('--strip', `${this.stream.cols + GAP}ch`);
