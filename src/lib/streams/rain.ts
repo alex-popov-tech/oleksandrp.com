@@ -26,8 +26,8 @@ export type Lane = readonly [x: number, speed: number, width: number];
 export const MIN_HOT_OP = 0.7;
 /** Six columns is what `commit`, `return`, `ASSIGN` and `LPAREN` need. */
 export const LANE = 6;
-/** Three lanes of six. */
-const COLS = 18;
+/** Three lanes of six, with structural gutters at columns 6 and 13. */
+const COLS = 20;
 
 export function rain(
   t: number,
@@ -66,11 +66,11 @@ export function rain(
       const dim = token.color === 'dim' || token.color === 'faint';
       const color: Role = k === 0 && !token.hot && dim ? 'fg' : token.color;
 
-      const end = x + token.text.length;
-      // keep one blank after a short word, so the lane's other stream cannot butt against it
-      if (token.text.length < width && !taken[r][end]) taken[r][end] = true;
-      for (let i = 0; i < token.text.length && x + i < cols; i++) {
-        if (taken[r][x + i]) continue;
+      let free = true;
+      for (let i = 0; i < token.text.length; i++) if (taken[r][x + i]) { free = false; break; }
+      // a half-drawn word is unreadable noise, so it is all or nothing
+      if (!free) continue;
+      for (let i = 0; i < token.text.length; i++) {
         taken[r][x + i] = true;
         g[r][x + i] = { ch: token.text[i], color, op };
       }
@@ -108,8 +108,8 @@ export const monkeyVocab: Vocab = (s, c, k) => {
   return { text: pick(MONKEY_TOKENS, s, c, k + 5), color: 'faint' };
 };
 
-const GIT_LANES: readonly Lane[] = [[0, 0.8, LANE], [6, 1.1, LANE], [12, 0.95, LANE]];
-const MONKEY_LANES: readonly Lane[] = [[0, 1.2, LANE], [6, 1.5, LANE], [12, 1.0, LANE]];
+const GIT_LANES: readonly Lane[] = [[0, 0.8, LANE], [7, 1.1, LANE], [14, 0.95, LANE]];
+const MONKEY_LANES: readonly Lane[] = [[0, 1.2, LANE], [7, 1.5, LANE], [14, 1.0, LANE]];
 
 export const git: Stream = {
   cols: COLS,

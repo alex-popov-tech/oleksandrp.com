@@ -40,6 +40,35 @@ describe.each(RAIN)('%s', (_name, stream) => {
       }
     }
   });
+
+  it('keeps a blank gutter between lanes at every moment', () => {
+    for (let t = 0; t < 60; t += 0.5) {
+      for (const row of stream.render(t, 24)) {
+        for (const gutter of [6, 13]) expect(row[gutter].op).toBe(0);
+      }
+    }
+  });
+
+  it('never draws a fragment of a word', () => {
+    // every lane holds a whole vocabulary word or nothing — never part of one
+    const whole = new Set<string>([
+      ...GIT_OBJECTS, ...GIT_WIRE,
+      ...MONKEY_KEYWORDS, ...MONKEY_IDENTS, ...MONKEY_OPS, ...MONKEY_TOKENS,
+    ]);
+    for (const rows of [6, 9, 24]) {
+      for (let t = 0; t < 60; t += 0.5) {
+        for (const row of stream.render(t, rows)) {
+          for (const x of [0, 7, 14]) {
+            const word = row.slice(x, x + 6).map((c) => (c.op > 0 ? c.ch : ' ')).join('').trim();
+            if (word === '') continue;
+            // git drops pairs of hex bytes, the interpreter drops integers
+            if (/^[0-9a-f]{2} [0-9a-f]{2}$/.test(word) || /^\d{1,2}$/.test(word)) continue;
+            expect(whole).toContain(word);
+          }
+        }
+      }
+    }
+  });
 });
 
 describe('rain', () => {
