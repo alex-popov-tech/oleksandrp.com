@@ -5,6 +5,7 @@ import {
   TRAIN_FRAMES_FLIPPED,
   TRAIN_ROWS,
 } from "../lib/train";
+import { columnWidth } from "../lib/measure";
 
 const STEP_MS = 28;
 /** columns travelled per wheel pattern. sl uses 3; 2 spins the drivers a touch livelier,
@@ -71,17 +72,6 @@ function tick() {
   const due = readSlot();
   if (!due) return writeSlot(Date.now() + FIRST_RUN_MS);
   if (Date.now() >= due) run();
-}
-
-/** Width of one column of the buffer font, measured rather than assumed. */
-function columnWidth(node: HTMLElement): number {
-  const probe = document.createElement("span");
-  probe.textContent = "0".repeat(20);
-  probe.style.cssText = "position:absolute;visibility:hidden;white-space:pre";
-  node.after(probe);
-  const w = probe.getBoundingClientRect().width / 20;
-  probe.remove();
-  return w || 9;
 }
 
 const escape = (s: string) =>
