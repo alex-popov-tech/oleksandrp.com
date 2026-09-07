@@ -23,9 +23,12 @@ describe('matchMask', () => {
     expect(matchMask('^a{2,4}$', 'a').some(Boolean)).toBe(false);
   });
 
-  it('is pure: it never carries lastIndex between calls', () => {
-    const first = matchMask('a', 'banana');
-    expect(matchMask('a', 'banana')).toEqual(first);
+  it('is pure: a call that stops on a zero-width match cannot leak into the next', () => {
+    // `a*` matches `aa`, then matches empty and breaks — leaving lastIndex at 2 on any RegExp
+    // that outlived the call. A cached one would resume past the `aa` and return nothing.
+    const first = matchMask('a*', 'aab');
+    expect(lit(first)).toEqual([0, 1]);
+    expect(matchMask('a*', 'aab')).toEqual(first);
   });
 
   it('does not spin on a zero-width match', () => {
