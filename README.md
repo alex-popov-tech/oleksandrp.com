@@ -1,6 +1,6 @@
 # oleksandrp.com
 
-Oleksandr Popov's portfolio, rendered as a Neovim workspace. Astro, static, deployed on Cloudflare Pages.
+Oleksandr Popov's portfolio, rendered as a Neovim workspace. Astro, static, deployed on Cloudflare Workers as static assets.
 
 ## Run
 
@@ -269,13 +269,19 @@ Do not hand-edit it.
 
 `src/styles/theme.css` holds the palette (Gruvbox is there, commented out). The Shiki theme is set in `astro.config.mjs` and `src/lib/highlight.ts`.
 
-## Deploy (phase 2)
+## Deploy
 
-Cloudflare Pages, Git integration. The zone `oleksandrp.com` already lives on Cloudflare.
+Cloudflare Workers, serving `dist/` as static assets. `wrangler.jsonc` is the whole description: no adapter and no Worker script, just the asset directory, the 404 page, and the custom domain `oleksandrp.com`, which Cloudflare creates the DNS record and certificate for on the first deploy. Requests for static assets are free and unlimited on the Workers free plan.
 
-1. `gh repo create alex-popov-tech/portfolio_v2 --public --source . --push`
-2. Cloudflare dashboard → Workers & Pages → Create → Pages → Connect to Git → pick the repo. Build command `npm run build`, output directory `dist`, Node version `24` (environment variable `NODE_VERSION=24`).
-3. After the first deploy, Custom domains → add `oleksandrp.com`, then add `www.oleksandrp.com`. Cloudflare creates the DNS records itself.
-4. Check: `https://oleksandrp.com/projects/from_scratch/redis` loads with no redirect, `https://www.oleksandrp.com/` redirects to the apex, `/nope` shows the nvim 404.
+Every push to `main` deploys, from `.github/workflows/ci.yml`. The `deploy` job runs only after `verify` (check, unit, e2e) is green, so a commit that breaks a test never ships. It needs one repository secret, `CLOUDFLARE_API_TOKEN`, made in the dashboard from the "Edit Cloudflare Workers" template. The account id is in `wrangler.jsonc`; it is not a secret.
 
-Every push to `main` deploys. Pull requests get preview URLs. Changes are live on the edge within a minute; only the first DNS record can take longer.
+Deploying by hand is the same thing CI runs, after a one-time `npx wrangler login`:
+
+```sh
+npm run build && npx wrangler deploy
+npx wrangler rollback        # the previous version, in seconds
+```
+
+`www.oleksandrp.com` is a zone-level Redirect Rule to the apex, set in the Cloudflare dashboard rather than in this repo: a `_redirects` file works on Workers assets, but it cannot redirect across hostnames. `public/_headers` ships with the assets and the asset router honours it.
+
+Check after a deploy: `https://oleksandrp.com/projects/from_scratch/redis` loads with no redirect, the same URL with a trailing slash or `.html` redirects to it, `/nope` shows the nvim 404, and `https://www.oleksandrp.com/` lands on the apex.

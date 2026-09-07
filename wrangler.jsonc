@@ -1,0 +1,19 @@
+/**
+ * The site is static, so this is an assets-only Worker: no script, just `dist/` served from
+ * the edge. `auto-trailing-slash` is what `build.format: 'file'` + `trailingSlash: 'never'`
+ * expect — `/foo` serves foo.html, `/foo/` and `/foo.html` redirect to it. The custom domain
+ * is declared here so a deploy from a clean account creates the DNS record and certificate.
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "oleksandrp-com",
+  "compatibility_date": "2026-09-08",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  },
+  "routes": [{ "pattern": "oleksandrp.com", "custom_domain": true }],
+  "workers_dev": false,
+  "preview_urls": true
+}
