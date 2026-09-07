@@ -283,6 +283,25 @@ function onKey(e: KeyboardEvent) {
 
 /* ---------- wiring ---------- */
 
+/**
+ * Clicking a line puts the cursor on it, the way clicking does in nvim with the mouse on:
+ * the relative numbers renumber from wherever you clicked. This is the only way most people
+ * will ever see the gutter move, now that the hint line no longer teaches hjkl.
+ *
+ * Two things it stays out of the way of. A click that ends a drag is a selection, not a
+ * cursor move, so a non-collapsed selection is left alone — otherwise selecting a paragraph
+ * would scroll the line you finished on into view. And links keep their own behaviour: the
+ * cursor follows the click, the navigation happens anyway.
+ */
+function onBufferClick(e: MouseEvent) {
+  const line = (e.target as HTMLElement | null)?.closest<HTMLElement>('#buffer .ln');
+  if (!line || !getSelection()?.isCollapsed) return;
+  const i = bufLines().indexOf(line);
+  if (i === -1) return;
+  setPane('buffer');
+  setBuf(i);
+}
+
 function bindSidebar() {
   const sidebar = $<HTMLElement>('#sidebar');
   // the sidebar persists across view transitions, so this must bind exactly once;
@@ -320,6 +339,8 @@ declare global {
 if (!window.__nvimBound) {
   window.__nvimBound = true;
   document.addEventListener('keydown', onKey);
+  // delegated, so it survives the buffer being replaced on every view transition
+  document.addEventListener('click', onBufferClick);
   document.addEventListener('astro:page-load', initPage);
   if (document.readyState !== 'loading') initPage();
   else document.addEventListener('DOMContentLoaded', initPage, { once: true });
