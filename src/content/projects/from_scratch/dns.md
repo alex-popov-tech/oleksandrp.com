@@ -4,6 +4,7 @@ lang: go
 order: 4
 repo: alex-popov-tech/dns-go
 tags: [Go, GitHub]
+stream: dns
 excerpts:
   - dns-go/question.go
   - dns-go/header.go

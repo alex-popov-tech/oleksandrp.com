@@ -1,4 +1,5 @@
 import { DIAGRAM_IDS } from './lib/diagrams';
+import { STREAM_IDS } from './lib/streams';
 import { defineCollection, z, type SchemaContext } from 'astro:content';
 import { glob } from 'astro/loaders';
 
@@ -28,6 +29,8 @@ const projectSchema = ({ image }: SchemaContext) =>
     excerpts: z.array(z.string()).default([]),
     /** an animated ascii diagram to show above the excerpts */
     diagram: z.enum(DIAGRAM_IDS).optional(),
+    /** an animated text stream in the file view's right margin */
+    stream: z.enum(STREAM_IDS).optional(),
   });
 
 const projects = defineCollection({

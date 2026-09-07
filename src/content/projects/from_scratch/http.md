@@ -4,6 +4,7 @@ lang: go
 order: 5
 repo: alex-popov-tech/go_http
 tags: [Go, GitHub]
+stream: http
 excerpts:
   - go_http/headers.go
 ---

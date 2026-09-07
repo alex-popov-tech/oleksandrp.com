@@ -4,6 +4,7 @@ lang: go
 order: 1
 repo: alex-popov-tech/redis-go
 tags: [Go, RESP, TCP, Streams, Transactions, Replication, CodeCrafters]
+stream: redis
 excerpts:
   - redis-go/unmarshal.go
   - redis-go/bulkstring.go

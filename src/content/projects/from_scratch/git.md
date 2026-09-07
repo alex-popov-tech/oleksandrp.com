@@ -4,6 +4,7 @@ lang: go
 order: 2
 repo: alex-popov-tech/git-go
 tags: [Go, Git, GitHub]
+stream: git
 excerpts:
   - git-go/blob.go
   - git-go/hashobject.go
