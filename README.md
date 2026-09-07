@@ -73,6 +73,12 @@ gutter between them, 20 columns wide. `grep.ts` scrolls real `grep -nE` sessions
 matches lit, 28 columns. `dialog.ts` scrolls a client/server exchange, 30 columns for http and
 26 for redis, dns and bittorrent.
 
+They do not move the same way, and should not. Rain falls: `rain.ts` runs top to bottom. The
+other five are logs, and a log reads down the page — oldest line at the top, newest arriving
+at the bottom, everything above it shifting up. That is what `scrollIndex` in `engine.ts`
+does, and it is not cosmetic: run those strips downward and `200 OK` prints above the GET that
+earned it, which is the one thing an exchange must not do.
+
 A stream is **not** content, and that is the whole difference from a diagram:
 
 - The layout renders it into `#main` beside the train, never through the buffer slot, so it

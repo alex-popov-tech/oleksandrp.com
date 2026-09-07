@@ -65,20 +65,20 @@ describe('scrollIndex', () => {
     }
   });
 
-  it('puts the newest entry on the top row and older ones below it', () => {
+  it('reads down the page: oldest at the top, newest on the bottom row', () => {
     const len = 50;
     for (let r = 0; r < 9; r++) {
-      // one row further down is one entry older
-      expect(scrollIndex(20, r + 1, 10, 3, len)).toBe(scrollIndex(20, r, 10, 3, len) - 1);
+      // one row further down is one entry newer, so a request prints above its response
+      expect(scrollIndex(20, r + 1, 10, 3, len)).toBe(scrollIndex(20, r, 10, 3, len) + 1);
     }
-    expect(isScrollHead(0)).toBe(true);
-    expect(isScrollHead(1)).toBe(false);
+    expect(isScrollHead(9, 10)).toBe(true);
+    expect(isScrollHead(8, 10)).toBe(false);
   });
 
-  it('carries an entry downward as t advances', () => {
-    // whatever sits on the top row now is one row lower a beat later
-    const entry = scrollIndex(10, 0, 12, 0, 40);
-    expect(scrollIndex(10 + 1 / SCROLL_RATE, 1, 12, 0, 40)).toBe(entry);
+  it('carries an entry upward as t advances', () => {
+    // whatever sits on the bottom row now is one row higher a beat later
+    const entry = scrollIndex(10, 11, 12, 0, 40);
+    expect(scrollIndex(10 + 1 / SCROLL_RATE, 10, 12, 0, 40)).toBe(entry);
   });
 
   it('wraps the script rather than running off the end of it', () => {

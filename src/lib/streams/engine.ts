@@ -60,24 +60,27 @@ export function edge(r: number, rows: number): number {
 /**
  * Which entry of a `len`-long script belongs on row `r`.
  *
- * The strip runs downward: the newest entry is on the top row and every entry slides one row
- * further down as time passes, so all three engines move the way the rain does. `seed` offsets
- * each strip so two of them on neighbouring pages are not in lockstep.
+ * These strips are logs, and a log reads down the page: the oldest line at the top, the
+ * newest arriving at the bottom, everything above it shifting up to make room. Requests come
+ * before their responses that way, which is the whole reason to print an exchange at all —
+ * scrolling the other way puts `200 OK` above the GET that earned it. The falling rain in
+ * `rain.ts` is the opposite case and runs downward on its own terms. `seed` offsets each
+ * strip so two of them on neighbouring pages are not in lockstep.
  *
  * The script wraps in both directions, so every row carries an entry from the very first
- * frame. Counting only forwards from t=0 would leave the strip filling from the top for the
- * half-minute it takes to reach the last row, which reads as a bug rather than as a start.
+ * frame. Counting only forwards from t=0 would leave the strip filling from the bottom for
+ * the half-minute it takes to reach the top row, which reads as a bug rather than as a start.
  */
 export function scrollIndex(t: number, r: number, rows: number, seed: number, len: number): number {
   const head = Math.floor(t * SCROLL_RATE * DENSITY + seed);
-  return (((head - r) % len) + len) % len;
+  return ((((head - (rows - 1 - r)) % len) + len) % len);
 }
 
 /**
- * Whether row `r` carries the newest entry — the strip's top row, since `scrollIndex` counts
- * downward from there. Exposed so a caller never has to recompute the head just to compare.
+ * Whether row `r` carries the newest entry — the strip's bottom row, since `scrollIndex`
+ * counts back up from there. Exposed so a caller never has to recompute the head to compare.
  */
-export const isScrollHead = (r: number): boolean => r === 0;
+export const isScrollHead = (r: number, rows: number): boolean => r === rows - 1;
 
 /** A cell that shows nothing. `runs()` folds a row of these into a single span. */
 const blankCell = (): Cell => ({ ch: ' ', color: 'fg', op: 0 });

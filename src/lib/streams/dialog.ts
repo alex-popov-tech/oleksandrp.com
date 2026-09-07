@@ -46,7 +46,7 @@ export function dialog(
     const text = line.side === 'c' ? `▶ ${line.text}` : `${line.text} ◀`;
     const x = line.side === 'c' ? 0 : Math.max(0, cols - text.length);
     // the newest line is the one being spoken
-    const op = (isScrollHead(r) ? 1 : 0.85) * MAX_OP * edge(r, rows);
+    const op = (isScrollHead(r, rows) ? 1 : 0.85) * MAX_OP * edge(r, rows);
 
     for (let k = 0; k < text.length && x + k < cols; k++) {
       const marker = line.side === 'c' ? k < 2 : k >= text.length - 2;
