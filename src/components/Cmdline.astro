@@ -1,4 +1,8 @@
 ---
-const hint = 'hjkl to move · Enter to open · :q to quit';
+/**
+ * The keys still work — hjkl moves, `:` opens the command line, `?` the help — but the hint
+ * no longer leads with them. Nobody arrives here to learn a keymap; they click.
+ */
+const hint = 'Enter to open · :q to quit';
 ---
 <div id="cmdline" data-hint={hint}>{hint}</div>
