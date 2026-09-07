@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { clip, hardWrap, paragraphs } from './text';
+import { WRAP_COLUMNS, clip, hardWrap, paragraphs } from './text';
 
 describe('paragraphs', () => {
   it('splits on blank lines and joins soft wraps', () => {
@@ -25,11 +25,11 @@ describe('hardWrap', () => {
     expect(hardWrap('a   b', 80)).toEqual(['a b']);
     expect(hardWrap('   ', 80)).toEqual([]);
   });
-  it('defaults to 80 columns and keeps every line within it', () => {
+  it('defaults to WRAP_COLUMNS and keeps every line within it', () => {
     const prose = 'A grep built from scratch in Go with no regex libraries, where the pattern is compiled by hand into a token list and matching is a backtracking DFS.';
     const lines = hardWrap(prose);
     expect(lines.length).toBeGreaterThan(1);
-    for (const l of lines) expect(l.length).toBeLessThanOrEqual(80);
+    for (const l of lines) expect(l.length).toBeLessThanOrEqual(WRAP_COLUMNS);
     expect(lines.join(' ')).toBe(prose);
   });
 });

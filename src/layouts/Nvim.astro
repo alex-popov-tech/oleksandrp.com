@@ -15,6 +15,7 @@ import { buildTree, type TreeEntry } from '../lib/tree';
 import { numberLines } from '../lib/numbers';
 import { cvFiles } from '../lib/cv-files';
 import { currentPath } from '../lib/pages';
+import { WRAP_COLUMNS } from '../lib/text';
 import { FOLDED, SITE } from '../site';
 
 interface Props {
@@ -57,7 +58,7 @@ const body = numberLines(await Astro.slots.render('default'));
     <link rel="sitemap" href="/sitemap-index.xml" />
     <ClientRouter />
   </head>
-  <body data-pane="buffer">
+  <body data-pane="buffer" style={`--wrap:${WRAP_COLUMNS}`}>
     <div id="app">
       <Sidebar tree={tree} current={current} />
       <div id="main">

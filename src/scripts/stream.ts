@@ -1,11 +1,11 @@
 import { rowHtml } from '../lib/diagram';
 import { columnWidth } from '../lib/measure';
+import { WRAP_COLUMNS } from '../lib/text';
 import type { Stream, StreamId } from '../lib/streams';
 
 /** Nothing here moves faster than this, so redrawing more often buys only CPU. */
 const FPS = 20;
-/** Prose is hard-wrapped to this many columns — WRAP_COLUMNS in lib/text. */
-const PROSE = 80;
+
 /** Columns of clear space between the end of the prose column and the strip. */
 const GAP = 2;
 /** The strip's inset from the pane's right edge — must match `right` in the .stream rule. */
@@ -77,7 +77,7 @@ class MarginStream extends HTMLElement {
     const ch = columnWidth(this);
     const lh = parseFloat(getComputedStyle(this).lineHeight) || 22;
     const gutter = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gutter')) || 4;
-    const fits = pane.clientWidth / ch >= gutter + PROSE + GAP + INSET + this.stream.cols;
+    const fits = pane.clientWidth / ch >= gutter + WRAP_COLUMNS + GAP + INSET + this.stream.cols;
     const rows = Math.floor((pane.clientHeight - TOP_ROWS * lh) / lh);
 
     if (!fits || rows < MIN_ROWS) return this.stand();

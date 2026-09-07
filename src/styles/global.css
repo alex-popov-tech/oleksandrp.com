@@ -159,7 +159,10 @@ details.cv li a:hover { background: var(--sel); text-decoration: none; }
 .ln .tx.h2 { color: var(--teal); }
 .ln .tx.title { color: var(--fg); display: flex; flex-wrap: wrap; column-gap: 2ch; }
 .ln .tx.title .links { margin-left: auto; white-space: nowrap; display: inline-flex; gap: 2ch; }
-.ln .tx.tags { color: var(--teal); display: flex; flex-wrap: wrap; column-gap: 2ch; }
+/* Tags are a flex row, so without a cap they fill the pane and reach past the prose column —
+   which on a from_scratch page means straight under the margin stream. --wrap is the layout's
+   WRAP_COLUMNS, so they wrap at the same measure the prose does. */
+.ln .tx.tags { color: var(--teal); display: flex; flex-wrap: wrap; column-gap: 2ch; max-width: calc(var(--wrap) * 1ch); }
 .ln .tx.tags .tag { white-space: nowrap; transition: color 0.1s; }
 .ln .tx.tags .tag:hover { color: var(--accent); }
 .ln .tx.label { color: var(--teal); }

@@ -7,8 +7,15 @@ export function paragraphs(body: string | undefined): string[] {
     .filter((p) => p.length > 0);
 }
 
-/** Column the prose is hard-wrapped to, the way a README is stored on disk. */
-export const WRAP_COLUMNS = 80;
+/**
+ * Column the prose is hard-wrapped to, the way a README is stored on disk.
+ *
+ * 72 rather than the 80 a terminal defaults to: the from_scratch pages carry an animated strip
+ * in the right margin, and scripts/stream.ts only shows it where the whole prose column clears
+ * it. At 80 the wider strips needed a window most laptops do not have. 72 is a comfortable
+ * measure in its own right, and it buys the margin the strips live in.
+ */
+export const WRAP_COLUMNS = 72;
 
 /**
  * Greedy word wrap, like `gq` in vim: break on spaces only, never inside a word.
