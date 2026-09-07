@@ -1,7 +1,7 @@
 ---
 title: .dotfiles
 lang: sh
-order: 6
+order: 3
 repo: alex-popov-tech/.dotfiles
 live: https://dotfiles.oleksandrp.com
 tags: [Git, Homebrew, Lua, Neovim, Raycast, WezTerm, Zsh, macOS]

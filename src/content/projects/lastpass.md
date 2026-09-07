@@ -1,7 +1,7 @@
 ---
 title: Lastpass for Raycast
 lang: ts
-order: 8
+order: 6
 repo: alex-popov-tech/extensions/tree/main/extensions/lastpass
 live: https://www.raycast.com/alex-popov-tech/lastpass
 tags: [Node.js, Raycast, React]

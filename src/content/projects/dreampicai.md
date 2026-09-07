@@ -1,7 +1,7 @@
 ---
 title: DreampicAI
 lang: go
-order: 4
+order: 7
 repo: alex-popov-tech/dreampicai
 live: https://dreampicai.oleksandrp.com
 tags: [GitHub, Go, HTMX, Replicate, Supabase, Templ]

@@ -1,7 +1,7 @@
 ---
 title: An HTTP/1.1 server, from scratch, in Go
 lang: go
-order: 5
+order: 1
 repo: alex-popov-tech/go_http
 tags: [Go, GitHub]
 stream: http

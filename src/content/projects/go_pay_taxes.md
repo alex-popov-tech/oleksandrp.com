@@ -1,7 +1,7 @@
 ---
 title: Go pay taxes!
 lang: ts
-order: 12
+order: 10
 repo: alex-popov-tech/go_pay_taxes_web
 live: https://alex-popov-tech.github.io/go_pay_taxes_web/
 tags: [React, TailwindCSS, Github, TypeScript, Vite]

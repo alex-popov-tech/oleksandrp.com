@@ -1,7 +1,7 @@
 ---
 title: Better DTEK
 lang: ts
-order: 3
+order: 4
 repo: alex-popov-tech/better-dtek
 live: https://dtek-theta.vercel.app
 tags: [Playwright, Redis, SvelteKit, TailwindCSS, TypeScript, Vercel, Vite]

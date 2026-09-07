@@ -1,7 +1,7 @@
 ---
 title: A Git implementation, from scratch, in Go
 lang: go
-order: 2
+order: 4
 repo: alex-popov-tech/git-go
 tags: [Go, Git, GitHub]
 stream: git

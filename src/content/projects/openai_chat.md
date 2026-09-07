@@ -1,7 +1,7 @@
 ---
 title: Openai Chat
 lang: ts
-order: 11
+order: 9
 repo: alex-popov-tech/t3_chatgpt
 live: https://t3-chatgpt.oleksandrp.com/
 tags: [Neon, Next.js, Node.js, OpenAI, PostgreSQL, Prisma, React, TanStack, TypeScript, Vercel, t3.gg, tRPC]

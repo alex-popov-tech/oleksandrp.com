@@ -1,7 +1,7 @@
 ---
 title: store.nvim
 lang: lua
-order: 1
+order: 2
 repo: alex-popov-tech/store.nvim
 tags: [GitHub, Lua, Neovim]
 diagram: store-browse

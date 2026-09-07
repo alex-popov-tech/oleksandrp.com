@@ -1,7 +1,7 @@
 ---
 title: Play Right
 lang: ts
-order: 9
+order: 11
 repo: automician/playright
 tags: [Node.js, Playwright, TypeScript]
 excerpts:

@@ -1,7 +1,7 @@
 ---
 title: A grep, from scratch, in Go
 lang: go
-order: 6
+order: 2
 repo: alex-popov-tech/grep-go
 tags: [Go, GitHub]
 stream: grep

@@ -1,7 +1,7 @@
 ---
 title: change_case.nvim
 lang: lua
-order: 7
+order: 8
 repo: alex-popov-tech/change_case.nvim
 tags: [Lua, Neovim]
 excerpts:

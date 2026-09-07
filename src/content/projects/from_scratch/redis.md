@@ -1,7 +1,7 @@
 ---
 title: A Redis-compatible server, from scratch, in Go
 lang: go
-order: 1
+order: 6
 repo: alex-popov-tech/redis-go
 tags: [Go, RESP, TCP, Streams, Transactions, Replication, CodeCrafters]
 stream: redis

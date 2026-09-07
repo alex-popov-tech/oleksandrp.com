@@ -1,7 +1,7 @@
 ---
 title: A power-outage tracker for one address in Ukraine
 lang: go
-order: 2
+order: 1
 repo: alex-popov-tech/acapulko
 live: https://acapulko.oleksandrp.com/
 tags: [Go, Home Assistant, Telegram, Raspberry Pi, Docker, SSE]

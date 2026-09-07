@@ -1,7 +1,7 @@
 ---
 title: A DNS server, from scratch, in Go
 lang: go
-order: 4
+order: 5
 repo: alex-popov-tech/dns-go
 tags: [Go, GitHub]
 stream: dns
