@@ -91,9 +91,11 @@ button.ghost { font: inherit; color: inherit; background: none; border: 0; paddi
 #main { grid-column: 2; grid-row: 1; display: flex; flex-direction: column; min-height: 0; min-width: 0;
   /* the train runs inside this pane and is clipped at its edges */
   position: relative; overflow: hidden; }
-/* the buffer and the margin stream share the pane as a row, so the stream takes real width
-   rather than floating over text and hoping the two never meet */
-#main .pane { flex: 1; display: flex; min-height: 0; min-width: 0; }
+/* The buffer and the margin stream share the pane. The buffer keeps the full width — so a
+   row's highlight runs the whole way across, the way a cursorline does in a real editor —
+   and reserves the strip's columns as padding on its text instead. --strip is set by
+   scripts/stream.ts to the strip's width plus its gap, and is 0 when no strip is drawn. */
+#main .pane { flex: 1; position: relative; min-height: 0; min-width: 0; display: flex; --strip: 0ch; }
 #statusline { grid-column: 1 / 3; grid-row: 2; }
 #cmdline { grid-column: 1 / 3; grid-row: 3; }
 .phone-only { display: none; }
@@ -162,7 +164,7 @@ details.cv li a:hover { background: var(--sel); text-decoration: none; }
 }
 .ln.cur { background: var(--cursor); }
 .ln.cur .nr { color: var(--accent); text-align: left; }
-.ln .tx { flex: 1; min-width: 0; padding-right: 2ch; color: var(--muted); overflow-wrap: anywhere; }
+.ln .tx { flex: 1; min-width: 0; padding-right: calc(2ch + var(--strip)); color: var(--muted); overflow-wrap: anywhere; }
 .ln .tx.h1 { color: var(--peach); }
 .ln .tx.h2 { color: var(--teal); }
 .ln .tx.title { color: var(--fg); display: flex; flex-wrap: wrap; column-gap: 2ch; }
@@ -180,7 +182,7 @@ details.cv li a:hover { background: var(--sel); text-decoration: none; }
 .ln .tx.media img, .ln .tx.media video { display: block; max-width: 100%; height: auto; border: 1px solid var(--faint); }
 
 /* code lines never wrap; the block scrolls sideways, the gutter stays put */
-.code { overflow-x: auto; }
+.code { overflow-x: auto; margin-right: var(--strip); }
 .code .ln .tx { white-space: pre; overflow-wrap: normal; color: var(--fg); }
 .code .ln .nr { position: sticky; left: 0; background: var(--bg); }
 .code .ln.cur .nr { background: var(--cursor); }
@@ -314,7 +316,7 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
   .winbar .crumb .long, #statusline .path .long, .cta .long { display: none; }
   #statusline .path .short, .cta .short { display: inline; }
   #statusline .branch, #statusline .arrow { display: none; }
-  .ln .tx { padding-right: 1ch; }
+  .ln .tx { padding-right: calc(1ch + var(--strip)); }
   .ln .tx.title .links { flex-basis: 100%; margin-left: 0; }
   .ln .tx .path { display: none; }
   .ln .tx.sub { padding-left: 2ch; }
@@ -391,16 +393,17 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 @media (max-width: 899px) { .train { display: none !important; } }
 
 /* ---- margin streams ---- */
-/* The animated strip in a file view's right margin. It is a column beside the buffer rather
-   than an overlay: it takes real width, so it can never land on the text, the tags can wrap
-   wherever they naturally fall, and the prose keeps its full measure. scripts/stream.ts hides
-   it when taking that width would squeeze the buffer under the prose measure. */
+/* The animated strip in a file view's right margin. It is positioned over the pane rather
+   than taking a flex column, so the buffer stays full width and a highlighted row reaches
+   across the whole pane. Nothing can collide with it: the buffer reserves its columns via
+   --strip, so text stops before it rather than being trusted not to arrive. */
 .stream {
-  flex: none;
+  position: absolute;
+  top: var(--lh);
+  right: 2ch;
   width: calc(var(--cols) * 1ch);
-  margin-left: 2ch;
-  /* line up with the buffer's first line, which sits below its own top padding */
-  padding-top: var(--lh);
+  bottom: 0;
+  z-index: 3; /* under the train's 4 */
   overflow: hidden;
   white-space: pre;
   /* it is decoration beside the text, never a target */

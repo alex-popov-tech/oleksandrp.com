@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { blankGrid, edge, hex, isBlank, pick, rnd, scrollIndex, FADE_ROWS } from './engine';
+import { blankGrid, edge, hex, isBlank, isScrollHead, pick, rnd, scrollIndex, FADE_ROWS, SCROLL_RATE } from './engine';
 
 describe('rnd', () => {
   it('is deterministic', () => {
@@ -56,22 +56,39 @@ describe('edge', () => {
 });
 
 describe('scrollIndex', () => {
-  it('is -1 before the script has scrolled up to that row', () => {
-    expect(scrollIndex(0, 0, 5, 0)).toBe(-1);
-    expect(scrollIndex(0, 2, 10, 0)).toBe(-1);
-  });
-
-  it('advances one entry per row, upward toward the bottom', () => {
-    const rows = 10;
-    for (let r = 0; r < rows - 1; r++) {
-      expect(scrollIndex(20, r + 1, rows, 3)).toBe(scrollIndex(20, r, rows, 3) + 1);
+  it('gives every row an entry from the very first frame', () => {
+    // no row is ever empty waiting for the script to arrive
+    for (let r = 0; r < 40; r++) {
+      const i = scrollIndex(0, r, 40, 0, 12);
+      expect(i).toBeGreaterThanOrEqual(0);
+      expect(i).toBeLessThan(12);
     }
   });
 
-  it('advances as t advances', () => {
-    const later = scrollIndex(10, 5, 10, 0);
-    const earlier = scrollIndex(1, 5, 10, 0);
-    expect(later).toBeGreaterThan(earlier);
+  it('puts the newest entry on the top row and older ones below it', () => {
+    const len = 50;
+    for (let r = 0; r < 9; r++) {
+      // one row further down is one entry older
+      expect(scrollIndex(20, r + 1, 10, 3, len)).toBe(scrollIndex(20, r, 10, 3, len) - 1);
+    }
+    expect(isScrollHead(0)).toBe(true);
+    expect(isScrollHead(1)).toBe(false);
+  });
+
+  it('carries an entry downward as t advances', () => {
+    // whatever sits on the top row now is one row lower a beat later
+    const entry = scrollIndex(10, 0, 12, 0, 40);
+    expect(scrollIndex(10 + 1 / SCROLL_RATE, 1, 12, 0, 40)).toBe(entry);
+  });
+
+  it('wraps the script rather than running off the end of it', () => {
+    for (const t of [0, 5, 50, 500]) {
+      for (let r = 0; r < 30; r++) {
+        const i = scrollIndex(t, r, 30, 7, 9);
+        expect(i).toBeGreaterThanOrEqual(0);
+        expect(i).toBeLessThan(9);
+      }
+    }
   });
 });
 

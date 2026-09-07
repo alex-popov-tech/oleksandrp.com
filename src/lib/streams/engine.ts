@@ -58,22 +58,26 @@ export function edge(r: number, rows: number): number {
 }
 
 /**
- * Which script entry belongs on row `r` of a strip that scrolls upward, newest at the bottom,
- * or -1 before the script has reached that row. `seed` offsets each strip so two of them on
- * neighbouring pages are not in lockstep.
+ * Which entry of a `len`-long script belongs on row `r`.
+ *
+ * The strip runs downward: the newest entry is on the top row and every entry slides one row
+ * further down as time passes, so all three engines move the way the rain does. `seed` offsets
+ * each strip so two of them on neighbouring pages are not in lockstep.
+ *
+ * The script wraps in both directions, so every row carries an entry from the very first
+ * frame. Counting only forwards from t=0 would leave the strip filling from the top for the
+ * half-minute it takes to reach the last row, which reads as a bug rather than as a start.
  */
-export function scrollIndex(t: number, r: number, rows: number, seed: number): number {
+export function scrollIndex(t: number, r: number, rows: number, seed: number, len: number): number {
   const head = Math.floor(t * SCROLL_RATE * DENSITY + seed);
-  const i = head - (rows - 1 - r);
-  return i < 0 ? -1 : i;
+  return (((head - r) % len) + len) % len;
 }
 
 /**
- * Whether row `r` carries the newest entry — always the strip's bottom row, since
- * `scrollIndex` advances one entry per row on the way there. Exposed so a caller never has to
- * recompute the head position itself just to compare against it.
+ * Whether row `r` carries the newest entry — the strip's top row, since `scrollIndex` counts
+ * downward from there. Exposed so a caller never has to recompute the head just to compare.
  */
-export const isScrollHead = (r: number, rows: number): boolean => r === rows - 1;
+export const isScrollHead = (r: number): boolean => r === 0;
 
 /** A cell that shows nothing. `runs()` folds a row of these into a single span. */
 const blankCell = (): Cell => ({ ch: ' ', color: 'fg', op: 0 });

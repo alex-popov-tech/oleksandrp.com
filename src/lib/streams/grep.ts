@@ -84,10 +84,8 @@ export const grep: Stream = {
   render(t, rows) {
     const g = blankGrid(COLS, rows);
 
-    for (let r = rows - 1; r >= 0; r--) {
-      const i = scrollIndex(t, r, rows, SEED * 5);
-      if (i < 0) continue;
-      const row = ROWS[i % ROWS.length];
+    for (let r = 0; r < rows; r++) {
+      const row = ROWS[scrollIndex(t, r, rows, SEED * 5, ROWS.length)];
       if (row.kind === 'gap') continue;
       const op = MAX_OP * edge(r, rows);
 

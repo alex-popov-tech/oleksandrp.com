@@ -57,9 +57,9 @@ class MarginStream extends HTMLElement {
   /**
    * Measure the pane and decide whether the strip belongs here.
    *
-   * The strip is a flex column beside the buffer, not an overlay, so it cannot land on the
-   * text however narrow things get — the only question is whether taking its width would
-   * squeeze the buffer below the measure the prose is wrapped to. That is a question about
+   * The buffer reserves the strip's columns rather than the strip stealing them, so text
+   * cannot land under it however narrow things get. The only question is whether reserving
+   * them would squeeze the text below the measure the prose is wrapped to — a question about
    * the space actually left over, which is why there is no width threshold here: a tablet
    * with a roomy pane gets a strip, and a phone fails this test on its own.
    */
@@ -70,21 +70,24 @@ class MarginStream extends HTMLElement {
     const ch = columnWidth(this);
     const lh = parseFloat(getComputedStyle(this).lineHeight) || 22;
     const gutter = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gutter')) || 4;
-    // the pane's width does not change when the strip appears — it is the flex container
+    // the pane's width never changes with the strip, so this measures the same either way
     const left = pane.clientWidth / ch - (this.stream.cols + GAP);
     const fits = left >= gutter + WRAP_COLUMNS;
-    // one row of the buffer's top padding sits above the strip's first line
+    // the strip starts one row down, level with the buffer's first line
     const rows = Math.floor((pane.clientHeight - lh) / lh);
 
     if (!fits || rows < MIN_ROWS) return this.stand();
     if (rows !== this.rows.length) this.build(rows);
+    // the buffer keeps its full width and holds this many columns clear on the right instead
+    pane.style.setProperty('--strip', `${this.stream.cols + GAP}ch`);
     this.hidden = false;
     this.sync();
   }
 
-  /** No room for it here: draw nothing, and hand the page back to the train. */
+  /** No room for it here: draw nothing, and give the reserved columns back to the text. */
   private stand() {
     clearTimeout(this.timer);
+    this.parentElement?.style.removeProperty('--strip');
     this.hidden = true;
     this.replaceChildren();
     this.rows = [];
