@@ -91,6 +91,9 @@ button.ghost { font: inherit; color: inherit; background: none; border: 0; paddi
 #main { grid-column: 2; grid-row: 1; display: flex; flex-direction: column; min-height: 0; min-width: 0;
   /* the train runs inside this pane and is clipped at its edges */
   position: relative; overflow: hidden; }
+/* the buffer and the margin stream share the pane as a row, so the stream takes real width
+   rather than floating over text and hoping the two never meet */
+#main .pane { flex: 1; display: flex; min-height: 0; min-width: 0; }
 #statusline { grid-column: 1 / 3; grid-row: 2; }
 #cmdline { grid-column: 1 / 3; grid-row: 3; }
 .phone-only { display: none; }
@@ -164,10 +167,7 @@ details.cv li a:hover { background: var(--sel); text-decoration: none; }
 .ln .tx.h2 { color: var(--teal); }
 .ln .tx.title { color: var(--fg); display: flex; flex-wrap: wrap; column-gap: 2ch; }
 .ln .tx.title .links { margin-left: auto; white-space: nowrap; display: inline-flex; gap: 2ch; }
-/* Tags are a flex row, so without a cap they fill the pane and reach past the prose column —
-   which on a from_scratch page means straight under the margin stream. --wrap is the layout's
-   WRAP_COLUMNS, so they wrap at the same measure the prose does. */
-.ln .tx.tags { color: var(--teal); display: flex; flex-wrap: wrap; column-gap: 2ch; max-width: calc(var(--wrap) * 1ch); }
+.ln .tx.tags { color: var(--teal); display: flex; flex-wrap: wrap; column-gap: 2ch; }
 .ln .tx.tags .tag { white-space: nowrap; transition: color 0.1s; }
 .ln .tx.tags .tag:hover { color: var(--accent); }
 .ln .tx.label { color: var(--teal); }
@@ -391,24 +391,22 @@ body[data-pane="tree"] .row.tcur { outline: 1px solid var(--dim); outline-offset
 @media (max-width: 899px) { .train { display: none !important; } }
 
 /* ---- margin streams ---- */
-/* The animated strip in a file view's right margin. It is not content: it sits over the
-   pane, below the title row, and stays put while the buffer scrolls under it. It never
-   covers prose — scripts/stream.ts shows it only where the pane fits the whole prose column
-   alongside it, and sets `top` from the measured title row, which wraps to two lines in the
-   drawer layout. Measurement is the only rule: a tablet with a roomy margin gets a strip
-   even in that layout, and a phone fails the column test on its own. */
+/* The animated strip in a file view's right margin. It is a column beside the buffer rather
+   than an overlay: it takes real width, so it can never land on the text, the tags can wrap
+   wherever they naturally fall, and the prose keeps its full measure. scripts/stream.ts hides
+   it when taking that width would squeeze the buffer under the prose measure. */
 .stream {
-  position: absolute;
-  top: calc(3 * var(--lh)); /* replaced by the measured offset once JS runs */
-  right: 2ch;
+  flex: none;
   width: calc(var(--cols) * 1ch);
-  z-index: 3; /* under the train's 4 */
+  margin-left: 2ch;
+  /* line up with the buffer's first line, which sits below its own top padding */
+  padding-top: var(--lh);
+  overflow: hidden;
   white-space: pre;
-  /* it floats over the buffer, so it must never swallow a click or a drag */
+  /* it is decoration beside the text, never a target */
   pointer-events: none;
   user-select: none;
 }
-.stream > div { height: var(--lh); }
 /* One plate per span rather than one over the strip, exactly as .train span does: a blank
    span is drawn at opacity 0, and opacity takes its background with it, so the cursor line
    shows through the strip's whitespace while glyphs still cover the code beneath. */

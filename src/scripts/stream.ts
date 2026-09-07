@@ -6,12 +6,8 @@ import type { Stream, StreamId } from '../lib/streams';
 /** Nothing here moves faster than this, so redrawing more often buys only CPU. */
 const FPS = 20;
 
-/** Columns of clear space between the end of the prose column and the strip. */
+/** Columns the strip costs the buffer beyond its own width: its left margin. */
 const GAP = 2;
-/** The strip's inset from the pane's right edge — must match `right` in the .stream rule. */
-const INSET = 2;
-/** Fallback rows above the strip when the title line cannot be found: winbar, padding, title. */
-const FALLBACK_TOP_ROWS = 3;
 /** Below this the strip is too short to read as a column at all. */
 const MIN_ROWS = 8;
 
@@ -56,30 +52,16 @@ class MarginStream extends HTMLElement {
     clearTimeout(this.timer);
     this.ro?.disconnect();
     document.removeEventListener('visibilitychange', this.onVis);
-    this.classList.remove('page-effect');
   }
 
   /**
-   * Where the strip starts: just under the title line, measured rather than assumed. The
-   * title is one row on a wide pane but wraps to two once the layout moves its [github] link
-   * onto its own line, so a fixed offset would drop the strip on top of it.
-   */
-  private topOffset(pane: Element, lh: number): number {
-    const title = pane.querySelector('#buffer .tx.title')?.closest('.ln');
-    if (!title) return FALLBACK_TOP_ROWS * lh;
-    const bottom = title.getBoundingClientRect().bottom - pane.getBoundingClientRect().top;
-    // land on a row boundary, so the strip stays on the buffer's grid
-    return Math.ceil(bottom / lh) * lh;
-  }
-
-  /**
-   * Measure the pane and decide whether the strip belongs here at all. It shows only where
-   * there is room for the whole prose column, a gap and the strip, so the text and the
-   * animation never fight over the same columns.
+   * Measure the pane and decide whether the strip belongs here.
    *
-   * Measurement is the whole rule: there is no width below which the strip is refused on
-   * principle. A tablet in landscape has a roomy right margin even in the drawer layout, and
-   * a phone fails the column test on its own without needing a breakpoint to say so.
+   * The strip is a flex column beside the buffer, not an overlay, so it cannot land on the
+   * text however narrow things get — the only question is whether taking its width would
+   * squeeze the buffer below the measure the prose is wrapped to. That is a question about
+   * the space actually left over, which is why there is no width threshold here: a tablet
+   * with a roomy pane gets a strip, and a phone fails this test on its own.
    */
   private layout() {
     const pane = this.parentElement;
@@ -88,16 +70,15 @@ class MarginStream extends HTMLElement {
     const ch = columnWidth(this);
     const lh = parseFloat(getComputedStyle(this).lineHeight) || 22;
     const gutter = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gutter')) || 4;
-    const fits = pane.clientWidth / ch >= gutter + WRAP_COLUMNS + GAP + INSET + this.stream.cols;
-    const top = this.topOffset(pane, lh);
-    const rows = Math.floor((pane.clientHeight - top) / lh);
+    // the pane's width does not change when the strip appears — it is the flex container
+    const left = pane.clientWidth / ch - (this.stream.cols + GAP);
+    const fits = left >= gutter + WRAP_COLUMNS;
+    // one row of the buffer's top padding sits above the strip's first line
+    const rows = Math.floor((pane.clientHeight - lh) / lh);
 
     if (!fits || rows < MIN_ROWS) return this.stand();
-    this.style.top = `${top}px`;
     if (rows !== this.rows.length) this.build(rows);
     this.hidden = false;
-    // the train is the fallback, and stays in the shed while the strip is running
-    this.classList.add('page-effect');
     this.sync();
   }
 
@@ -105,7 +86,6 @@ class MarginStream extends HTMLElement {
   private stand() {
     clearTimeout(this.timer);
     this.hidden = true;
-    this.classList.remove('page-effect');
     this.replaceChildren();
     this.rows = [];
   }

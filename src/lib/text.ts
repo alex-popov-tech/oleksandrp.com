@@ -10,12 +10,11 @@ export function paragraphs(body: string | undefined): string[] {
 /**
  * Column the prose is hard-wrapped to, the way a README is stored on disk.
  *
- * 72 rather than the 80 a terminal defaults to: the from_scratch pages carry an animated strip
- * in the right margin, and scripts/stream.ts only shows it where the whole prose column clears
- * it. At 80 the wider strips needed a window most laptops do not have. 72 is a comfortable
- * measure in its own right, and it buys the margin the strips live in.
+ * 76 rather than a terminal's 80: the margin stream is a column beside the buffer, so the
+ * buffer has to stay at least this wide or the hard-wrapped lines would soft-wrap again.
+ * Four columns off the default is what buys every strip a home on a 1280px screen.
  */
-export const WRAP_COLUMNS = 72;
+export const WRAP_COLUMNS = 76;
 
 /**
  * Greedy word wrap, like `gq` in vim: break on spaces only, never inside a word.
