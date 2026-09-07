@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { CHAR_S, duration, renderSession, rowHtml, type Command } from './session';
+import { CHAR_S, duration, highlight, renderSession, rowHtml, type Command } from './session';
 
 const SCRIPT: Command[] = [
   { cmd: 'ab', out: [[{ text: 'first', color: 'fg' }]] },
@@ -64,5 +64,34 @@ describe('rowHtml', () => {
   it('escapes text, so a shell command cannot become markup', () => {
     expect(rowHtml([{ text: 'grep -A4 <x> & y', color: 'fg' }]))
       .toBe('<span class="c-fg">grep -A4 &lt;x&gt; &amp; y</span>');
+  });
+});
+
+describe('highlight', () => {
+  const paint = (cmd: string) => highlight(cmd).map((s) => `${s.color}:${s.text}`);
+
+  it('colours the command, its flags, its variables and the pipe', () => {
+    expect(paint('cat a.txt | grep -A4 X')).toEqual([
+      'green:cat',
+      'fg: a.txt ',
+      'dim:|',
+      'fg: ',
+      'green:grep',
+      'fg: ',
+      'accent:-A4',
+      'fg: X',
+    ]);
+    expect(paint('echo $EDITOR')).toEqual(['green:echo', 'fg: ', 'mauve:$EDITOR']);
+  });
+
+  it('greens the command only once it is a whole word, the way a shell does', () => {
+    expect(paint('ca')).toEqual(['fg:ca']);
+    expect(paint('cat')).toEqual(['green:cat']);
+  });
+
+  it('rebuilds the whole line, so it never disagrees with the finished one', () => {
+    const full = 'stat projects/';
+    expect(highlight(full.slice(0, 4)).map((s) => s.text).join('')).toBe('stat');
+    expect(highlight(full).map((s) => s.text).join('')).toBe(full);
   });
 });

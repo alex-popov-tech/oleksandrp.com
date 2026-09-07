@@ -33,11 +33,31 @@ const BOARDS = ['5x12-ortho/', 'corne/', 'dao/', 'jorne/', 'seagull/', 'skean/',
  */
 const HOME = new Set(['N', 'R', 'T', 'S', 'H', 'A', 'E', 'I']);
 
+/**
+ * Home-row mods, drawn on the border the two keys share. Every combo in the keymap pairs a
+ * top-row key with the home key under it — ⌃ is C+S on the left and Y+H on the right, and so
+ * on out to the ring finger — so the glyph goes on the line between them, in their column.
+ */
+const MOD_GLYPHS: [block: number, key: number, glyph: string][] = [
+  [0, 2, '⌥'], [0, 3, '⌘'], [0, 4, '⌃'],
+  [34, 1, '⌃'], [34, 2, '⌘'], [34, 3, '⌥'],
+];
+const MODS = new Set(['⌃', '⌘', '⌥']);
+
+/** the column a key's label sits in: cells are four wide, the label one in from the border */
+const labelCol = (block: number, key: number) => block + 5 * key + 2;
+
+function withMods(row: string): string {
+  const chars = [...row];
+  for (const [block, key, glyph] of MOD_GLYPHS) chars[labelCol(block, key)] = glyph;
+  return chars.join('');
+}
+
 /** the GALLIUM layer, 4-wide keys, three columns between the halves */
 const KEYBOARD: [string, boolean][] = [
   ['┌────┬────┬────┬────┬────┬────┐   ┌────┬────┬────┬────┬────┬────┐', false],
   ['│F13 │ B  │ L  │ D  │ C  │ V  │   │ J  │ Y  │ O  │ U  │ \'  │F13 │', false],
-  ['├────┼────┼────┼────┼────┼────┤   ├────┼────┼────┼────┼────┼────┤', false],
+  [withMods('├────┼────┼────┼────┼────┼────┤   ├────┼────┼────┼────┼────┼────┤'), false],
   ['│F11 │ N  │ R  │ T  │ S  │ G  │   │ P  │ H  │ A  │ E  │ I  │F12 │', true],
   ['├────┼────┼────┼────┼────┼────┤   ├────┼────┼────┼────┼────┼────┤', false],
   ['│F14 │ X  │ Q  │ M  │ W  │ Z  │   │ K  │ F  │ .: │ /; │ ,; │F14 │', false],
@@ -53,7 +73,7 @@ function keyRow(line: string, home: boolean): Row {
   const spans: Span[] = [];
   for (const [i, ch] of [...line].entries()) {
     const isCap = home && HOME.has(ch) && line[i - 1] === ' ' && line[i + 1] === ' ';
-    const color: Span['color'] = BOX.test(ch) ? 'faint' : isCap ? 'accent' : 'fg';
+    const color: Span['color'] = MODS.has(ch) ? 'teal' : BOX.test(ch) ? 'faint' : isCap ? 'accent' : 'fg';
     const last = spans[spans.length - 1];
     if (last && last.color === color) last.text += ch;
     else spans.push({ text: ch, color });
@@ -125,7 +145,7 @@ export const SCRIPT: Command[] = [
       [
         { text: 'layer 0 · GALLIUM · home row ', color: 'muted' },
         { text: 'N R T S · H A E I', color: 'accent' },
-        { text: ' · combos for ⌃ ⌘ ⌥', color: 'muted' },
+        { text: ' · ⌃ ⌘ ⌥ hold both keys', color: 'muted' },
       ],
       ...KEYBOARD.map(([line, home]) => pre(keyRow(line, home))),
     ],

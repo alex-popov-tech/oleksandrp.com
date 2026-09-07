@@ -1,27 +1,15 @@
-import { renderSession, rowHtml, type Command } from '../lib/session';
+import { prompt, renderSession, rowHtml, type Command } from '../lib/session';
 import { SCRIPT } from '../readme';
 
 /** the typewriter is 13 characters a second, so this is already more than enough */
 const FPS = 20;
-/** replayed once per browser session, not once per navigation */
-const SEEN_KEY = 'readme:played';
 
-/** Storage is unavailable in some privacy modes; a session that always replays is no tragedy. */
-function seen(): boolean {
-  try {
-    return sessionStorage.getItem(SEEN_KEY) !== null;
-  } catch {
-    return false;
-  }
-}
-
-function remember() {
-  try {
-    sessionStorage.setItem(SEEN_KEY, '1');
-  } catch {
-    /* ignore */
-  }
-}
+/**
+ * Module state, so it survives a view transition but not a reload: coming back to the README
+ * from another page does not retype it, and refreshing does. It lived in sessionStorage
+ * before, which also survives reloads — one full watch and the page was dead for that tab.
+ */
+let played = false;
 
 /**
  * Types README.sh back in. The build renders the finished session; this clears it on load and
@@ -40,7 +28,7 @@ class ShellSession extends HTMLElement {
   connectedCallback() {
     this.caret.className = 'caret';
     this.addEventListener('click', this.replay);
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches || seen()) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || played) {
       this.settle();
       return;
     }
@@ -104,7 +92,7 @@ class ShellSession extends HTMLElement {
     this.drawn = rows.length;
 
     const tx = this.liveRow();
-    const html = rowHtml([{ text: '❯ ', color: 'green' }, { text: typing ?? '', color: 'fg' }]);
+    const html = rowHtml(prompt(typing ?? ''));
     if (tx.dataset.line !== html) {
       tx.innerHTML = html;
       tx.dataset.line = html;
@@ -113,7 +101,7 @@ class ShellSession extends HTMLElement {
     }
 
     if (done) {
-      remember();
+      played = true;
       this.settle();
       return;
     }

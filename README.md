@@ -131,8 +131,10 @@ section of the bio. `src/readme.ts` holds the content, `src/lib/session.ts` the 
 a pure `renderSession(t)`, so the build renders the finished transcript (complete without
 JavaScript, and to a crawler) and `scripts/session.ts` clears it and replays it.
 
-It plays once per browser session — the flag is `readme:played` in `sessionStorage`, so
-moving between pages does not restart it — and not at all under `prefers-reduced-motion`.
+It plays once per page load: the flag is module state, so it survives a view transition —
+coming back to the README from another page does not retype it — but a refresh replays it.
+`sessionStorage` was wrong for this; it survives reloads too, so one full watch left the page
+dead for the rest of that tab. It does not play at all under `prefers-reduced-motion`.
 Clicking the pane replays it on demand. While it plays the pane is a `.page-effect`, which
 keeps the train away; when it settles the class comes off and the train runs again.
 
@@ -142,7 +144,13 @@ no line-number gutter, the way nvim shows one.
 
 The keyboard is the real GALLIUM layer of `~/me/zmk/zmk-skean/config/skean.keymap`. Only the
 eight keys the fingers rest on are amber: the design handoff also lit up `G` and `P`, which
-are the index stretch and contradicted its own caption.
+are the index stretch and contradicted its own caption. The `⌃ ⌘ ⌥` sit on the border each
+combo spans — every one in the keymap pairs a top-row key with the home key beneath it
+(`C`+`S` for control, mirrored to `Y`+`H`), so the glyph goes in that column, between them.
+
+Command lines are coloured the way a shell with syntax highlighting does it, including the
+part where the command only turns green once it is a whole word — the line is re-highlighted
+on every frame while it is still being typed.
 
 ### Recounting the languages
 

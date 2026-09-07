@@ -81,11 +81,41 @@ export function renderSession(script: Command[], tSeconds: number): SessionFrame
   return { rows, typing, done };
 }
 
+/** The commands the session runs. A word here is a command, the way zsh colours a valid one. */
+const COMMANDS = new Set(['whoami', 'cat', 'stat', 'ls', 'echo', 'open', 'grep']);
+
+/**
+ * Colour a command line the way a shell with syntax highlighting would: the command green,
+ * its flags amber, variables mauve, the pipe dim, everything else plain. Works on a partial
+ * line too, because this runs on every frame while the command is still being typed.
+ */
+export function highlight(cmd: string): Row {
+  const out: Row = [];
+  let expectingCommand = true;
+  for (const token of cmd.split(/(\s+|\|)/).filter((t) => t !== '')) {
+    let color: Role = 'fg';
+    if (token === '|') {
+      color = 'dim';
+      expectingCommand = true;
+    } else if (token.trim() === '') {
+      color = 'fg';
+    } else if (expectingCommand) {
+      color = COMMANDS.has(token) ? 'green' : 'fg';
+      expectingCommand = false;
+    } else if (token.startsWith('-')) {
+      color = 'accent';
+    } else if (token.startsWith('$')) {
+      color = 'mauve';
+    }
+    const last = out[out.length - 1];
+    if (last && last.color === color) last.text += token;
+    else out.push({ text: token, color });
+  }
+  return out;
+}
+
 export function prompt(cmd: string): Row {
-  return [
-    { text: '❯ ', color: 'green' },
-    { text: cmd, color: 'fg' },
-  ];
+  return [{ text: '❯ ', color: 'green' }, ...highlight(cmd)];
 }
 
 /** One row as HTML. The server and the client both go through here, so a replayed row is

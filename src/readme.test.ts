@@ -73,6 +73,16 @@ describe('README.sh', () => {
     expect(new Set(full.map((l) => l.length))).toEqual(new Set([65]));
   });
 
+  it('puts each home-row mod on the border between the two keys that fire it', () => {
+    const keyboard = lines.filter((l) => /^[┌│├└]/.test(l));
+    const [, top, separator, home] = keyboard;
+    const found = [...separator]
+      .map((ch, i) => (/[⌃⌘⌥]/.test(ch) ? `${ch} ${top[i]}+${home[i]}` : null))
+      .filter(Boolean);
+    // every combo in the keymap pairs a top-row key with the home key under it, mirrored
+    expect(found).toEqual(['⌥ L+R', '⌘ D+T', '⌃ C+S', '⌃ Y+H', '⌘ O+A', '⌥ U+E']);
+  });
+
   it('highlights the home row of the layer it is showing', () => {
     const homeRow = rows.find((r) => r.spans.map((s) => s.text).join('').startsWith('│F11'));
     expect(homeRow, 'the GALLIUM home row').toBeDefined();
