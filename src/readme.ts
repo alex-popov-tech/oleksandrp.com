@@ -8,7 +8,7 @@
 import { LANGUAGES, LANGUAGE_TOTAL } from './languages';
 import type { Command, Output, Row, Span } from './lib/session';
 import { hardWrap } from './lib/text';
-import { SITE } from './site';
+import { CONTACTS } from './site';
 
 const BIO = [
   'Currently writing Go for things that already exist: Redis, DNS, Git, BitTorrent and HTTP — each built from the wire up, with no library doing the interesting part.',
@@ -136,12 +136,14 @@ export const SCRIPT: Command[] = [
     ]),
   },
   {
-    cmd: 'ls ~/keyboards/zmk/',
-    out: [[{ text: BOARDS.join('  '), color: 'blue' }]],
-  },
-  {
-    cmd: 'cat ~/keyboards/zmk/skean/config/skean.keymap | grep -A4 GALLIUM',
+    /**
+     * One line, because two prompts for one thought is a wasted row on a phone. cd first so
+     * the keymap can be named relatively — spelled out twice it runs past 80 columns — and
+     * grep reads the file itself rather than being fed it by cat.
+     */
+    cmd: 'cd ~/keyboards/zmk && ls && grep -A4 GALLIUM skean/config/skean.keymap',
     out: [
+      [{ text: BOARDS.join('  '), color: 'blue' }],
       [
         { text: 'layer 0 · GALLIUM · home row ', color: 'muted' },
         { text: 'N R T S · H A E I', color: 'accent' },
@@ -150,12 +152,13 @@ export const SCRIPT: Command[] = [
       ...KEYBOARD.map(([line, home]) => pre(keyRow(line, home))),
     ],
   },
-  { cmd: 'echo $EDITOR $SHELL', out: [[{ text: 'nvim /bin/zsh', color: 'fg' }]] },
   {
-    cmd: 'open github.com/alex-popov-tech',
-    out: [[
-      { text: '→ ', color: 'dim' },
-      { text: 'github.com/alex-popov-tech', color: 'blue', href: SITE.github, external: true },
-    ]],
+    cmd: 'cat contacts.txt',
+    // the same two columns start-here.md uses: a dim label, then the thing you click
+    out: CONTACTS.map((c): Row => [
+      { text: c.label.padEnd(14), color: 'dim' },
+      // a mailto: opened in a new tab leaves the reader looking at a blank one
+      { text: c.value, color: 'blue', href: c.href, external: !c.href.startsWith('mailto:') },
+    ]),
   },
 ];

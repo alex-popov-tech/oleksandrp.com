@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { SCRIPT } from './readme';
 import { LANGUAGES, LANGUAGE_TOTAL } from './languages';
+import { CONTACTS } from './site';
 import { renderSession } from './lib/session';
 
 const rows = renderSession(SCRIPT, Number.MAX_SAFE_INTEGER).rows;
@@ -14,10 +15,8 @@ describe('README.sh', () => {
       '❯ cat about.txt',
       '❯ stat projects/',
       '❯ cat start-here.md',
-      '❯ ls ~/keyboards/zmk/',
-      '❯ cat ~/keyboards/zmk/skean/config/skean.keymap | grep -A4 GALLIUM',
-      '❯ echo $EDITOR $SHELL',
-      '❯ open github.com/alex-popov-tech',
+      '❯ cd ~/keyboards/zmk && ls && grep -A4 GALLIUM skean/config/skean.keymap',
+      '❯ cat contacts.txt',
     ]);
   });
 
@@ -57,13 +56,23 @@ describe('README.sh', () => {
   });
 
   it('links the four projects worth opening first', () => {
-    const links = rows.flatMap((r) => r.spans).filter((s) => s.href && !s.external);
+    const links = rows.flatMap((r) => r.spans).filter((s) => s.href?.startsWith('/'));
     expect(links.map((l) => l.href)).toEqual([
       '/projects/from_scratch/redis',
       '/projects/from_scratch/git',
       '/projects/store',
       '/projects/acapulko',
     ]);
+  });
+
+  it('ends on every way to reach me, and sends only the web ones to a new tab', () => {
+    const away = rows.flatMap((r) => r.spans).filter((s) => s.href && !s.href.startsWith('/'));
+    expect(away.map((s) => s.href)).toEqual(CONTACTS.map((c) => c.href));
+    // a mailto: in a new tab would leave the reader looking at a blank one
+    expect(away.map((s) => s.external === true)).toEqual(CONTACTS.map((c) => !c.href.startsWith('mailto:')));
+    // every value starts in the same column, the one start-here.md pads its names to
+    const block = rows.filter((r) => r.spans.some((s) => s.href && !s.href.startsWith('/')));
+    expect(block.map((r) => r.spans[0].text)).toEqual(CONTACTS.map((c) => c.label.padEnd(14)));
   });
 
   it('keeps the keyboard rectangular', () => {

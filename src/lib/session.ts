@@ -82,19 +82,20 @@ export function renderSession(script: Command[], tSeconds: number): SessionFrame
 }
 
 /** The commands the session runs. A word here is a command, the way zsh colours a valid one. */
-const COMMANDS = new Set(['whoami', 'cat', 'stat', 'ls', 'echo', 'open', 'grep']);
+const COMMANDS = new Set(['whoami', 'cat', 'stat', 'ls', 'echo', 'open', 'grep', 'cd']);
 
 /**
  * Colour a command line the way a shell with syntax highlighting would: the command green,
- * its flags amber, variables mauve, the pipe dim, everything else plain. Works on a partial
- * line too, because this runs on every frame while the command is still being typed.
+ * its flags amber, variables mauve, the operators dim, everything else plain. Works on a
+ * partial line too, because this runs on every frame while the command is still being typed.
  */
 export function highlight(cmd: string): Row {
   const out: Row = [];
   let expectingCommand = true;
   for (const token of cmd.split(/(\s+|\|)/).filter((t) => t !== '')) {
     let color: Role = 'fg';
-    if (token === '|') {
+    if (token === '|' || token === '&&') {
+      // an operator ends one command, so the next word is a command again and colours green
       color = 'dim';
       expectingCommand = true;
     } else if (token.trim() === '') {

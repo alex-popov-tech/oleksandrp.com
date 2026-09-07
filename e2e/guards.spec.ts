@@ -46,7 +46,7 @@ test('prefers-reduced-motion silences everything that moves', async ({ page }) =
 
   // README.sh is shown in full rather than typed out
   await page.goto('/');
-  await expect(page.locator('shell-session')).toContainText('github.com/alex-popov-tech');
+  await expect(page.locator('shell-session')).toContainText('alex-popov-tech');
   await expect(page.locator('shell-session .ln').first()).toContainText('whoami');
 });
 

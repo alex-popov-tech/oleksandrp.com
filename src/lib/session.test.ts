@@ -84,6 +84,16 @@ describe('highlight', () => {
     expect(paint('echo $EDITOR')).toEqual(['green:echo', 'fg: ', 'mauve:$EDITOR']);
   });
 
+  it('treats && like the pipe: dim, and the word after it is a command again', () => {
+    expect(paint('cd ~/zmk && ls')).toEqual([
+      'green:cd',
+      'fg: ~/zmk ',
+      'dim:&&',
+      'fg: ',
+      'green:ls',
+    ]);
+  });
+
   it('greens the command only once it is a whole word, the way a shell does', () => {
     expect(paint('ca')).toEqual(['fg:ca']);
     expect(paint('cat')).toEqual(['green:cat']);
