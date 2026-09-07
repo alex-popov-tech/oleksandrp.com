@@ -6,12 +6,16 @@ import type { Stream, StreamId } from '../lib/streams';
 const FPS = 20;
 /** Prose is hard-wrapped to this many columns — WRAP_COLUMNS in lib/text. */
 const PROSE = 80;
-/** Columns between the end of the prose column and the strip. */
+/** Columns of clear space between the end of the prose column and the strip. */
 const GAP = 2;
+/** The strip's inset from the pane's right edge — must match `right` in the .stream rule. */
+const INSET = 2;
 /** Rows above the strip: the winbar, the buffer's top padding, and the title line. */
 const TOP_ROWS = 3;
 /** Below this the strip is too short to read as a column at all. */
 const MIN_ROWS = 8;
+/** The strip is a desktop effect, same threshold as the train's MIN_WIDTH in scripts/train.ts. */
+const MIN_WIDTH = 900;
 
 /** One chunk per engine: a page downloads its own renderer and no others. */
 const LOADERS: Record<StreamId, () => Promise<Stream>> = {
@@ -60,16 +64,20 @@ class MarginStream extends HTMLElement {
   /**
    * Measure the pane and decide whether the strip belongs here at all. It shows only where
    * there is room for the whole prose column, a gap, and the strip; below that the text and
-   * the animation would be fighting over the same columns, so nothing is drawn.
+   * the animation would be fighting over the same columns, so nothing is drawn. It is also a
+   * desktop effect only, same as the train it stands in for — below MIN_WIDTH it stands down
+   * without even measuring, since the phone/drawer layout changes --fs and --gutter enough
+   * that the column math alone would let a strip pass at widths the train never runs at.
    */
   private layout() {
     const pane = this.parentElement;
     if (!pane || !this.stream) return;
+    if (window.innerWidth < MIN_WIDTH) return this.stand();
 
     const ch = columnWidth(this);
     const lh = parseFloat(getComputedStyle(this).lineHeight) || 22;
     const gutter = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gutter')) || 4;
-    const fits = pane.clientWidth / ch >= gutter + PROSE + GAP + this.stream.cols;
+    const fits = pane.clientWidth / ch >= gutter + PROSE + GAP + INSET + this.stream.cols;
     const rows = Math.floor((pane.clientHeight - TOP_ROWS * lh) / lh);
 
     if (!fits || rows < MIN_ROWS) return this.stand();
